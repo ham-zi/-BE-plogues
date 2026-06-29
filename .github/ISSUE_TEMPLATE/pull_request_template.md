@@ -1,6 +1,6 @@
 ---
-name: ISO PR 템플릿
-about: PR 템플릿
+name: PULL_REQUEST_TEMPLATE
+about: PULL_REQUEST_TEMPLATE
 title: ''
 labels: ''
 assignees: ''
@@ -12,8 +12,6 @@ assignees: ''
 ## 📌 작업 내용
 
 ## ✨ 변경 사항
-
-## 📷 실행 화면 (선택)
 
 ## ✅ 테스트
 
