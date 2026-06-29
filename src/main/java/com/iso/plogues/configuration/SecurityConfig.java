@@ -32,13 +32,12 @@ public class SecurityConfig {
 	private final JwtFilter jwtFilter;
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		
 	
 		return http.formLogin(AbstractHttpConfigurer::disable)
 				   .csrf(AbstractHttpConfigurer::disable)
 				   .cors(Customizer.withDefaults())
 				   .authorizeHttpRequests(requests -> { 
-					   
+					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout").authenticated();
 					   requests.requestMatchers(HttpMethod.POST).permitAll();
 					   requests.requestMatchers(HttpMethod.PATCH).permitAll();
 					   requests.requestMatchers(HttpMethod.DELETE).permitAll();

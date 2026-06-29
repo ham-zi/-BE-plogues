@@ -9,7 +9,6 @@ import lombok.ToString;
 import lombok.Value;
 
 @Value
-@Builder
 public class PageInfo {
 	private int listCount;
 	private int currentPage;
@@ -32,10 +31,9 @@ public class PageInfo {
 		this.startPage = (currentPage - 1) / pageLimit * pageLimit + 1;
 		this.endPage = startPage + pageLimit - 1;
 		this.offset = (currentPage - 1) * boardLimit;
-		
-		if(endPage > maxPage) {
-			endPage = maxPage;
-		}
+		/*
+		 * if(endPage > maxPage) { endPage = maxPage; }
+		 */
 	}
 	
 	public static PageInfo of(int listCount, int currentPage, int boardLimit, int pageLimit) {
