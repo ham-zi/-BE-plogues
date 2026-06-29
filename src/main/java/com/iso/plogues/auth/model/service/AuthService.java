@@ -36,7 +36,7 @@ public class AuthService {
 							.refreshToken(tokens.get("refreshToken"))
 							.build();
 	}
-	
+
 	private CustomUserDetails getCustomUserDetails(LoginRequestDto lrd) {
 		Authentication auth = null;
 		try {
@@ -52,5 +52,11 @@ public class AuthService {
 		Map<String, String>tokens = tokenService.tokenRotation(refreshToken);
 		return tokens;
 	}
+
+	public void logout(CustomUserDetails user, String refreshToken) {
+		tokenService.deleteToken(user, refreshToken);
+	}
+	
+	
 	
 }

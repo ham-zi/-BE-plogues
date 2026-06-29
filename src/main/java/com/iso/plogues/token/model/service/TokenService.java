@@ -45,11 +45,11 @@ public class TokenService {
 	
 	public Map<String, String> tokenRotation(String refreshToken){
 		RefreshToken token = tokenMapper.findByToken(refreshToken);
-		hasRefreshToken(token);
 		Claims claims = tokenUtil.parseJwt(token.getToken());
 		String userId = claims.getSubject();
 		String memberName = (String)claims.get("memberName");
 		CustomUserDetails user = CustomUserDetails.builder().memberName(memberName).username(userId).build();
+		hasRefreshToken(token);
 		Map<String, String> tokens = createTokens(user);
 		saveToken(tokens.get("refreshToken"), userId);
 		return tokens;
@@ -60,9 +60,13 @@ public class TokenService {
 			throw new CustomAuthenticationException("일치하는  토큰이 없습니다.");
 		}
 		if(token.getExpiration() < System.currentTimeMillis()) {
-			tokenMapper.deleteToken(null);
+			tokenMapper.deleteToken(token.getUserId(), token.getToken());
 			throw new CustomAuthenticationException("유효하지않은 토큰입니다.");
 		}
+	}
+
+	public void deleteToken(CustomUserDetails user, String refreshToken) {
+		tokenMapper.deleteToken(user.getUsername(), refreshToken);
 	}
 	
 	
