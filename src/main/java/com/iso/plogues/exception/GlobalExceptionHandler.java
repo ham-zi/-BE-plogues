@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.exception.CustomAuthenticationException;
+import com.iso.plogues.exception.user.InvalidUserPwdException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,6 +35,11 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<ApiResponse> handlerIllegalArgument(IllegalArgumentException e){
+		return ResponseEntity.badRequest().body(new ApiResponse(400, e.getMessage(), null));
+	}
+
+	@ExceptionHandler(InvalidUserPwdException.class)
+	public ResponseEntity<ApiResponse> handlerInvalidUserPwd(InvalidUserPwdException e){
 		return ResponseEntity.badRequest().body(new ApiResponse(400, e.getMessage(), null));
 	}
 	

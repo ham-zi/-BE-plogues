@@ -1,12 +1,16 @@
 package com.iso.plogues.user.model.service;
 
 
+import java.util.Map;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.DuplicateUserIdException;
+import com.iso.plogues.exception.user.InvalidUserPwdException;
 import com.iso.plogues.user.model.dao.UserMapper;
 import com.iso.plogues.user.model.dto.UserDto;
 import com.iso.plogues.user.model.vo.User;
@@ -44,6 +48,18 @@ public class UserService {
 							  .build();
 
 		userMapper.signUp(userEntity);
+	}
+	
+	@Transactional
+	public void deleteAccount(CustomUserDetails user, Map<String,String>body) {
+		matchesPassword(user, body.get("userPwd") );
+		userMapper.deleteAccount(user.getUsername());
+	}
+	
+	private void matchesPassword(CustomUserDetails user, String userPwd) {
+		if(!passwordEncoder.matches(userPwd, user.getPassword())) {
+			throw new InvalidUserPwdException("비밀번호가 틀렸습니다.");
+		}
 	}
 
 }
