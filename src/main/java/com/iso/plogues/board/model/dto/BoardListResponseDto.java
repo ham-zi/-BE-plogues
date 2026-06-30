@@ -2,17 +2,15 @@ package com.iso.plogues.board.model.dto;
 
 import java.util.List;
 
+import com.iso.plogues.page.PageInfo;
+
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 @Builder
 public class BoardListResponseDto {
-	private int totalElements;
-    private int totalPages;
-    private int currentPage;
-    private List<BoardDto> reviewList;
-   
+
+    private List<BoardDto> boardList;
+    private PageInfo pageInfo;
 }

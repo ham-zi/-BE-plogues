@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.iso.plogues.board.model.dao.BoardMapper;
 import com.iso.plogues.board.model.dto.BoardDto;
 import com.iso.plogues.board.model.dto.BoardListResponseDto;
+import com.iso.plogues.page.PageInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,24 +17,22 @@ public class BoardService {
 	
 	private final BoardMapper boardMapper;
 
-    public BoardListResponseDto selectBoardList(int page) {
+	public BoardListResponseDto selectBoardList(int currentPage) {
 
-        int limit = 5;
-        int offset = (page - 1) * limit;
+	    int listCount = boardMapper.countBoardList();
 
-        int totalElements = boardMapper.countBoardList();
+	    PageInfo pi = PageInfo.of(
+	            listCount,
+	            currentPage,
+	            5, 
+	            5   
+	    );
 
-        int totalPages =
-                (int)Math.ceil((double)totalElements / limit);
+	    List<BoardDto> boardList = boardMapper.selectBoardList(pi);
 
-        List<BoardDto> reviewList =
-                boardMapper.selectBoardList(offset, limit);
-
-        return BoardListResponseDto.builder()
-                .totalElements(totalElements)
-                .totalPages(totalPages)
-                .currentPage(page)
-                .reviewList(reviewList)
-                .build();
-    }
+	    return BoardListResponseDto.builder()
+	            .boardList(boardList)
+	            .pageInfo(pi)
+	            .build();
+	}
 }
