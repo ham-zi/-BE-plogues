@@ -24,11 +24,11 @@ public class BoardService {
 	    PageInfo pi = PageInfo.of(
 	            listCount,
 	            currentPage,
-	            5, 
+	            10, 
 	            5   
 	    );
 
-	    List<BoardDto> boardList = boardMapper.selectBoardList(pi);
+	    List<BoardDto> boardList  = boardMapper.selectBoardList(pi);
 
 	    return BoardListResponseDto.builder()
 	            .boardList(boardList)
