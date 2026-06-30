@@ -44,7 +44,6 @@ public class SecurityConfig {
 					   requests.requestMatchers(HttpMethod.DELETE).permitAll();
 					   requests.requestMatchers(HttpMethod.GET).permitAll();
 					   requests.requestMatchers("/api/admin").hasRole("ADMIN");
-		            	  requests.requestMatchers("/api/admin").hasAnyRole("ADMIN", "USER");
 				   }).sessionManagement(manager -> 
 				   						manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				   .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
