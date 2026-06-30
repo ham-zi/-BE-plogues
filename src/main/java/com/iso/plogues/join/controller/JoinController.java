@@ -1,8 +1,11 @@
 package com.iso.plogues.join.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,9 +26,20 @@ public class JoinController {
 	private final JoinService joinService;
 	
 	@PostMapping
-	public ResponseEntity<ApiResponse<?>> saveJoin(@AuthenticationPrincipal CustomUserDetails user, JoinDto join, @RequestParam(name="file") MultipartFile file) {
+	public ResponseEntity<ApiResponse<Void>> saveJoin(@AuthenticationPrincipal CustomUserDetails user, JoinDto join, @RequestParam(name="file", required=false) MultipartFile file) {
 		joinService.saveJoin(user, join, file);
 		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("게시글 작성 성공", null));
+	}
+	
+	@GetMapping
+	public ResponseEntity<ApiResponse<List<JoinDto>>> findAll(@RequestParam(name="page", defaultValue = "1") int page, @RequestParam(name="category") String category) {
+		List<JoinDto> list = null;
+		if("plant".equals(category)) {
+			list = joinService.findAllPlant(page);
+		} else if("plogging".equals(category)) {
+			list = joinService.findAllPlog(page);
+		}
+		return ResponseEntity.status(200).body(ApiResponse.created("게시글 전체 조회 성공", list));
 	}
 
 }
