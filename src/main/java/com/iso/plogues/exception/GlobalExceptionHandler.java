@@ -45,5 +45,9 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
 	}
 	
+	@ExceptionHandler(FailedFindByNoException.class)
+	public ResponseEntity<ApiResponse> handlerFailedFindByNo(FailedFindByNoException e){
+		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+	}
 
 }
