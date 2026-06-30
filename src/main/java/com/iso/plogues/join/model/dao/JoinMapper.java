@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.vo.Join;
-import com.iso.plogues.page.PageInfo;
+import com.iso.plogues.template.page.PageInfo;
 
 @Mapper
 public interface JoinMapper {

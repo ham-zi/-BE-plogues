@@ -1,4 +1,4 @@
-package com.iso.plogues.file;
+package com.iso.plogues.template.file;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

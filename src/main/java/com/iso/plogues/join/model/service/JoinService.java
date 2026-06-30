@@ -12,7 +12,8 @@ import com.iso.plogues.join.file.model.service.JoinFileService;
 import com.iso.plogues.join.model.dao.JoinMapper;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.vo.Join;
-import com.iso.plogues.page.PageInfo;
+import com.iso.plogues.template.board.BoardResponse;
+import com.iso.plogues.template.page.PageInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -49,13 +50,23 @@ public class JoinService {
 	}
 	
 	@Transactional
-	public List<JoinDto> findAllPlant(int page) {
-		return joinMapper.findAllPlant(newPageInfo(joinMapper.listCount(), page));
+	public BoardResponse<JoinDto> findAllPlant(int page) {
+		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
+		List<JoinDto> list = joinMapper.findAllPlant(pageInfo);
+		BoardResponse<JoinDto> br = new BoardResponse();
+		br.setPage(pageInfo);
+		br.setBoard(list);
+		return br;
 	}
 	
 	@Transactional
-	public List<JoinDto> findAllPlog(int page) {
-		return joinMapper.findAllPlog(newPageInfo(joinMapper.listCount(), page));
+	public BoardResponse<JoinDto> findAllPlog(int page) {
+		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
+		List<JoinDto> list = joinMapper.findAllPlog(newPageInfo(joinMapper.listCount(), page));
+		BoardResponse<JoinDto> br = new BoardResponse();
+		br.setPage(pageInfo);
+		br.setBoard(list);
+		return br;
 	}
 
 }

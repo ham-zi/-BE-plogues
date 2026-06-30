@@ -1,7 +1,5 @@
 package com.iso.plogues.join.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +14,7 @@ import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.service.JoinService;
+import com.iso.plogues.template.board.BoardResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,14 +31,14 @@ public class JoinController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<ApiResponse<List<JoinDto>>> findAll(@RequestParam(name="page", defaultValue = "1") int page, @RequestParam(name="category") String category) {
-		List<JoinDto> list = null;
+	public ResponseEntity<ApiResponse<BoardResponse<JoinDto>>> findAll(@RequestParam(name="page", defaultValue = "1") int page, @RequestParam(name="category") String category) {
+		BoardResponse<JoinDto> br = null;
 		if("plant".equals(category)) {
-			list = joinService.findAllPlant(page);
+			br = joinService.findAllPlant(page);
 		} else if("plogging".equals(category)) {
-			list = joinService.findAllPlog(page);
+			br = joinService.findAllPlog(page);
 		}
-		return ResponseEntity.status(200).body(ApiResponse.created("게시글 전체 조회 성공", list));
+		return ResponseEntity.status(200).body(ApiResponse.created("게시글 전체 조회 성공", br));
 	}
 
 }

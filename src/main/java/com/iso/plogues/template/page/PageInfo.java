@@ -1,11 +1,5 @@
-package com.iso.plogues.page;
+package com.iso.plogues.template.page;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import lombok.Value;
 
 @Value
