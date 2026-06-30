@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Update;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.user.model.dto.MyInfoDto;
+import com.iso.plogues.user.model.dto.UserDto;
 import com.iso.plogues.user.model.vo.User;
 
 @Mapper
@@ -45,6 +46,9 @@ public interface UserMapper {
 
 	@Update("UPDATE PLOGUES_USER SET DELETED = 'Y' WHERE USER_ID = #{username}")
 	void deleteAccount(@Param(value="username")String username);
+
+	@Update("UPDATE PLOGUES_USER SET EMAIL = #{email}, INFO = #{info} WHERE USER_ID = #{userId} AND DELETED = 'N'")
+	int patchMyInfo(UserDto userInfo);
 
 
 }

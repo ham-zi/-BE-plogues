@@ -1,9 +1,10 @@
 package com.iso.plogues.join.file.model.dao;
 
 import org.apache.ibatis.annotations.Insert;
+
 import org.apache.ibatis.annotations.Mapper;
 
-import com.iso.plogues.file.File;
+import com.iso.plogues.util.file.File;
 
 
 

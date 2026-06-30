@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.iso.plogues.board.model.dto.BoardDto;
-import com.iso.plogues.page.PageInfo;
+import com.iso.plogues.util.page.PageInfo;
 
 @Mapper
 public interface BoardMapper {

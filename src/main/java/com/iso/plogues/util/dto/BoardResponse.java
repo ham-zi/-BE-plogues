@@ -1,4 +1,4 @@
-package com.iso.plogues.template.board;
+package com.iso.plogues.util.dto;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BoardResponse<T> {
-	PageInfo page;
-	List<T> board; 
+	private PageInfo page;
+	private List<T> board;
 
 }

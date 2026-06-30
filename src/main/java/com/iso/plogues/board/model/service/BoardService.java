@@ -6,8 +6,9 @@ import org.springframework.stereotype.Service;
 
 import com.iso.plogues.board.model.dao.BoardMapper;
 import com.iso.plogues.board.model.dto.BoardDto;
-import com.iso.plogues.page.PageInfo;
+
 import com.iso.plogues.template.board.BoardResponse;
+import com.iso.plogues.util.page.PageInfo;
 
 import lombok.RequiredArgsConstructor;
 

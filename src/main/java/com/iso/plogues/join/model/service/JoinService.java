@@ -2,6 +2,7 @@ package com.iso.plogues.join.model.service;
 
 import java.util.List;
 
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,9 +13,8 @@ import com.iso.plogues.join.file.model.service.JoinFileService;
 import com.iso.plogues.join.model.dao.JoinMapper;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.vo.Join;
-import com.iso.plogues.page.PageInfo;
 import com.iso.plogues.template.board.BoardResponse;
-
+import com.iso.plogues.util.page.PageInfo;
 import lombok.RequiredArgsConstructor;
 
 @Service
