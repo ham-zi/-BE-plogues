@@ -37,7 +37,10 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(new ApiResponse(400, e.getMessage(), null));
 	}
 	
-
+	@ExceptionHandler(FailedInsertException.class)
+	public ResponseEntity<ApiResponse> handlerFailedInsert(FailedInsertException e){
+		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+	}
 	
 
 }
