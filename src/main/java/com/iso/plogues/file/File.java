@@ -4,6 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import lombok.Getter;
+
+@Getter
 public class File {
 	private Long fileNo; 
 	private Long refBoardNo;
@@ -14,11 +17,11 @@ public class File {
 	private String boardType;
 	private List<String>extensions = List.of(".jpg", ".png", ".jpeg", ".svg", ".heif", ".heic");
 	
-	public static File of(Long refBoardNo, String originName, String changeName, String filePath, String boardType) {
-		return new File(refBoardNo,originName, changeName,filePath,boardType);
+	public static File of(Long refBoardNo, String originName, String boardType) {
+		return new File(refBoardNo,originName, boardType);
 	}
 	
-	private File(Long refBoardNo, String originName, String changeName, String filePath, String boardType) {
+	private File(Long refBoardNo, String originName, String boardType) {
 		validOriginName(originName);
 		validRefBoardNo(refBoardNo);
 		validExtension(originName);

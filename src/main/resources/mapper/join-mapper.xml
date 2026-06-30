@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iso.plogues.join.model.dao.JoinMapper">
+  <insert id="saveJoin">
+  	<selectKey keyProperty="joinNo"
+               resultType="long"
+               order="BEFORE">
+        SELECT SEQ_PLG_JB.NEXTVAL
+        FROM DUAL
+    </selectKey>
+    INSERT
+      INTO
+           JOIN_BOARD
+    VALUES 
+           (
+			 #{joinNo}
+		   , #{userId}
+		   , #{category}
+		   , #{participants}
+		   , #{region}
+		   , #{startDate}
+		   , #{endDate}
+		   , #{title}
+		   , #{content}
+		   , 'N'
+		   , 'N'
+		   , SYSDATE
+		   )
+  </insert>
+</mapper>
