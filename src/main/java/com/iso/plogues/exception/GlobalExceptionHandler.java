@@ -1,13 +1,10 @@
 package com.iso.plogues.exception;
 
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
-import com.iso.plogues.exception.CustomAuthenticationException;
 import com.iso.plogues.exception.user.InvalidUserPwdException;
 
 import lombok.extern.slf4j.Slf4j;

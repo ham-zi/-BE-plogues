@@ -17,6 +17,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class QuestionDto {
 	private Long boardNo;
+	private String userId;
 	@NotBlank
 	private String title;
 	@NotBlank

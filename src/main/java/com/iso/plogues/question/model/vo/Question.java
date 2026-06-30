@@ -9,6 +9,7 @@ import lombok.Value;
 @Value
 public class Question {
 	private Long boardNo;
+	private String userId;
 	private String title;
 	private String category;
 	private Date createDate;
