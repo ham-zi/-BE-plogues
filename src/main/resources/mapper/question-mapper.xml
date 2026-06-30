@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iso.plogues.question.model.dao.QuestionMapper">
+
+    <insert id="save">
+        INSERT
+          INTO
+               QUESTION_BOARD
+       	VALUES
+               (
+               SEQ_PLG_QB.NEXTVAL
+             , #{userId}
+             , #{title}
+             , #{category}
+             , SYSDATE
+             , #{content}
+             , 'N'
+             , 'N'
+               )
+    </insert>
+
+</mapper>

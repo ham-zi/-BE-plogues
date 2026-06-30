@@ -37,11 +37,14 @@ public class SecurityConfig {
 				   .csrf(AbstractHttpConfigurer::disable)
 				   .cors(Customizer.withDefaults())
 				   .authorizeHttpRequests(requests -> { 
-					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins").authenticated();
+             
+					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question",).authenticated();
 					   requests.requestMatchers(HttpMethod.POST).permitAll();
 					   requests.requestMatchers(HttpMethod.PATCH).permitAll();
 					   requests.requestMatchers(HttpMethod.DELETE).permitAll();
 					   requests.requestMatchers(HttpMethod.GET).permitAll();
+					   requests.requestMatchers("/api/admin").hasRole("ADMIN");
+		            	  requests.requestMatchers("/api/admin").hasAnyRole("ADMIN", "USER");
 				   }).sessionManagement(manager -> 
 				   						manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				   .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
