@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.Value;
+import lombok.Value; 
 
 @Value
 public class PageInfo {
@@ -15,7 +15,7 @@ public class PageInfo {
 	private int boardLimit;
 	private int pageLimit;
 	private int maxPage;
-	private int startPage;
+	private int startPage; 
 	private int endPage;
 	private int offset;
 	
@@ -23,7 +23,7 @@ public class PageInfo {
 		if(currentPage < 1) {
 			currentPage = 1;
 		}
-		this.listCount = listCount;
+		this.listCount = listCount; 
 		this.currentPage = currentPage;
 		this.boardLimit = boardLimit;
 		this.pageLimit = pageLimit;

@@ -54,7 +54,6 @@
     		REVIEW_BOARD RB
     JOIN 
     		PLOGUES_USER PU
-    		
     ON 
     		RB.USER_ID = PU.USER_ID
     WHERE 

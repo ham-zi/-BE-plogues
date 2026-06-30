@@ -8,31 +8,37 @@ import com.iso.plogues.board.model.dao.BoardMapper;
 import com.iso.plogues.board.model.dto.BoardDto;
 import com.iso.plogues.board.model.dto.BoardListResponseDto;
 import com.iso.plogues.page.PageInfo;
+import com.iso.plogues.template.board.BoardResponse;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+
 public class BoardService {
 	
 	private final BoardMapper boardMapper;
 
-	public BoardListResponseDto selectBoardList(int currentPage) {
+	public BoardResponse<BoardDto> selectBoardList(int currentPage) {
 
-	    int listCount = boardMapper.countBoardList();
+        int listCount = boardMapper.countBoardList();
 
-	    PageInfo pi = PageInfo.of(
-	            listCount,
-	            currentPage,
-	            10, 
-	            5   
-	    );
+        PageInfo page = PageInfo.of(
+                listCount,
+                currentPage,
+                10,
+                5
+        );
 
-	    List<BoardDto> boardList  = boardMapper.selectBoardList(pi);
+        List<BoardDto> boardList = boardMapper.selectBoardList(page);
 
-	    return BoardListResponseDto.builder()
-	            .boardList(boardList)
-	            .pageInfo(pi)
-	            .build();
-	}
+        BoardResponse<BoardDto> response = new BoardResponse<>();
+
+        response.setPage(page);
+        response.setBoard(boardList);
+
+        return response;
+    }
+	
+	
 }
