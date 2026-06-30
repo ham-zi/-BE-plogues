@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iso.plogues.board.model.dao.BoardMapper">
+
+    <select id="selectBoardList"
+            resultType="com.iso.plogues.board.model.dto.BoardDto">
+
+        SELECT *
+        FROM (
+            SELECT
+                ROWNUM RNUM,
+                A.*
+            FROM (
+                SELECT
+                    RB.BOARD_NO AS boardNo,
+                    RB.TITLE AS title,
+                    PU.USER_NAME AS writer,
+                    TO_CHAR(RB.CREATE_DATE, 'YYYY.MM.DD') AS createDate,
+                    RB.VIEW_COUNT AS views
+                FROM REVIEW_BOARD RB
+                JOIN PLOGUES_USER PU
+                  ON RB.USER_ID = PU.USER_ID
+                WHERE RB.DELETED = 'N'
+                ORDER BY RB.BOARD_NO DESC
+            ) A
+            WHERE ROWNUM &lt;= #{offset} + #{limit}
+        )
+        WHERE RNUM &gt; #{offset}
+
+    </select>
+
+    <select id="countBoardList"
+            resultType="int">
+
+        SELECT COUNT(*)
+        FROM REVIEW_BOARD
+        WHERE DELETED = 'N'
+
+    </select>
+
+</mapper>
