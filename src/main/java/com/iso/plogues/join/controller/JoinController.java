@@ -14,7 +14,8 @@ import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.service.JoinService;
-import com.iso.plogues.template.board.BoardResponse;
+import com.iso.plogues.util.dto.BoardResponse;
+
 import lombok.RequiredArgsConstructor;
 
 

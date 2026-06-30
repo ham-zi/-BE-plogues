@@ -12,7 +12,7 @@ import com.iso.plogues.join.file.model.service.JoinFileService;
 import com.iso.plogues.join.model.dao.JoinMapper;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.vo.Join;
-import com.iso.plogues.template.board.BoardResponse;
+import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.page.PageInfo;
 import lombok.RequiredArgsConstructor;
 
