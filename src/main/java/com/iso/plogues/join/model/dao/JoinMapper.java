@@ -10,6 +10,7 @@ import com.iso.plogues.join.model.vo.Join;
 import com.iso.plogues.util.page.PageInfo;
 
 
+
 @Mapper
 public interface JoinMapper {
 	int saveJoin(Join join);
