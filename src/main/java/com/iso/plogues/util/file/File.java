@@ -1,4 +1,4 @@
-package com.iso.plogues.file;
+package com.iso.plogues.util.file;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +10,7 @@ import lombok.Getter;
 public class File {
 	private Long fileNo; 
 	private Long refBoardNo;
+	private String refUserId;
 	private String originName;
 	private String changeName;
 	private String filePath;
@@ -19,6 +20,10 @@ public class File {
 	
 	public static File of(Long refBoardNo, String originName, String boardType) {
 		return new File(refBoardNo,originName, boardType);
+	}
+	
+	public static File of(String refUserId, String originName, String boardType) {
+		return new File(refUserId,originName, boardType);
 	}
 	
 	private File(Long refBoardNo, String originName, String boardType) {
@@ -31,6 +36,18 @@ public class File {
 		this.filePath = "http://localhost/uploads/"+ boardType + "/"+ changeName;
 		this.deleted = "N";
 	}
+	
+	private File(String refUserId, String originName, String boardType) {
+		validOriginName(originName);
+		validExtension(originName);
+		this.refUserId = refUserId;
+		this.originName = originName;
+		this.changeName = getChangeName(originName);
+		this.filePath = "http://localhost/uploads/"+ boardType + "/"+ changeName;
+		this.deleted = "N";
+	}
+	
+
 	
 	private String getChangeName(String originName) {
 		StringBuilder sb = new StringBuilder();

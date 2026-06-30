@@ -1,4 +1,4 @@
-package com.iso.plogues.page;
+package com.iso.plogues.util.page;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
