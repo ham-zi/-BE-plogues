@@ -15,4 +15,5 @@ public interface JoinMapper {
 	List<JoinDto> findAllPlant(PageInfo page);
 	List<JoinDto> findAllPlog(PageInfo page);
 
+
 }
