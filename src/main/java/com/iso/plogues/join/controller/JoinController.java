@@ -1,10 +1,10 @@
 package com.iso.plogues.join.controller;
 
 import org.springframework.http.HttpStatus;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,6 +41,12 @@ public class JoinController {
 			br = joinService.findAllPlog(page);
 		}
 		return ResponseEntity.status(200).body(ApiResponse.created("게시글 전체 조회 성공", br));
+	}
+	
+	@GetMapping("/{joinNo}")
+	public ResponseEntity<ApiResponse<JoinDto>> findByJoinNo(@PathVariable(name="joinNo") Long joinNo) {
+		JoinDto join = joinService.findByJoinNo(joinNo);
+		return ResponseEntity.status(200).body(ApiResponse.created("게시글 조회 성공", join));
 	}
 
 }
