@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.iso.plogues.board.model.dao.BoardMapper;
 import com.iso.plogues.board.model.dto.BoardDto;
-import com.iso.plogues.board.model.dto.BoardListResponseDto;
 import com.iso.plogues.page.PageInfo;
 import com.iso.plogues.template.board.BoardResponse;
 
@@ -31,9 +30,7 @@ public class BoardService {
         );
 
         List<BoardDto> boardList = boardMapper.selectBoardList(page);
-
         BoardResponse<BoardDto> response = new BoardResponse<>();
-
         response.setPage(page);
         response.setBoard(boardList);
 
