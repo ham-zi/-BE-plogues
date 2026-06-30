@@ -13,4 +13,5 @@ public class BoardListResponseDto {
 
     private List<BoardDto> boardList;
     private PageInfo pageInfo;
+    
 }
