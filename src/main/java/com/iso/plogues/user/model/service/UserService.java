@@ -12,6 +12,7 @@ import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.DuplicateUserIdException;
 import com.iso.plogues.exception.user.InvalidUserPwdException;
 import com.iso.plogues.user.model.dao.UserMapper;
+import com.iso.plogues.user.model.dto.MyInfoDto;
 import com.iso.plogues.user.model.dto.UserDto;
 import com.iso.plogues.user.model.vo.User;
 
@@ -27,6 +28,15 @@ public class UserService {
 	private final UserMapper userMapper;
 	private final PasswordEncoder passwordEncoder;
 
+	
+	@Transactional(readOnly=true)
+	public MyInfoDto selectMyInfo(CustomUserDetails user) {
+		log.info("{}",user.getUsername());
+		return userMapper.selectMyInfo(user);
+	}
+
+	
+	
 	@Transactional
 	public void signUp(UserDto user) {
 		
@@ -61,5 +71,6 @@ public class UserService {
 			throw new InvalidUserPwdException("비밀번호가 틀렸습니다.");
 		}
 	}
+
 
 }
