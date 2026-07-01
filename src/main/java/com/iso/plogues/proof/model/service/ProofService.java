@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
+import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedInsertException;
 import com.iso.plogues.exception.FileUploadException;
 import com.iso.plogues.proof.file.model.service.ProofFileService;
@@ -51,19 +52,20 @@ public class ProofService {
 
 	}
 
-	@Transactional
-	public BoardResponse<ProofDto> findByProofNo(Long proofNo) {
+	@Transactional(readOnly=true)
+	public ProofDto findByProofNo(Long proofNo) {
 
-		ProofDto proof = proofMapper.findByProofNo(proofNo);
+	    ProofDto proof = proofMapper.findByProofNo(proofNo);
 
-		List<FileDto> fileList = proofFileService.findByBno(proofNo);
+	    if(proof == null) {
+	        throw new FailedFindByNoException("게시글 조회에 실패했습니다.");
+	    }
 
-		proof.setFiles(fileList);
+	    List<FileDto> fileList = proofFileService.findByBno(proofNo);
 
-		BoardResponse<ProofDto> br = new BoardResponse<>();
-		br.setBoard(List.of(proof));
+	    proof.setFiles(fileList);
 
-		return br;
+	    return proof;
 	}
 
 }
