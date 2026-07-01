@@ -39,6 +39,7 @@ public class RequestService {
 	private void validateRequest(String userId, Long requestNo) {
 		RequestDto request = requestMapper.findByRequestNo(requestNo);
 		validateRequestNo(requestNo);
+		checkStatus(request.getStatus());
 		validateHost(userId, request.getUserId());
 		
 	}
@@ -46,6 +47,12 @@ public class RequestService {
 	private void validateRequestNo(Long requestNo) {
 		if(requestMapper.findByRequestNo(requestNo) == null) {
 			throw new InValidJoinRequestException("존재하지 않는 요청입니다.");
+		}
+	}
+	
+	private void checkStatus(String status) {
+		if("ACCEPTED".equals(status)) {			
+			throw new InValidJoinRequestException("이미 승인 처리된 요청입니다.");
 		}
 	}
 

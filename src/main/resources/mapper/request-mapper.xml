@@ -15,15 +15,6 @@
 	       USER_ID = #{userId}
   </select>
   
-  <select id="countByUserIdRequestNo" resultType="_int">
-	SELECT
-	       COUNT(*)
-	  FROM
-	       JOIN_REQUEST
-	 WHERE
-	       REQUEST_NO = #{requestNo}
-  </select>
-  
   <select id="findByRequestNo" resultType="RequestDto">
   	SELECT
   	       JOIN_REQUEST_NO
@@ -62,7 +53,7 @@
   	   SET
 	       STATUS = 'ACCEPTED'
 	 WHERE
-  	       REQUEST_NO = #{requestNo}    
+  	       JOIN_REQUEST_NO = #{requestNo}    
   </update>
 
   <update id="requestDenied">

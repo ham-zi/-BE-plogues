@@ -35,7 +35,7 @@ public class RequestController {
 	
 	@PatchMapping("/{requestNo}")
 	public ResponseEntity<ApiResponse<Void>> requestAccept(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(value="requestNo")Long requestNo){
-		
+		requestService.requestAccept(user,requestNo);
 		return ResponseEntity.ok().body(ApiResponse.success("요청을 수락하셨습니다.", null));
 	}
 	
