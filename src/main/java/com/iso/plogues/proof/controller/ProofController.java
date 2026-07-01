@@ -43,7 +43,7 @@ public class ProofController {
 		proofService.save(proof, files, user);
 
 		// 복수로 받으니 files
-		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created(null));
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("게시글 작성 성공", null));
 	}
 
 	@GetMapping("/detail")
