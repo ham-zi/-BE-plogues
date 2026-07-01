@@ -15,6 +15,24 @@
 	       USER_ID = #{userId}
   </select>
   
+  <select id="findByRequestNo" resultType="RequestDto">
+  	SELECT
+  	       JOIN_REQUEST_NO
+  	     , ASPIRATION
+  	     , STATUS
+  	     , JR.JOIN_NO
+  	     , JR.USER_ID
+  	     , JB.USER_ID AS host
+  	  FROM
+  	       JOIN_REQUEST JR
+  	  JOIN
+  	       JOIN_BOARD JB ON(JB.JOIN_NO = JR.JOIN_NO)
+  	 WHERE
+  	       JOIN_REQUEST_NO = #{requestNo}
+  </select>
+  
+  
+  
   <insert id="requestJoin">
   	INSERT
   	  INTO
@@ -28,5 +46,25 @@
 		 , #{userId}
 		   )
   </insert>
+  
+  <update id="requestAccept">
+  	UPDATE
+  	       JOIN_REQUEST
+  	   SET
+	       STATUS = 'ACCEPTED'
+	 WHERE
+  	       JOIN_REQUEST_NO = #{requestNo}    
+  </update>
+
+  <update id="requestDenied">
+  	UPDATE
+  	       JOIN_REQUEST
+  	   SET
+	       STATUS = 'DENIED'
+	 WHERE
+  	       REQUEST_NO = #{requestNo}    
+  </update>
+  
+  
   
 </mapper>

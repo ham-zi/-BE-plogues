@@ -20,4 +20,5 @@ public class RequestDto {
 	@NotBlank(message="포부를 작성해주세요.")
 	private String aspiration;
 	private String status;
+	private String host;
 }

@@ -1,6 +1,7 @@
 package com.iso.plogues.request.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,17 +19,25 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping
+@RequestMapping("/api/request")
 @Slf4j
 public class RequestController {
 
 	private final RequestService requestService;
 	
-	@PostMapping("/api/request/{joinNo}")
+	@PostMapping("/{joinNo}")
 	public ResponseEntity<ApiResponse<Void>> requestJoin(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(value="joinNo")Long joinNo, @Valid @RequestBody RequestDto requestDto){
 		requestDto.setUserId(user.getUsername());
 		requestDto.setJoinNo(joinNo);
 		requestService.requestJoin(requestDto);
 		return ResponseEntity.ok().body(ApiResponse.created("요청에 성공했습니다.", null));
 	}
+	
+	@PatchMapping("/{requestNo}")
+	public ResponseEntity<ApiResponse<Void>> requestAccept(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(value="requestNo")Long requestNo){
+		requestService.requestAccept(user,requestNo);
+		return ResponseEntity.ok().body(ApiResponse.success("요청을 수락하셨습니다.", null));
+	}
+	
+	
 }
