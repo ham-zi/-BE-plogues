@@ -24,7 +24,7 @@ public class BoardService {
         PageInfo page = PageInfo.of(
                 listCount,
                 currentPage,
-                5,
+                10,
                 5
         );
 
