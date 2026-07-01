@@ -21,13 +21,16 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping
-    public ApiResponse<BoardResponse<BoardDto>> selectBoardList(
+    public ResponseEntity<ApiResponse<BoardResponse<BoardDto>>> selectBoardList(
             @RequestParam(name = "category") String category,
             @RequestParam(name = "page", defaultValue = "1") int page) {
 
-        return ApiResponse.<BoardResponse<BoardDto>>builder()
-                .code(200)
-                .data(boardService.selectBoardList(page))
-                .build();
+        return ResponseEntity.ok(
+                ApiResponse.<BoardResponse<BoardDto>>builder()
+                        .code(200)
+                        .message("게시글 목록 조회 성공")
+                        .data(boardService.selectBoardList(page))
+                        .build()
+        );
     }
 }
