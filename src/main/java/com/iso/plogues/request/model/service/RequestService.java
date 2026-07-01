@@ -26,8 +26,13 @@ public class RequestService {
 	}
 	
 	public void requestAccept(CustomUserDetails user, Long requestNo) {
-		validateRequest(user.getUsername(), requestNo);
+		validateAcceptRequest(user.getUsername(), requestNo);
 		requestMapper.requestAccept(requestNo);
+	}
+	
+	public void requestDenied(CustomUserDetails user, Long requestNo) {
+		validateDeniedRequest(user.getUsername(), requestNo);
+		requestMapper.requestDenied(requestNo);
 	}
 	
 	private void isDuplicateRequest(RequestDto requestDto) {
@@ -36,10 +41,17 @@ public class RequestService {
 		}
 	}
 	
-	private void validateRequest(String userId, Long requestNo) {
+	private void validateAcceptRequest(String userId, Long requestNo) {
 		RequestDto request = requestMapper.findByRequestNo(requestNo);
 		validateRequestNo(requestNo);
-		checkStatus(request.getStatus());
+		checkAccepted(request.getStatus());
+		validateHost(userId, request.getUserId());
+		
+	}
+	private void validateDeniedRequest(String userId, Long requestNo) {
+		RequestDto request = requestMapper.findByRequestNo(requestNo);
+		validateRequestNo(requestNo);
+		checkDenied(request.getStatus());
 		validateHost(userId, request.getUserId());
 		
 	}
@@ -50,9 +62,15 @@ public class RequestService {
 		}
 	}
 	
-	private void checkStatus(String status) {
+	private void checkAccepted(String status) {
 		if("ACCEPTED".equals(status)) {			
 			throw new InValidJoinRequestException("이미 승인 처리된 요청입니다.");
+		}
+	}
+	
+	private void checkDenied(String status) {
+		if("DENIED".equals(status)) {			
+			throw new InValidJoinRequestException("이미 거절 처리된 요청입니다.");
 		}
 	}
 

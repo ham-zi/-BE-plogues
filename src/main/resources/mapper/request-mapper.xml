@@ -62,7 +62,7 @@
   	   SET
 	       STATUS = 'DENIED'
 	 WHERE
-  	       REQUEST_NO = #{requestNo}    
+  	       JOIN_REQUEST_NO = #{requestNo}    
   </update>
   
   

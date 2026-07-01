@@ -11,4 +11,5 @@ public interface RequestMapper {
 	RequestDto findByRequestNo(Long RequestNo);
 	void requestJoin(RequestDto requestDto);
 	void requestAccept(Long requestNo);
+	void requestDenied(Long requestNo);
 }
