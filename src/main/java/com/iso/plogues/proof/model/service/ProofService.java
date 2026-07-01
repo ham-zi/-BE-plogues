@@ -13,7 +13,6 @@ import com.iso.plogues.proof.model.dao.ProofMapper;
 import com.iso.plogues.proof.model.dto.ProofDto;
 import com.iso.plogues.proof.model.vo.Proof;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +24,7 @@ public class ProofService {
 	
 	private final ProofMapper proofMapper;
 	private final ProofFileService proofFileService;
+	
 	
 	@Transactional
     public void save(ProofDto proof, List<MultipartFile> files, CustomUserDetails user) {
@@ -51,6 +51,9 @@ public class ProofService {
             proofFileService.saveProofFiles(files, p.getProofNo());
         }
     }
+	
+
+
 	
 	
 	

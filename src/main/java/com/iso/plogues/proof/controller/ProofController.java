@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +49,19 @@ public class ProofController {
 	return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created(null));
 	}
 
+	// 목록조회
+	@GetMapping	
+	public ResponseEntity<ApiResponse<List<ProofDto>>> findAll(
+	        @RequestParam(name="page", defaultValue="1") int page) {
+
+	    List<ProofDto> proofs = proofService.findAll(page);
+
+	    return ResponseEntity.ok()
+	            .body(ApiResponse.success(proofs));
+	}
+	
+	
+	
 }
 
 
