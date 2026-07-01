@@ -1,6 +1,9 @@
 package com.iso.plogues.board.model.dto;
 
 import java.util.Date;
+import java.util.List;
+
+import com.iso.plogues.util.file.FileDto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,4 +16,6 @@ public class BoardDto {
     private String writer;
     private Date createDate;
     private int views;
+    private String content;
+    private List<FileDto> files;
 }

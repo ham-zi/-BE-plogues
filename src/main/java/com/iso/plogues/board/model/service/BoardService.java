@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.iso.plogues.board.model.dao.BoardMapper;
 import com.iso.plogues.board.model.dto.BoardDto;
 import com.iso.plogues.util.dto.BoardResponse;
+import com.iso.plogues.util.file.FileDto;
 import com.iso.plogues.util.page.PageInfo;
 
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,15 @@ public class BoardService {
         response.setBoard(boardList);
 
         return response;
+    }
+
+    public BoardDto selectBoardDetail(Long boardNo) {
+        BoardDto board = boardMapper.selectBoardDetail(boardNo);
+        if (board == null) throw new RuntimeException("존재하지 않는 게시글입니다.");
+
+        List<FileDto> files = boardMapper.selectFileList(boardNo);
+        board.setFiles(files);
+
+        return board;
     }
 }
