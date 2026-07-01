@@ -62,5 +62,11 @@ public class JoinController {
 		joinService.updateJoin(user, joinNo, join, file);
 		return ResponseEntity.status(200).body(ApiResponse.success("게시글 수정 성공", null));
 	}
+	
+	@PostMapping("/{joinNo}/reform")
+	public ResponseEntity<ApiResponse<Void>> reformJoin(@AuthenticationPrincipal CustomUserDetails user, JoinDto join, @RequestParam(name="file", required=false) MultipartFile file) {
+		joinService.saveJoin(user, join, file);
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("게시글 작성 성공", null));
+	}
 
 }
