@@ -4,10 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.properties
 !gradlew
 !gradlew.bat
-<<<<<<< HEAD
 
-=======
->>>>>>> 3f141cf30cc435aaa40a40cf62ad448b21642182
 .apt_generated/
 .classpath
 .factorypath
@@ -18,22 +15,15 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-<<<<<<< HEAD
 
-=======
->>>>>>> 3f141cf30cc435aaa40a40cf62ad448b21642182
 .idea/
 *.iws
 *.iml
 *.ipr
 out/
-<<<<<<< HEAD
 
 .vscode/
 
-=======
-.vscode/
->>>>>>> 3f141cf30cc435aaa40a40cf62ad448b21642182
 *.yml
 src/main/resources/application.yml
 src/main/resources/application.yaml
@@ -41,19 +31,13 @@ src/main/resources/application.properties
 src/main/resources/application-*.yml
 src/main/resources/application-*.yaml
 src/main/resources/application-*.properties
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 3f141cf30cc435aaa40a40cf62ad448b21642182
 *.log
 logs/
 *.tmp
 *.bak
-<<<<<<< HEAD
 
-=======
->>>>>>> 3f141cf30cc435aaa40a40cf62ad448b21642182
 # Windows
 Thumbs.db
 Thumbs.db:encryptable
@@ -66,8 +50,4 @@ $RECYCLE.BIN/
 ._*
 # Linux
 *~
-<<<<<<< HEAD
 .directory
-=======
-.directory
->>>>>>> 3f141cf30cc435aaa40a40cf62ad448b21642182
