@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class File {
 	private Long fileNo; 
 	private Long refBoardNo;
@@ -33,6 +35,7 @@ public class File {
 		this.refBoardNo = refBoardNo;
 		this.originName = originName;
 		this.changeName = getChangeName(originName);
+		this.boardType = boardType;
 		this.filePath = "http://localhost/uploads/"+ boardType + "/"+ changeName;
 		this.deleted = "N";
 	}
@@ -43,6 +46,7 @@ public class File {
 		this.refUserId = refUserId;
 		this.originName = originName;
 		this.changeName = getChangeName(originName);
+		this.boardType = boardType;
 		this.filePath = "http://localhost/uploads/"+ boardType + "/"+ changeName;
 		this.deleted = "N";
 	}

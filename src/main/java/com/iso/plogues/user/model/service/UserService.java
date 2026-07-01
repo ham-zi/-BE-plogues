@@ -1,6 +1,7 @@
 package com.iso.plogues.user.model.service;
 
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,16 +12,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.DuplicateUserIdException;
+import com.iso.plogues.exception.FileUploadException;
 import com.iso.plogues.exception.user.InvalidUserPwdException;
-
+import com.iso.plogues.user.file.FileMapper;
 import com.iso.plogues.user.model.dao.UserMapper;
 import com.iso.plogues.user.model.dto.MyInfoDto;
 import com.iso.plogues.user.model.dto.UserDto;
 import com.iso.plogues.user.model.vo.User;
 import com.iso.plogues.util.file.File;
 import com.iso.plogues.util.file.FileService;
-
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
 	
 	private final UserMapper userMapper;
+	private final FileMapper fileMapper;
 	private final PasswordEncoder passwordEncoder;
 	private final FileService fileService;
 
@@ -67,18 +68,35 @@ public class UserService {
 	
 	@Transactional
 	public void patchMyInfo(CustomUserDetails user, UserDto userInfo, MultipartFile file) {
-		
 		userInfo.setUserId(user.getUsername());
 		int result = userMapper.patchMyInfo(userInfo);
-		//파일이 있다면?
-		if(result > 0 && file != null) {
-			File userFile = File.of(user.getUsername(), file.getOriginalFilename(), "user");
-			
-			fileService.fileTransferTo(file, userFile.getChangeName(), userFile.getBoardType());
+		log.info("{}, {}",file, result);
+		if(result == 1 && file != null) {
+			changeUserFile(user, file);
 		}
-		
 	}
-
+	
+	private void changeUserFile(CustomUserDetails user, MultipartFile file) {
+		File userFile = File.of(user.getUsername(), file.getOriginalFilename(), "user");
+		log.info("usernameuansemr~!@~!@{}",userFile);
+		fileMapper.deleteFile(user.getUsername());
+		int saveResult = fileMapper.saveFile(user.getUsername(),userFile);
+		invalidSaveFile(saveResult);
+		try {
+			fileService.deleteFile(userFile);
+		} catch (IOException e) {
+			throw new FileUploadException("파일 업로드에 실패했습니다.");
+		}
+		fileService.fileTransferTo(file, userFile.getChangeName(), userFile.getBoardType());
+	}
+	
+	private void invalidSaveFile(int result) {
+		if(result != 1) {
+			throw new FileUploadException("파일 업로드에 실패했습니다.");
+		}
+	}
+	
+	
 	@Transactional
 	public void deleteAccount(CustomUserDetails user, Map<String,String>body) {
 		matchesPassword(user, body.get("userPwd") );
