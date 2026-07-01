@@ -32,23 +32,26 @@ public class JwtFilter extends OncePerRequestFilter {
 	private final JwtUtil jwtUtil;
 	private final UserDetailsService userDetailService;
 
-	// 요 안에서 반환하는 경로들은 필터를 아예 안타게해주는 메소드
-	@Override
-	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-		String uri = request.getRequestURI();
-		return uri.equals("/api/auth/login") || uri.equals("/api/auth/refresh");
-	}
+	
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		
-		String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-		
-		if(authorization == null || !authorization.startsWith("Bearer ")) {
-			filterChain.doFilter(request, response);
-			return;
-		}
+	        throws ServletException, IOException {
+	    
+	    String uri = request.getRequestURI();
+	    if (uri.equals("/api/auth/login") || uri.equals("/api/auth/refresh")) {
+	        filterChain.doFilter(request, response);
+	        return;
+	    }
+
+	    String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+	    log.info("요청 URI: {}, 인증 헤더: {}", uri, authorization); // <--- 이 로그를 꼭 추가하세요!
+
+	    if(authorization == null || !authorization.startsWith("Bearer ")) {
+	        log.info("인증 헤더 없음 또는 형식 오류"); // <--- 이 로그도 추가
+	        filterChain.doFilter(request, response);
+	        return;
+	    }
 		String token = authorization.substring(7);
 		try {
 			Claims claims = jwtUtil.parseJwt(token);
@@ -79,6 +82,13 @@ public class JwtFilter extends OncePerRequestFilter {
 			
 		}
 		
+		// filterChain.doFilter(request, response); 밑에삭제하
+		
+		if (SecurityContextHolder.getContext().getAuthentication() != null) {
+		    log.info("인증 성공! 사용자: {}", SecurityContextHolder.getContext().getAuthentication().getName());
+		} else {
+		    log.info("인증 실패! SecurityContext가 비어있습니다.");
+		}
 		filterChain.doFilter(request, response);
 	}
 	
