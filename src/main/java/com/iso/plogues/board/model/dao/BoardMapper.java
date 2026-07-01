@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 
 import com.iso.plogues.board.model.dto.BoardDto;
+import com.iso.plogues.util.file.File;
 import com.iso.plogues.util.file.FileDto;
 import com.iso.plogues.util.page.PageInfo;
 
@@ -17,6 +18,10 @@ public interface BoardMapper {
     
     BoardDto selectBoardDetail(Long boardNo);
 	List<FileDto> selectFileList(Long boardNo);
+	
+	void insertBoard(BoardDto boardDto);
+	void insertFile(File file);
+	
 }
 
 

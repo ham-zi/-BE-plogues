@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.iso.plogues.util.file.FileDto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,10 +13,13 @@ import lombok.Setter;
 @Setter
 public class BoardDto {
 	private Long boardNo;
+	@NotBlank(message = "제목은 필수입니다.")
     private String title;
     private String writer;
     private Date createDate;
     private int views;
+    @NotBlank(message = "내용은 필수입니다.")
     private String content;
-    private List<FileDto> files;
+    private String userId;    
+    private List<FileDto> fileList;
 }

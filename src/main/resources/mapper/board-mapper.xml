@@ -59,13 +59,15 @@
     			RB.DELETED = 'N'
 </select>
 
-<select id="selectFileList"
-        resultType="com.iso.plogues.board.file.model.dto.BoardFileDto">
+	<select id="selectFileList"
+        resultType="com.iso.plogues.util.file.FileDto">
     	SELECT
         		FILE_NO     AS fileNo,
         		ORIGIN_NAME AS originName,
         		CHANGE_NAME AS changeName,
-        		FILE_PATH   AS filePath
+       		 	FILE_PATH   AS filePath,
+        		DELETED     AS deleted,
+        		BOARD_NO    AS refBoardNo
     	FROM
         		REVIEW_FILE
     	WHERE
@@ -73,7 +75,47 @@
     	AND 
     			DELETED = 'N'
 </select>
-    
+	<insert id="insertBoard"
+			useGeneratedKeys="true" 
+        	keyProperty="boardNo" 
+        	keyColumn="BOARD_NO">
+    	INSERT 
+    	INTO 
+    			REVIEW_BOARD 
+    			(
+        		BOARD_NO, 
+        		TITLE, 
+        		CONTENT, 
+        		USER_ID
+    			) 
+    	VALUES 
+    			(
+        SEQ_REVIEW_BOARD.NEXTVAL, 
+        		#{title}, 
+        		#{content}, 
+        		#{userId}
+   		 		)
+</insert>
+
+	<insert id="insertFile">
+    INSERT INTO 
+    			REVIEW_FILE 
+    			(
+        		FILE_NO, 
+        		ORIGIN_NAME, 
+        		CHANGE_NAME, 
+        		FILE_PATH, 
+        		BOARD_NO
+    			) 
+    	VALUES 
+    			(
+        SEQ_REVIEW_FILE.NEXTVAL, 
+        		#{originName}, 
+        		#{changeName}, 
+        		#{filePath}, 
+        		#{refBoardNo}
+    )
+</insert>
     
 
 </mapper>
