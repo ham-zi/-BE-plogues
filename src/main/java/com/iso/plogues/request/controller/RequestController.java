@@ -1,6 +1,7 @@
 package com.iso.plogues.request.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +37,13 @@ public class RequestController {
 	@PatchMapping("/{requestNo}")
 	public ResponseEntity<ApiResponse<Void>> requestAccept(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(value="requestNo")Long requestNo){
 		requestService.requestAccept(user,requestNo);
-		return ResponseEntity.ok().body(ApiResponse.success("요청을 수락하셨습니다.", null));
+		return ResponseEntity.ok().body(ApiResponse.success("모임 신청 수락에 성공하셨습니다.", null));
+	}
+	
+	@DeleteMapping("/{requestNo}")
+	public ResponseEntity<ApiResponse<Void>> requestDenied(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(value="requestNo")Long requestNo){
+		requestService.requestDenied(user,requestNo);
+		return ResponseEntity.ok().body(ApiResponse.success("모임 신청 거절에 성공하셨습니다", null));
 	}
 	
 	
