@@ -17,5 +17,6 @@ public interface JoinMapper {
 	List<JoinDto> findAllPlog(PageInfo page);
 	JoinDto findByJoinNo(Long joinNo);
 	int deleteJoin(@Param(value="userId") String userId, @Param(value="joinNo") Long joinNo);
+	int updateJoin(Join join);
 
 }

@@ -18,7 +18,7 @@ public class File {
 	private String filePath;
 	private String deleted;
 	private String boardType;
-	private List<String>extensions = List.of(".jpg", ".png", ".jpeg", ".svg", ".heif", ".heic");
+	private List<String>extensions = List.of(".jpg", ".png", ".jpeg", ".svg", ".heif", ".heic", ".gif");
 	
 	public static File of(Long refBoardNo, String originName, String boardType) {
 		return new File(refBoardNo,originName, boardType);

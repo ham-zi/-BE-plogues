@@ -20,6 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JoinDto {
+	private Long joinNo;
 	private String userId;
 	@NotBlank
 	private String category;

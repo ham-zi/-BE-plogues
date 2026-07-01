@@ -54,5 +54,18 @@ public class JoinFileService {
 			throw new FailedDeleteException("파일 삭제에 실패했습니다.");
 		}
 	}
+	
+	@Transactional
+	public void updateFile(MultipartFile file, Long refBno, String boardType) {
+		if(!findByBno(refBno).isEmpty()) {
+			hardDeleteFile(refBno);
+		}
+		saveFile(file, refBno, boardType);
+	}
+	
+	private void hardDeleteFile(Long refBno) {
+		int result = fileMapper.hardDeleteFile(refBno);
+		throwFailedDeleteException(result);
+	}
 
 }

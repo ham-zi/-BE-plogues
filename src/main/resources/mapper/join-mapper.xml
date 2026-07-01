@@ -87,4 +87,20 @@
   	   AND 
   	       JOIN_NO = #{joinNo}
   </update>
+  <update id="updateJoin">
+  	UPDATE 
+  	       JOIN_BOARD
+  	   SET 
+  	       PARTICIPANTS = #{participants}
+  	     , REGION = #{region}
+  	     , START_DATE = #{startDate}
+  	     , END_DATE = #{endDate}
+  	     , TITLE = #{title}
+  	     , CONTENT = #{content}
+  	     , UPDATED = 'Y'
+  	 WHERE 
+  	       USER_ID = #{userId}
+  	   AND 
+  	       JOIN_NO = #{joinNo}
+  </update>
 </mapper>
