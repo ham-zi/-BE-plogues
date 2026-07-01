@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iso.plogues.join.model.dao.JoinMapper">
+  <insert id="saveJoin">
+  	<selectKey keyProperty="joinNo"
+               resultType="long"
+               order="BEFORE">
+        SELECT SEQ_PLG_JB.NEXTVAL
+        FROM DUAL
+    </selectKey>
+    INSERT
+      INTO
+           JOIN_BOARD
+    VALUES 
+           (
+			 #{joinNo}
+		   , #{userId}
+		   , #{category}
+		   , #{participants}
+		   , #{region}
+		   , #{startDate}
+		   , #{endDate}
+		   , #{title}
+		   , #{content}
+		   , 'N'
+		   , 'N'
+		   , SYSDATE
+		   )
+  </insert>
+  <select id="listCount" resultType="_int">
+  	SELECT 
+  	       COUNT(*)
+  	  FROM 
+  	       JOIN_BOARD
+  	 WHERE 
+  	       DELETED = 'N'
+  </select>
+  <sql id="joinColumns">
+  	SELECT 
+  	       JOIN_NO
+  	     , USER_ID
+  	     , CATEGORY
+  	     , PARTICIPANTS
+  	     , REGION
+  	     , START_DATE
+  	     , END_DATE
+  	     , TITLE
+  	     , CONTENT
+  	     , CREATE_DATE
+  	  FROM 
+  	       JOIN_BOARD
+  	 WHERE 
+  	       DELETED = 'N'
+  </sql>
+  <select id="findAllPlant" resultType="joinDto">
+  	<include refid="joinColumns"/>
+  	   AND 
+  	       CATEGORY = 'PLANT'
+  	 ORDER 
+  	    BY 
+  	       JOIN_NO DESC
+  	OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY
+  </select>
+  <select id="findAllPlog" resultType="joinDto">
+  	<include refid="joinColumns"/>
+  	   AND 
+  	       CATEGORY = 'PLOG'
+  	 ORDER 
+  	    BY 
+  	       JOIN_NO DESC
+  	OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY
+  </select>
+  <select id="findByJoinNo" resultType="joinDto">
+  	<include refid="joinColumns"/>
+  	   AND 
+  	       JOIN_NO = #{joinNo}
+  </select>
+</mapper>

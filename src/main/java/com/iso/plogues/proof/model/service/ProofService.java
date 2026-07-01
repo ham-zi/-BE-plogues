@@ -7,10 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
+import com.iso.plogues.exception.FileUploadException;
 import com.iso.plogues.proof.file.model.service.ProofFileService;
 import com.iso.plogues.proof.model.dao.ProofMapper;
 import com.iso.plogues.proof.model.dto.ProofDto;
 import com.iso.plogues.proof.model.vo.Proof;
+
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,8 +44,8 @@ public class ProofService {
        
         
         if (result == 0) {
-            throw new RuntimeException("게시글 작성에 실패하였습니다. 잠시 후에 다시 시도해주세요.");
-        }	// FailedInsertException 로 변경
+            throw new FileUploadException("게시글 작성에 실패하였습니다. 잠시 후에 다시 시도해주세요.");
+        }	
        
         if (files != null && !files.isEmpty()) {
             proofFileService.saveProofFiles(files, p.getProofNo());
