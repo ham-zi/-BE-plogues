@@ -1,8 +1,8 @@
 spring:
   application:
-    name: unknown
+    name: one
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521:XE
+    url: jdbc:oracle:thin:@192.168.51.34:1521:XE
     username: C##KH_ISO
     password: 1234
     driver-class-name: oracle.jdbc.driver.OracleDriver
@@ -23,6 +23,7 @@ mybatis:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.iso.plogues.question.model.dto;
   
 jwt:
-  secret: D9uLKVc4FE0IEheN3pLLEb8GKhHRsG8cdOxazHnEkRm3CGAeB+xVbt8Dbob1QhRB
+  secret: p7Vq3mZ8kL1Xo9R2bT6nW4cF0HsJ8vQeA5uD3mZx7LpN2kV9sR1cG6hT0bY8fJ

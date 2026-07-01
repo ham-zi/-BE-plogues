@@ -1,11 +1,7 @@
 package com.iso.plogues.util.page;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Value;
 
 @Value
@@ -17,6 +13,7 @@ public class PageInfo {
 	private int maxPage;
 	private int startPage;
 	private int endPage;
+	@JsonIgnore
 	private int offset;
 	
 	private PageInfo(int listCount, int currentPage, int boardLimit, int pageLimit) {

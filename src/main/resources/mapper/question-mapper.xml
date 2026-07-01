@@ -20,5 +20,74 @@
              , 'N'
                )
     </insert>
+    
+    <select id="findByAll" resultType="QuestionDto">
+	    SELECT
+	           BOARD_NO
+	         , USER_ID
+	         , TITLE
+	         , CATEGORY
+	         , CREATE_DATE
+	         , CONTENT
+	         , UPDATED
+	         , DELETED
+	      FROM 
+	      	   QUESTION_BOARD
+	    <where>
+	        DELETED = 'N'
+	       <if test="category != null and category != ''">
+	       AND CATEGORY = #{category}
+	        </if>
+	    </where>
+	    ORDER BY BOARD_NO DESC
+	</select>
+	
+	<select id="listCount" resultType="int">
+	    SELECT
+	           COUNT(*)
+	      FROM
+	    	   QUESTION_BOARD
+	     WHERE 
+	     	   DELETED = 'N'
+	
+	    <if test="category != null and category != ''">
+	       AND CATEGORY = #{category}
+	    </if>
+	</select>
+	
+	<select id="findByOne" resultType="QuestionDto">
+        SELECT
+               BOARD_NO
+	         , USER_ID
+	         , TITLE
+	         , CATEGORY
+	         , CREATE_DATE
+	         , CONTENT
+	         , UPDATED
+	         , DELETED
+         FROM 
+               QUESTION_BOARD
+        WHERE 
+               BOARD_NO = #{boardNo}
+    </select>
+	
+	<delete id="deleteByQuestion">
+        DELETE 
+          FROM
+               QUESTION_BOARD 
+         WHERE
+               BOARD_NO = #{boardNo}
+    </delete>
+    
+    <select id="findAuthorByBoardNo" resultType="java.lang.String">
+        SELECT 
+               WRITER 
+          FROM 
+               BOARD 
+         WHERE 
+               BOARD_NO = #{boardNo}
+    </select>
+	
+    
 
 </mapper>
