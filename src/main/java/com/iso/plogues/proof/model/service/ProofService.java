@@ -7,11 +7,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
+import com.iso.plogues.exception.FailedFindByNoException;
+import com.iso.plogues.exception.FailedInsertException;
 import com.iso.plogues.exception.FileUploadException;
 import com.iso.plogues.proof.file.model.service.ProofFileService;
 import com.iso.plogues.proof.model.dao.ProofMapper;
 import com.iso.plogues.proof.model.dto.ProofDto;
 import com.iso.plogues.proof.model.vo.Proof;
+import com.iso.plogues.util.dto.BoardResponse;
+import com.iso.plogues.util.file.FileDto;
+import com.iso.plogues.util.page.PageInfo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +50,22 @@ public class ProofService {
 		// 사진 2개 각각 저장
 		proofFileService.saveProofFiles(files, p.getProofNo());
 
+	}
+
+	@Transactional(readOnly=true)
+	public ProofDto findByProofNo(Long proofNo) {
+
+	    ProofDto proof = proofMapper.findByProofNo(proofNo);
+
+	    if(proof == null) {
+	        throw new FailedFindByNoException("게시글 조회에 실패했습니다.");
+	    }
+
+	    List<FileDto> fileList = proofFileService.findByBno(proofNo);
+
+	    proof.setFiles(fileList);
+
+	    return proof;
 	}
 
 }

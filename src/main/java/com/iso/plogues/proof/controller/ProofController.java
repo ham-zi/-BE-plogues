@@ -19,41 +19,39 @@ import com.iso.plogues.board.model.dto.BoardDto;
 import com.iso.plogues.board.model.service.BoardService;
 import com.iso.plogues.proof.model.dto.ProofDto;
 import com.iso.plogues.proof.model.service.ProofService;
+import com.iso.plogues.util.dto.BoardResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 @RestController
 @RequestMapping("/proof")
 @RequiredArgsConstructor
 public class ProofController {
-	
-	
+
 	private final ProofService proofService;
-	
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Void>> save(@Valid@ModelAttribute ProofDto proof,
-	@RequestParam(name="file", required=false)  List<MultipartFile> files,
-	@AuthenticationPrincipal CustomUserDetails user){
-	// 제약조건valid 리스트로 이미지파일 2개 받고, 유저검증하기
+	public ResponseEntity<ApiResponse<Void>> save(@Valid @ModelAttribute ProofDto proof,
+			@RequestParam(name = "file", required = false) List<MultipartFile> files,
+			@AuthenticationPrincipal CustomUserDetails user) {
+		// 제약조건valid 리스트로 이미지파일 2개 받고, 유저검증하기
 		System.out.println("user = " + user);
-		
+
 		proofService.save(proof, files, user);
-	
-	
-	// 복수로 받으니 files
-	return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created(null));
+
+		// 복수로 받으니 files
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created(null));
 	}
 
-	
-	
-	
-	
+	@GetMapping("/detail")
+	public ResponseEntity<ApiResponse<ProofDto>> findByProofNo(@RequestParam(name = "proofNo") Long proofNo) {
+
+		ProofDto proof = proofService.findByProofNo(proofNo);
+
+		return ResponseEntity.status(200).body(ApiResponse.success("인증 게시글 상세 조회 성공", proof));
+	}
+
 }
-
-
-

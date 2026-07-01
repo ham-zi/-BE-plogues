@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.iso.plogues.util.page.PageInfo;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

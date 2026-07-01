@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.iso.plogues.exception.FailedInsertException;
 import com.iso.plogues.proof.file.model.dao.ProofFileMapper;
 import com.iso.plogues.util.file.File;
+import com.iso.plogues.util.file.FileDto;
 import com.iso.plogues.util.file.FileService;
 
 import lombok.RequiredArgsConstructor;
@@ -38,4 +39,11 @@ public class ProofFileService {
 			fileService.fileTransferTo(file, fileEntity.getChangeName(), boardType);
 		}
 	}
+
+	@Transactional
+	public List<FileDto> findByBno(Long proofNo) {
+		return proofFileMapper.findByBno(proofNo);
+	}
+
+
 }

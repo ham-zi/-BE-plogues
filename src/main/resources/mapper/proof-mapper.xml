@@ -1,40 +1,38 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.iso.plogues.proof.model.dao.ProofMapper">
 
 	<insert id="save" parameterType="com.iso.plogues.proof.model.vo.Proof">
 
-    <selectKey keyProperty="proofNo" resultType="long" order="BEFORE">
-        SELECT SEQ_PLG_PB.NEXTVAL FROM DUAL
-    </selectKey>
+		<selectKey keyProperty="proofNo" resultType="long" order="BEFORE">
+			SELECT SEQ_PLG_PB.NEXTVAL FROM DUAL
+		</selectKey> INSERT INTO
+		PROOF_BOARD ( PROOF_NO, USER_ID, JOIN_NO, TITLE, CATEGORY, QUANTITY,
+		CONTENT, CREATE_DATE, DELETED, UPDATED ) VALUES ( #{proofNo}, #{userId},
+		#{joinNo}, #{title}, #{category}, #{quantity}, #{content}, SYSDATE, 'N',
+		'N' ) </insert>
 
-    INSERT INTO PROOF_BOARD (
-        PROOF_NO,
-        USER_ID,
-        JOIN_NO,
-        TITLE,
-        CATEGORY,
-        QUANTITY,
-        CONTENT,
-        CREATE_DATE,
-        DELETED,
-        UPDATED
-    )
-    VALUES (
-        #{proofNo},
-        #{userId},
-        #{joinNo},
-        #{title},
-        #{category},
-        #{quantity},
-        #{content},
-        SYSDATE,
-        'N',
-        'N'
-    )
 
-</insert>
+	<sql id="proofColumns">
+		SELECT
+		PROOF_NO
+		, USER_ID
+		, JOIN_NO
+		, TITLE
+		, CATEGORY
+		, QUANTITY
+		, CONTENT
+		, CREATE_DATE
+		FROM
+		PROOF_BOARD
+		WHERE
+		DELETED = 'N'
+	</sql>
+
+
+	<select id="findByProofNo"
+		resultType="com.iso.plogues.proof.model.dto.ProofDto">
+		<include refid="proofColumns" /> AND PROOF_NO = #{proofNo} </select>
 
 </mapper>
