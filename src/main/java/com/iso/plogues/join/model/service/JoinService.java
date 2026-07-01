@@ -16,7 +16,6 @@ import com.iso.plogues.join.model.vo.Join;
 import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.file.FileDto;
 import com.iso.plogues.util.page.PageInfo;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
