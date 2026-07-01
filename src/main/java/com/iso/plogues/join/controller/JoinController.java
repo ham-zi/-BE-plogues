@@ -3,6 +3,7 @@ package com.iso.plogues.join.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.join.model.dto.JoinDto;
@@ -39,13 +41,19 @@ public class JoinController {
 		} else if("plogging".equals(category)) {
 			br = joinService.findAllPlog(page);
 		}
-		return ResponseEntity.status(200).body(ApiResponse.created("게시글 전체 조회 성공", br));
+		return ResponseEntity.status(200).body(ApiResponse.success("게시글 전체 조회 성공", br));
 	}
 	
 	@GetMapping("/{joinNo}")
 	public ResponseEntity<ApiResponse<JoinDto>> findByJoinNo(@PathVariable(name="joinNo") Long joinNo) {
 		JoinDto join = joinService.findByJoinNo(joinNo);
-		return ResponseEntity.status(200).body(ApiResponse.created("게시글 조회 성공", join));
+		return ResponseEntity.status(200).body(ApiResponse.success("게시글 조회 성공", join));
+	}
+	
+	@DeleteMapping("/{joinNo}")
+	public ResponseEntity<ApiResponse<Void>> deleteJoin(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(name="joinNo") Long joinNo) {
+		joinService.deleteJoin(user, joinNo);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.noContent("게시글 조회 성공", null));
 	}
 
 }

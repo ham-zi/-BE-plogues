@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
+import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedInsertException;
 import com.iso.plogues.join.file.model.service.JoinFileService;
@@ -16,6 +17,7 @@ import com.iso.plogues.join.model.vo.Join;
 import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.file.FileDto;
 import com.iso.plogues.util.page.PageInfo;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -37,13 +39,17 @@ public class JoinService {
 							  .content(join.getContent())
 							  .build();
 		int result = joinMapper.saveJoin(joinEntity);
-		if(result != 1) {
-			throw new FailedInsertException("게시글 작성 실패");
-		}
+		throwFailedInsertException(result);
 		if(file == null || file.isEmpty()) {
 			return;
 		}
 		fileService.saveFile(file, joinEntity.getJoinNo(), "join");
+	}
+	
+	private void throwFailedInsertException(int result) {
+		if(result != 1) {
+			throw new FailedInsertException("게시글 작성 실패");
+		}
 	}
 	
 	private PageInfo newPageInfo(int listCount, int page) {
@@ -73,12 +79,30 @@ public class JoinService {
 	@Transactional
 	public JoinDto findByJoinNo(Long joinNo) {
 		JoinDto join = joinMapper.findByJoinNo(joinNo);
-		if(join == null) {
-			throw new FailedFindByNoException("해당 게시글을 찾지 못했습니다.");
-		}
+		throwFindByException(join);
 		List<FileDto> file = fileService.findByBno(joinNo);
 		join.setFiles(file);
 		return join;
+	}
+	
+	private void throwFindByException(JoinDto join) {
+		if(join == null) {
+			throw new FailedFindByNoException("해당 게시글을 찾지 못했습니다.");
+		}
+	}
+	
+	@Transactional
+	public void deleteJoin(CustomUserDetails user, Long joinNo) {
+		findByJoinNo(joinNo);
+		int result = joinMapper.deleteJoin(user.getUsername(), joinNo);
+		throwDeleteException(result);
+		fileService.deleteFile(joinNo);
+	}
+	
+	private void throwDeleteException(int result) {
+		if(result != 1) {
+			throw new FailedDeleteException("게시글 삭제에 실패했습니다.");
+		}
 	}
 
 }
