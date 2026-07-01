@@ -1,10 +1,15 @@
 package com.iso.plogues.exception;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
+import com.iso.plogues.exception.request.InValidJoinRequestException;
 import com.iso.plogues.exception.user.InvalidUserPwdException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +53,24 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(FailedFindByNoException.class)
 	public ResponseEntity<ApiResponse> handlerFailedFindByNo(FailedFindByNoException e){
 		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+	}
+	
+	@ExceptionHandler(InValidJoinRequestException.class)
+	public ResponseEntity<ApiResponse> handlerInValidJoinRequest(InValidJoinRequestException e){
+		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<ApiResponse> handlerMethodArgumentNotValid(MethodArgumentNotValidException e){
+		List<String> messages = e.getBindingResult()
+	            .getFieldErrors()
+	            .stream()
+	            .map(FieldError::getDefaultMessage)
+	            .toList();
+
+	    return ResponseEntity
+	            .badRequest()
+	            .body(ApiResponse.badRequest("입력값 검증에 실패했습니다.", messages));
 	}
 
 }
