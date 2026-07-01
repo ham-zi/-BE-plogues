@@ -77,4 +77,14 @@
   	   AND 
   	       JOIN_NO = #{joinNo}
   </select>
+  <update id="deleteJoin">
+  	UPDATE 
+  	       JOIN_BOARD
+  	   SET 
+  	       DELETED = 'Y'
+  	 WHERE 
+  	       USER_ID = #{userId}
+  	   AND 
+  	       JOIN_NO = #{joinNo}
+  </update>
 </mapper>
