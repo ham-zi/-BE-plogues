@@ -56,7 +56,9 @@ public class BoardService {
     @Transactional(readOnly = true)
     public BoardDto selectBoardDetail(Long boardNo) {
         BoardDto board = boardMapper.selectBoardDetail(boardNo);
-        if (board == null) throw new FailedFindByNoException("존재하지 않는 게시글입니다.");
+        if (board == null) {
+            throw new FailedFindByNoException("존재하지 않는 게시글입니다.");
+        }
         List<FileDto> files = boardMapper.selectFileList(boardNo);
         board.setFileList(files);
         return board;
@@ -78,7 +80,9 @@ public class BoardService {
         boardDto.setUserId(user.getUsername());
         boardDto.setBoardNo(boardNo);
         int result = boardMapper.updateBoard(boardDto);
-        if(result != 1) throw new FailedUpdateException("게시글 수정에 실패했습니다.");
+        if(result != 1) {
+            throw new FailedUpdateException("게시글 수정에 실패했습니다.");
+        }
         if(files != null && !files.isEmpty()) {
             for(MultipartFile file : files) {
                 boardFileService.updateFile(file, boardNo);
@@ -90,7 +94,9 @@ public class BoardService {
     public void deleteBoard(CustomUserDetails user, Long boardNo) {
         selectBoardDetail(boardNo);
         int result = boardMapper.deleteBoard(user.getUsername(), boardNo);
-        if(result != 1) throw new FailedDeleteException("게시글 삭제에 실패했습니다.");
+        if(result != 1) {
+            throw new FailedDeleteException("게시글 삭제에 실패했습니다.");
+        }
         boardFileService.deleteFile(boardNo);
     }
 }
