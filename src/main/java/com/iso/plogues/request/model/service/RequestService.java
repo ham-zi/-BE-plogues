@@ -64,14 +64,15 @@ public class RequestService {
 		RequestDto request = requestMapper.findByRequestNo(requestNo);
 		validateRequestNo(requestNo);
 		checkAccepted(request.getStatus());
-		validateHost(userId, request.getUserId());
+		validateJoinNo(request.getJoinNo());
+		validateHost(userId, request.getHost());
 		
 	}
 	private void validateDeniedRequest(String userId, Long requestNo) {
 		RequestDto request = requestMapper.findByRequestNo(requestNo);
 		validateRequestNo(requestNo);
 		checkDenied(request.getStatus());
-		validateHost(userId, request.getUserId());
+		validateHost(userId, request.getHost());
 		
 	}
 	
