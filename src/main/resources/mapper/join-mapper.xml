@@ -29,4 +29,78 @@
 		   , SYSDATE
 		   )
   </insert>
+  <select id="listCount" resultType="_int">
+  	SELECT 
+  	       COUNT(*)
+  	  FROM 
+  	       JOIN_BOARD
+  	 WHERE 
+  	       DELETED = 'N'
+  </select>
+  <sql id="joinColumns">
+  	SELECT 
+  	       JOIN_NO
+  	     , USER_ID
+  	     , CATEGORY
+  	     , PARTICIPANTS
+  	     , REGION
+  	     , START_DATE
+  	     , END_DATE
+  	     , TITLE
+  	     , CONTENT
+  	     , CREATE_DATE
+  	  FROM 
+  	       JOIN_BOARD
+  	 WHERE 
+  	       DELETED = 'N'
+  </sql>
+  <select id="findAllPlant" resultType="joinDto">
+  	<include refid="joinColumns"/>
+  	   AND 
+  	       CATEGORY = 'PLANT'
+  	 ORDER 
+  	    BY 
+  	       JOIN_NO DESC
+  	OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY
+  </select>
+  <select id="findAllPlog" resultType="joinDto">
+  	<include refid="joinColumns"/>
+  	   AND 
+  	       CATEGORY = 'PLOG'
+  	 ORDER 
+  	    BY 
+  	       JOIN_NO DESC
+  	OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY
+  </select>
+  <select id="findByJoinNo" resultType="joinDto">
+  	<include refid="joinColumns"/>
+  	   AND 
+  	       JOIN_NO = #{joinNo}
+  </select>
+  <update id="deleteJoin">
+  	UPDATE 
+  	       JOIN_BOARD
+  	   SET 
+  	       DELETED = 'Y'
+  	 WHERE 
+  	       USER_ID = #{userId}
+  	   AND 
+  	       JOIN_NO = #{joinNo}
+  </update>
+  <update id="updateJoin">
+  	UPDATE 
+  	       JOIN_BOARD
+  	   SET 
+  	       PARTICIPANTS = #{participants}
+  	     , REGION = #{region}
+  	     , START_DATE = #{startDate}
+  	     , END_DATE = #{endDate}
+  	     , TITLE = #{title}
+  	     , CONTENT = #{content}
+  	     , UPDATED = 'Y'
+  	 WHERE 
+  	       USER_ID = #{userId}
+  	   AND 
+  	       JOIN_NO = #{joinNo}
+  </update>
 </mapper>

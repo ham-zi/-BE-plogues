@@ -1,10 +1,12 @@
 package com.iso.plogues.join.controller;
 
 import org.springframework.http.HttpStatus;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,7 +42,31 @@ public class JoinController {
 		} else if("plogging".equals(category)) {
 			br = joinService.findAllPlog(page);
 		}
-		return ResponseEntity.status(200).body(ApiResponse.created("게시글 전체 조회 성공", br));
+		return ResponseEntity.status(200).body(ApiResponse.success("게시글 전체 조회 성공", br));
+	}
+	
+	@GetMapping("/{joinNo}")
+	public ResponseEntity<ApiResponse<JoinDto>> findByJoinNo(@PathVariable(name="joinNo") Long joinNo) {
+		JoinDto join = joinService.findByJoinNo(joinNo);
+		return ResponseEntity.status(200).body(ApiResponse.success("게시글 조회 성공", join));
+	}
+	
+	@DeleteMapping("/{joinNo}")
+	public ResponseEntity<ApiResponse<Void>> deleteJoin(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(name="joinNo") Long joinNo) {
+		joinService.deleteJoin(user, joinNo);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.noContent("게시글 삭제 성공", null));
+	}
+	
+	@PatchMapping("/{joinNo}")
+	public ResponseEntity<ApiResponse<Void>> updateJoin(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(name="joinNo") Long joinNo, JoinDto join, @RequestParam(name="file", required=false) MultipartFile file) {
+		joinService.updateJoin(user, joinNo, join, file);
+		return ResponseEntity.status(200).body(ApiResponse.success("게시글 수정 성공", null));
+	}
+	
+	@PostMapping("/{joinNo}/reform")
+	public ResponseEntity<ApiResponse<Void>> reformJoin(@AuthenticationPrincipal CustomUserDetails user, JoinDto join, @RequestParam(name="file", required=false) MultipartFile file) {
+		joinService.saveJoin(user, join, file);
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("게시글 작성 성공", null));
 	}
 
 }
