@@ -52,20 +52,39 @@ public class ProofService {
 
 	}
 
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	public ProofDto findByProofNo(Long proofNo) {
 
-	    ProofDto proof = proofMapper.findByProofNo(proofNo);
+		ProofDto proof = proofMapper.findByProofNo(proofNo);
 
-	    if(proof == null) {
-	        throw new FailedFindByNoException("게시글 조회에 실패했습니다.");
-	    }
+		if (proof == null) {
+			throw new FailedFindByNoException("게시글 조회에 실패했습니다.");
+		}
 
-	    List<FileDto> fileList = proofFileService.findByBno(proofNo);
+		List<FileDto> fileList = proofFileService.findByBno(proofNo);
 
-	    proof.setFiles(fileList);
+		proof.setFiles(fileList);
 
-	    return proof;
+		return proof;
+	}
+
+	private PageInfo newPageInfo(int listCount, int page) {
+		return PageInfo.of(listCount, page, 10, 5);
+	}
+
+	@Transactional
+	public BoardResponse<ProofDto> findAll(int page) {
+
+		PageInfo pageInfo = newPageInfo(proofMapper.listCount(), page);
+
+		List<ProofDto> list = proofMapper.findAll(pageInfo);
+
+		BoardResponse<ProofDto> br = new BoardResponse<>();
+
+		br.setPage(pageInfo);
+		br.setBoard(list);
+
+		return br;
 	}
 
 }
