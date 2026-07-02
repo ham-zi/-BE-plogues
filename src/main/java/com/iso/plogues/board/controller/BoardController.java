@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,5 +63,13 @@ public class BoardController {
             @RequestParam(name = "files", required = false) List<MultipartFile> files) {
         boardService.updateBoard(userDetails, boardNo, boardDto, files);
         return ResponseEntity.ok(ApiResponse.success("게시글 수정 성공", null));
+    }
+    
+    @DeleteMapping("/{boardNo}")
+    public ResponseEntity<ApiResponse<Void>> deleteBoard(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PathVariable(name = "boardNo") Long boardNo) {
+        boardService.deleteBoard(user, boardNo);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.noContent("게시글 삭제 성공", null));
     }
 }

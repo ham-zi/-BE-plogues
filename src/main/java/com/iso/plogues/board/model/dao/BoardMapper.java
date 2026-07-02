@@ -3,7 +3,7 @@ package com.iso.plogues.board.model.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-
+import org.apache.ibatis.annotations.Param;
 
 import com.iso.plogues.board.model.dto.BoardDto;
 import com.iso.plogues.util.file.File;
@@ -23,6 +23,8 @@ public interface BoardMapper {
 	void insertFile(File file);
 	
 	int updateBoard(BoardDto boardDto);
+	
+	int deleteBoard(@Param(value="userId") String userId, @Param(value="boardNo") Long boardNo);
 	
 }
 
