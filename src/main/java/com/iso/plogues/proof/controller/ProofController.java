@@ -38,8 +38,8 @@ public class ProofController {
 
 	@PostMapping
 	public ResponseEntity<ApiResponse<Void>> save(@Valid @ModelAttribute ProofDto proof,
-			@RequestParam(name = "file", required = false) List<MultipartFile> files,
-			@AuthenticationPrincipal CustomUserDetails user) {
+												  @RequestParam(name = "file", required = false) List<MultipartFile> files,
+												  @AuthenticationPrincipal CustomUserDetails user) {
 		// 제약조건valid 리스트로 이미지파일 2개 받고, 유저검증하기
 		System.out.println("user = " + user);
 
