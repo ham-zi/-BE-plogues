@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.iso.plogues.util.file.File;
 import com.iso.plogues.util.file.FileDto;
@@ -52,5 +53,16 @@ public interface ProofFileMapper {
 			""")
 
 	List<FileDto> findByBno(Long proofNo);
+	
+	@Update("""
+		    UPDATE PROOF_FILE
+		       SET DELETED = 'Y'
+		     WHERE PROOF_NO = #{proofNo}
+		""")
+		int deleteFile(Long proofNo);
+	
+	
+	
+	
 
 }

@@ -7,8 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
+import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedFindByNoException;
-import com.iso.plogues.exception.FailedInsertException;
+import com.iso.plogues.exception.FailedUpdateException;
 import com.iso.plogues.exception.FileUploadException;
 import com.iso.plogues.proof.file.model.service.ProofFileService;
 import com.iso.plogues.proof.model.dao.ProofMapper;
@@ -32,7 +33,6 @@ public class ProofService {
 	@Transactional
 	public void save(ProofDto proof, List<MultipartFile> files, CustomUserDetails user) {
 
-		// 사진 2장 필수
 		if (files == null || files.size() != 2) {
 			throw new FileUploadException("인증 사진은 2장을 등록해야 합니다.");
 		}
@@ -40,14 +40,13 @@ public class ProofService {
 		Proof p = Proof.builder().title(proof.getTitle()).content(proof.getContent()).userId(user.getUsername())
 				.category(proof.getCategory()).joinNo(proof.getJoinNo()).quantity(proof.getQuantity()).build();
 
-		// 게시글 저장
 		int result = proofMapper.save(p);
 
 		if (result == 0) {
 			throw new FileUploadException("게시글 작성에 실패하였습니다.");
 		}
 
-		// 사진 2개 각각 저장
+		// 파일 저장
 		proofFileService.saveProofFiles(files, p.getProofNo());
 
 	}
@@ -69,7 +68,9 @@ public class ProofService {
 	}
 
 	private PageInfo newPageInfo(int listCount, int page) {
+
 		return PageInfo.of(listCount, page, 10, 5);
+
 	}
 
 	@Transactional
@@ -85,6 +86,57 @@ public class ProofService {
 		br.setBoard(list);
 
 		return br;
+	}
+
+	@Transactional
+	public void deleteProof(CustomUserDetails user, Long proofNo) {
+
+		findByProofNo(proofNo);
+
+		int result = proofMapper.deleteProof(user.getUsername(), proofNo);
+
+		throwDeleteException(result);
+
+		proofFileService.deleteFile(proofNo);
+
+	}
+
+	private void throwDeleteException(int result) {
+
+		if (result != 1) {
+			throw new FailedDeleteException("게시글 삭제에 실패했습니다.");
+		}
+
+	}
+
+	@Transactional
+	public void updateProof(CustomUserDetails user, Long proofNo, ProofDto proof, List<MultipartFile> files) {
+
+		findByProofNo(proofNo);
+
+		Proof proofEntity = Proof.builder()
+								 .proofNo(proofNo)
+								 .userId(user.getUsername())
+								 .title(proof.getTitle())
+								 .category(proof.getCategory())
+								 .content(proof.getContent())
+								 .quantity(proof.getQuantity())
+								 .build();
+
+		int result = proofMapper.updateProof(proofEntity);
+
+		throwUpdateException(result);
+
+		proofFileService.updateFile(files, proofNo, "proof");
+
+	}
+
+	private void throwUpdateException(int result) {
+
+		if (result != 1) {
+			throw new FailedUpdateException("게시글 수정에 실패했습니다.");
+		}
+
 	}
 
 }

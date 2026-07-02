@@ -5,8 +5,11 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,5 +65,23 @@ public class ProofController {
 
 		return ResponseEntity.status(200).body(ApiResponse.success("인증 게시글 전체 조회 성공", br));
 	}
+
+	@DeleteMapping("/{proofNo}")
+	public ResponseEntity<ApiResponse<Void>> deleteProof(@AuthenticationPrincipal CustomUserDetails user,
+														 @PathVariable(name="proofNo") Long proofNo) {
+		proofService.deleteProof(user, proofNo);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.noContent("게시글 삭제 성공", null));
+
+	}
+	@PatchMapping("/{proofNo}")
+	public ResponseEntity<ApiResponse<Void>> UpdateProof(@AuthenticationPrincipal CustomUserDetails user, 
+														 @PathVariable (name="proofNo") Long proofNo, 
+														 @Valid ProofDto proof,
+														 @RequestParam (name="file", required=false) List<MultipartFile> files) {
+	    proofService.updateProof(user, proofNo, proof, files);
+		return ResponseEntity.status(200).body(ApiResponse.success("게시글 수정 성공", null));												 
+	}
+	
+	
 
 }
