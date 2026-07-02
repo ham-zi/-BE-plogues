@@ -23,6 +23,7 @@ bin/
 out/
 
 .vscode/
+.metadata/
 
 *.yml
 src/main/resources/application.yml
