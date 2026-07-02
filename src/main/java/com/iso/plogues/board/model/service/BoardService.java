@@ -52,7 +52,8 @@ public class BoardService {
         response.setBoard(boardList);
         return response;
     }
-
+    
+    @Transactional(readOnly = true)
     public BoardDto selectBoardDetail(Long boardNo) {
         BoardDto board = boardMapper.selectBoardDetail(boardNo);
         if (board == null) throw new FailedFindByNoException("존재하지 않는 게시글입니다.");
@@ -60,6 +61,7 @@ public class BoardService {
         board.setFileList(files);
         return board;
     }
+    
     @Transactional
     public void insertBoard(BoardDto boardDto, List<MultipartFile> files) {
         boardMapper.insertBoard(boardDto);

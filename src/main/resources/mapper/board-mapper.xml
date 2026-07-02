@@ -73,6 +73,7 @@
 		AND
 		DELETED = 'N'
 	</select>
+	
 	<insert id="insertBoard"
 		useGeneratedKeys="true"
 		keyProperty="boardNo"
