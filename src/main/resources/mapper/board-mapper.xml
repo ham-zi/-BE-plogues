@@ -28,6 +28,37 @@
 		FETCH NEXT #{boardLimit} ROWS ONLY
 
 	</select>
+	
+	    <select id="selectMyBoardList"
+            resultType="BoardDto">
+
+        SELECT
+    			RB.BOARD_NO AS boardNo,
+   				RB.TITLE AS title,
+    			PU.USER_NAME AS writer,
+    			RB.CREATE_DATE AS createDate,
+    			RB.VIEW_COUNT AS views
+		FROM 	
+				REVIEW_BOARD RB
+		JOIN 
+				PLOGUES_USER PU
+		ON 
+				RB.USER_ID = PU.USER_ID
+		WHERE 
+				RB.DELETED = 'N'
+		  AND
+		        RB.USER_ID = #{userId}
+		ORDER BY 
+				RB.BOARD_NO DESC
+				
+		OFFSET #{pi.offset} ROWS
+		
+		FETCH NEXT #{pi.boardLimit} ROWS ONLY
+				
+   
+
+    </select>
+
 
 	<select id="countBoardList"
 		resultType="int">
@@ -37,6 +68,16 @@
 		WHERE DELETED = 'N'
 
 	</select>
+	
+	    <select id="countMyBoardList"
+            resultType="int">
+
+        SELECT COUNT(*)
+        FROM REVIEW_BOARD
+        WHERE DELETED = 'N'
+        AND USER_ID = #{userId}
+
+    </select>
 
 	<select id="selectBoardDetail"
 		resultType="BoardDto">

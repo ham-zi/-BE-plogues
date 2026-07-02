@@ -79,9 +79,7 @@ public class JoinService {
 	public BoardResponse<JoinDto> findAllPlant(int page) {
 		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
 		List<JoinDto> list = joinMapper.findAllPlant(pageInfo);
-		BoardResponse<JoinDto> br = new BoardResponse();
-		br.setPage(pageInfo);
-		br.setBoard(list);
+		BoardResponse<JoinDto> br = new BoardResponse<JoinDto>(br.setPage(pageInfo), br.setBoard(list));
 		return br;
 	}
 	
@@ -89,12 +87,17 @@ public class JoinService {
 	public BoardResponse<JoinDto> findAllPlog(int page) {
 		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
 		List<JoinDto> list = joinMapper.findAllPlog(newPageInfo(joinMapper.listCount(), page));
-		BoardResponse<JoinDto> br = new BoardResponse();
-		br.setPage(pageInfo);
-		br.setBoard(list);
+		BoardResponse<JoinDto> br = new BoardResponse<JoinDto>(br.setPage(pageInfo),br.setBoard(list));
 		return br;
 	}
 	
+	public BoardResponse<JoinDto> findAllByHost(CustomUserDetails user, int page) {
+		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
+		List<JoinDto> list = joinMapper.findAllByHost(user.getUsername(),pageInfo);
+		BoardResponse<JoinDto> br = new BoardResponse<JoinDto>(br.setPage(pageInfo),br.setBoard(list));
+		return br;
+	}
+
 	@Transactional
 	public JoinDto findByJoinNo(Long joinNo) {
 		JoinDto join = joinMapper.findByJoinNo(joinNo);
@@ -147,5 +150,6 @@ public class JoinService {
 			throw new FailedUpdateException("게시글 수정에 실패했습니다.");
 		}
 	}
+
 
 }

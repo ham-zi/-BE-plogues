@@ -14,6 +14,7 @@ public interface JoinMapper {
 	int saveJoin(Join join);
 	int listCount();
 	List<JoinDto> findAllPlant(PageInfo page);
+	List<JoinDto> findAllByHost(@Param(value="userId")String userId,@Param(value="pi")PageInfo pi);
 	List<JoinDto> findAllPlog(PageInfo page);
 	JoinDto findByJoinNo(Long joinNo);
 	int deleteJoin(@Param(value="userId") String userId, @Param(value="joinNo") Long joinNo);
