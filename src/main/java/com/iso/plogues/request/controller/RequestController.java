@@ -27,10 +27,10 @@ public class RequestController {
 	private final RequestService requestService;
 	
 	@PostMapping("/{joinNo}")
-	public ResponseEntity<ApiResponse<Void>> requestJoin(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(value="joinNo")Long joinNo, @Valid @RequestBody RequestDto requestDto){
+	public ResponseEntity<ApiResponse<Void>> saveRequest(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(value="joinNo")Long joinNo, @Valid @RequestBody RequestDto requestDto){
 		requestDto.setUserId(user.getUsername());
 		requestDto.setJoinNo(joinNo);
-		requestService.requestJoin(requestDto);
+		requestService.saveRequest(requestDto);
 		return ResponseEntity.ok().body(ApiResponse.created("요청에 성공했습니다.", null));
 	}
 	

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.request.InValidJoinRequestException;
+import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.service.JoinService;
 import com.iso.plogues.request.model.dao.RequestMapper;
 import com.iso.plogues.request.model.dto.RequestDto;
@@ -25,10 +26,10 @@ public class RequestService {
 	private final JoinService joinService;
 	
 	@Transactional
-	public void requestJoin(RequestDto requestDto) {
+	public void saveRequest(RequestDto requestDto) {
 		validateJoinNo(requestDto.getJoinNo());
 		isDuplicateRequest(requestDto);
-		requestMapper.requestJoin(requestDto);
+		requestMapper.saveRequest(requestDto);
 	}
 	
 	@Transactional
@@ -63,14 +64,15 @@ public class RequestService {
 		RequestDto request = requestMapper.findByRequestNo(requestNo);
 		validateRequestNo(requestNo);
 		checkAccepted(request.getStatus());
-		validateHost(userId, request.getUserId());
+		validateJoinNo(request.getJoinNo());
+		validateHost(userId, request.getHost());
 		
 	}
 	private void validateDeniedRequest(String userId, Long requestNo) {
 		RequestDto request = requestMapper.findByRequestNo(requestNo);
 		validateRequestNo(requestNo);
 		checkDenied(request.getStatus());
-		validateHost(userId, request.getUserId());
+		validateHost(userId, request.getHost());
 		
 	}
 	
@@ -99,8 +101,14 @@ public class RequestService {
 	}
 	
 	private void validateJoinNo(Long joinNo) {
-		joinService.findByJoinNo(joinNo);
+		JoinDto joinDto = joinService.findByJoinNo(joinNo);
+		validateParticipants(joinDto.getParticipants(), joinNo);
 	}
 	
+	private void validateParticipants(int participants, Long joinNo) {
+		if(participants <= requestMapper.countAcceptByJoinNo(joinNo)) {			
+			throw new InValidJoinRequestException("모집이 완료된 모임입니다.");
+		}
+	}
 
 }
