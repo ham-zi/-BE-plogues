@@ -70,6 +70,6 @@ public class BoardController {
             @AuthenticationPrincipal CustomUserDetails user,
             @PathVariable(name = "boardNo") Long boardNo) {
         boardService.deleteBoard(user, boardNo);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.noContent("게시글 삭제 성공", null));
+        return ResponseEntity.ok(ApiResponse.success("게시글 삭제 성공", null));
     }
 }
