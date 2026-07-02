@@ -15,6 +15,8 @@ public interface QuestionMapper {
 	int save(Question q);
     int listCount(@Param("category") String category);
     List<QuestionDto> findByAll(@Param("pageInfo") PageInfo pageInfo, @Param("category") String category);
+    int listCountByUser(@Param("category") String category, @Param("userId") String user);
+    List<QuestionDto> findByUser(@Param("pageInfo") PageInfo pageInfo,@Param("category") String category,@Param("userId") String user);
 	QuestionDto findByOne(Long boardNo);
 	void deleteByQuestion(Long boardNo);
 	String findAuthorByBoardNo(Long boardNo);

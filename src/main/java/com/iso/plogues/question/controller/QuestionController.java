@@ -40,11 +40,12 @@ public class QuestionController {
     @GetMapping
     public ResponseEntity<ApiResponse<BoardResponse<QuestionDto>>> findByAll(
             @RequestParam(name="page", defaultValue = "1") int page,
-            @RequestParam(name="category", required = false) String category
+            @RequestParam(name="category", required = false) String category,
+            @AuthenticationPrincipal CustomUserDetails user
     ) {
 
     	  return ResponseEntity.ok(
-                 ApiResponse.success(questionService.findByAll(page, category)));
+                 ApiResponse.success(questionService.findByAll(page, category, user)));
 	}
 	
 	@GetMapping("/{boardNo}")
@@ -53,13 +54,18 @@ public class QuestionController {
 		return ResponseEntity.status(200).body(ApiResponse.success(question));
 	}
 
+
 	
 	@DeleteMapping("/{boardNo}")
-	@PreAuthorize("@questionService.isAuthor(#boardNo, user.userId)")
-	public ResponseEntity<ApiResponse<Void>> deleteByQuestion(@AuthenticationPrincipal CustomUserDetails user,
-															  @PathVariable(name="boardNo") Long boardNo) {
-		questionService.deleteByQeustion(boardNo);
-		return ResponseEntity.ok().build();
+	public ResponseEntity<ApiResponse<Void>> deleteByQuestion(
+	        @AuthenticationPrincipal CustomUserDetails user,
+	        @PathVariable(name="boardNo") Long boardNo) {
+	    
+	    boolean isAdmin = user.getAuthorities().stream()
+	            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")); 
+
+	    questionService.deleteByQeustion(boardNo, user.getUsername(), isAdmin);
+	    return ResponseEntity.ok().build();
 	}
 	
 

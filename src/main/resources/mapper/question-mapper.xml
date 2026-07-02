@@ -21,34 +21,57 @@
                )
     </insert>
     
-    <select id="findByAll" resultType="QuestionDto">
-	    SELECT
-	           BOARD_NO
-	         , USER_ID
-	         , TITLE
-	         , CATEGORY
-	         , CREATE_DATE
-	         , CONTENT
-	         , UPDATED
-	         , DELETED
+	<select id="findByAll">
+	    SELECT *
 	      FROM 
-	      	   QUESTION_BOARD
+	           QUESTION_BOARD
 	    <where>
-	        DELETED = 'N'
-	       <if test="category != null and category != ''">
-	       AND CATEGORY = #{category}
+	           DELETED = 'N'
+	        <if test="category != null and category != ''">
+	       AND 
+	           CATEGORY = #{category}
 	        </if>
 	    </where>
-	    ORDER BY BOARD_NO DESC
+	</select>
+	
+	<select id="findByUser">
+	    SELECT *
+	      FROM 
+	           QUESTION_BOARD
+	    <where>
+	           DELETED = 'N'
+	       AND
+	           USER_ID = #{userId}
+	       <if test="category != null and category != ''">
+	       AND
+	           CATEGORY = #{category}
+	       </if>
+	    </where>
 	</select>
 	
 	<select id="listCount" resultType="int">
 	    SELECT
 	           COUNT(*)
 	      FROM
+	           QUESTION_BOARD
+	    <where>
+	           DELETED = 'N'
+	        <if test="category != null and category != ''">
+	       AND 
+	           CATEGORY = #{category}
+	        </if>
+	    </where>
+	</select>
+	
+	<select id="listCountByUser" resultType="int">
+	    SELECT
+	           COUNT(*)
+	      FROM
 	    	   QUESTION_BOARD
 	     WHERE 
 	     	   DELETED = 'N'
+	       AND
+	           USER_ID = #{userId}
 	
 	    <if test="category != null and category != ''">
 	       AND CATEGORY = #{category}
@@ -71,19 +94,20 @@
                BOARD_NO = #{boardNo}
     </select>
 	
-	<delete id="deleteByQuestion">
-        DELETE 
-          FROM
-               QUESTION_BOARD 
-         WHERE
-               BOARD_NO = #{boardNo}
-    </delete>
+	<update id="deleteByQuestion">
+	    UPDATE
+	           QUESTION_BOARD
+	       SET 
+	           DELETED = 'Y'
+	     WHERE 
+	           BOARD_NO = #{boardNo}
+	</update>
     
     <select id="findAuthorByBoardNo" resultType="java.lang.String">
         SELECT 
-               WRITER 
+               USER_ID 
           FROM 
-               BOARD 
+               QUESTION_BOARD 
          WHERE 
                BOARD_NO = #{boardNo}
     </select>

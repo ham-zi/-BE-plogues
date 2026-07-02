@@ -12,5 +12,6 @@ import lombok.Setter;
 public class BoardResponse<T> {
 	private PageInfo page;
 	private List<T> board;
+	private String message;
 
 }

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.FailedInsertException;
+import com.iso.plogues.exception.user.NotPermissionException;
 import com.iso.plogues.question.model.dao.QuestionMapper;
 import com.iso.plogues.question.model.dto.QuestionDto;
 import com.iso.plogues.question.model.vo.Question;
@@ -43,17 +44,35 @@ public class QuestionService {
 	}
 
 	  @Transactional
-	    public BoardResponse<QuestionDto> findByAll(int page, String category) {
+	    public BoardResponse<QuestionDto> findByAll(int page, String category, CustomUserDetails user) {
+		  
 
-	        PageInfo pageInfo = newPageInfo(questionMapper.listCount(category), page);
+		    boolean isAdmin = user.getAuthorities().stream()
+		            .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+		    
+		    
 
-	        List<QuestionDto> list = questionMapper.findByAll(pageInfo, category);
+		    // count
+		    int totalCount = isAdmin
+		            ? questionMapper.listCount(category)
+		            : questionMapper.listCountByUser(category, user.getUsername());
 
-	        BoardResponse<QuestionDto> br = new BoardResponse<>();
-	        br.setPage(pageInfo);
-	        br.setBoard(list);
+		    // pageInfo
+		    PageInfo pageInfo = newPageInfo(totalCount, page);
 
-		return br;
+		    // list
+		    List<QuestionDto> list = isAdmin
+		            ? questionMapper.findByAll(pageInfo, category)
+		            : questionMapper.findByUser(pageInfo, category, user.getUsername());
+
+
+		    // response
+		    BoardResponse<QuestionDto> br = new BoardResponse<>();
+		    br.setPage(pageInfo);
+		    br.setBoard(list);
+		    br.setMessage(list.isEmpty() ? "작성한 게시글이 존재하지 않습니다." : null);
+
+		    return br;
 	}
 
 	  public QuestionDto findByOne(Long boardNo) {
@@ -67,14 +86,25 @@ public class QuestionService {
 		    return result;
 		}
 
-	public void deleteByQeustion(Long boardNo) {
-		questionMapper.deleteByQuestion(boardNo);
-	}
-	
-	public boolean isAuthor(Long boardNo, String username) {
+	  @Transactional
+	  public void deleteByQeustion(Long boardNo, String username, boolean isAdmin) {
+
+	      boolean isAuthor = isAuthor(boardNo, username);
+
+	      if (!isAdmin && !isAuthor) {
+	          throw new NotPermissionException("삭제 권한이 없습니다.");
+	      }
+
+	      questionMapper.deleteByQuestion(boardNo);
+	  }
+	  public boolean isAuthor(Long boardNo, String username) {
 	    String author = questionMapper.findAuthorByBoardNo(boardNo); // 작성자 ID 조회 매퍼 필요
+	    
 	    return author != null && author.equals(username);
 	}
+
+
+
 
 
 
