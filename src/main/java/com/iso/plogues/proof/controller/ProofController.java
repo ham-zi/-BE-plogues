@@ -68,14 +68,15 @@ public class ProofController {
 
 	@DeleteMapping("/{proofNo}")
 	public ResponseEntity<ApiResponse<Void>> deleteProof(@AuthenticationPrincipal CustomUserDetails user,
-														 @PathVariable(name = "proofNo") Long proofNo) {
+														 @PathVariable(name="proofNo") Long proofNo) {
 		proofService.deleteProof(user, proofNo);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.noContent("게시글 삭제 성공", null));
 
 	}
 	@PatchMapping("/{proofNo}")
 	public ResponseEntity<ApiResponse<Void>> UpdateProof(@AuthenticationPrincipal CustomUserDetails user, 
-														 @PathVariable (name="proofNo") Long proofNo, ProofDto proof,
+														 @PathVariable (name="proofNo") Long proofNo, 
+														 @Valid ProofDto proof,
 														 @RequestParam (name="file", required=false) List<MultipartFile> files) {
 	    proofService.updateProof(user, proofNo, proof, files);
 		return ResponseEntity.status(200).body(ApiResponse.success("게시글 수정 성공", null));												 

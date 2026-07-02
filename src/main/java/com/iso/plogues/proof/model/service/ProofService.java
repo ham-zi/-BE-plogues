@@ -114,8 +114,14 @@ public class ProofService {
 
 		findByProofNo(proofNo);
 
-		Proof proofEntity = Proof.builder().proofNo(proofNo).userId(user.getUsername()).title(proof.getTitle())
-				.category(proof.getCategory()).content(proof.getContent()).quantity(proof.getQuantity()).build();
+		Proof proofEntity = Proof.builder()
+								 .proofNo(proofNo)
+								 .userId(user.getUsername())
+								 .title(proof.getTitle())
+								 .category(proof.getCategory())
+								 .content(proof.getContent())
+								 .quantity(proof.getQuantity())
+								 .build();
 
 		int result = proofMapper.updateProof(proofEntity);
 
