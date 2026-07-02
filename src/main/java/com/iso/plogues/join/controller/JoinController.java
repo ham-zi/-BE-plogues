@@ -31,11 +31,11 @@ import lombok.RequiredArgsConstructor;
 public class JoinController {
 	private final JoinService joinService;
 	
-//	@PostMapping
-//	public ResponseEntity<ApiResponse<Void>> saveJoin(@AuthenticationPrincipal CustomUserDetails user, @Valid JoinDto join, @RequestParam(name="file", required=false) MultipartFile file) {
-//		joinService.saveJoin(user, join, file);
-//		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("게시글 작성 성공", null));
-//	}
+	@PostMapping
+	public ResponseEntity<ApiResponse<Void>> saveJoin(@AuthenticationPrincipal CustomUserDetails user, @Valid JoinDto join, @RequestParam(name="file", required=false) MultipartFile file) {
+		joinService.saveJoin(user, join, file);
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("게시글 작성 성공", null));
+	}
 	
 	@GetMapping
 	public ResponseEntity<ApiResponse<BoardResponse<JoinDto>>> findAll(@RequestParam(name="page", defaultValue = "1") int page, @RequestParam(name="category") String category) {

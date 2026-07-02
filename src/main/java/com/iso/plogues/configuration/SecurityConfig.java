@@ -38,13 +38,19 @@ public class SecurityConfig {
 				   .cors(Customizer.withDefaults())
 				   .authorizeHttpRequests(requests -> { 
 
-             
-					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question", "/api/chats").authenticated();
+					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question", "/api/boards", "/api/chats").authenticated();
 					   requests.requestMatchers(HttpMethod.POST).permitAll();
 					   requests.requestMatchers(HttpMethod.PATCH).permitAll();
 					   requests.requestMatchers(HttpMethod.DELETE, "/api/joins/**").authenticated();
-					   requests.requestMatchers(HttpMethod.DELETE).permitAll();
+					   requests.requestMatchers(HttpMethod.DELETE).permitAll(); 
+					   requests.requestMatchers(HttpMethod.GET, "/api/users", "/api/users/requests").authenticated();
+					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question", "/api/auth/refresh", "/api/request/**").authenticated();
+					   requests.requestMatchers(HttpMethod.PATCH, "/api/users", "/api/request/**").authenticated();					   
+					   requests.requestMatchers(HttpMethod.DELETE, "/api/users", "/api/joins/**", "/api/request/**").authenticated();
 					   requests.requestMatchers(HttpMethod.GET).permitAll();
+					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login").permitAll();
+					   requests.requestMatchers(HttpMethod.PATCH).permitAll();
+					   requests.requestMatchers(HttpMethod.DELETE).permitAll();
 					   requests.requestMatchers("/api/admin").hasRole("ADMIN");
 				   }).sessionManagement(manager -> 
 				   						manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

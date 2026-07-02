@@ -3,36 +3,91 @@
 
 <mapper namespace="com.iso.plogues.proof.model.dao.ProofMapper">
 
+
 	<insert id="save" parameterType="com.iso.plogues.proof.model.vo.Proof">
 
 		<selectKey keyProperty="proofNo" resultType="long" order="BEFORE">
 			SELECT SEQ_PLG_PB.NEXTVAL FROM DUAL
-		</selectKey> INSERT INTO
-		PROOF_BOARD ( PROOF_NO, USER_ID, JOIN_NO, TITLE, CATEGORY, QUANTITY,
-		CONTENT, CREATE_DATE, DELETED, UPDATED ) VALUES ( #{proofNo}, #{userId},
-		#{joinNo}, #{title}, #{category}, #{quantity}, #{content}, SYSDATE, 'N',
-		'N' ) </insert>
+		</selectKey>
+
+		INSERT INTO PROOF_BOARD (
+			PROOF_NO,
+			USER_ID,
+			JOIN_NO,
+			TITLE,
+			CATEGORY,
+			QUANTITY,
+			CONTENT,
+			CREATE_DATE,
+			DELETED,
+			UPDATED
+		)
+		VALUES (
+			#{proofNo},
+			#{userId},
+			#{joinNo},
+			#{title},
+			#{category},
+			#{quantity},
+			#{content},
+			SYSDATE,
+			'N',
+			'N'
+		)
+
+	</insert>
 
 
 	<sql id="proofColumns">
 		SELECT
-		PROOF_NO
-		, USER_ID
-		, JOIN_NO
-		, TITLE
-		, CATEGORY
-		, QUANTITY
-		, CONTENT
-		, CREATE_DATE
+			PROOF_NO,
+			USER_ID,
+			JOIN_NO,
+			TITLE,
+			CATEGORY,
+			QUANTITY,
+			CONTENT,
+			CREATE_DATE
 		FROM
-		PROOF_BOARD
+			PROOF_BOARD
 		WHERE
-		DELETED = 'N'
+			DELETED = 'N'
 	</sql>
 
 
 	<select id="findByProofNo"
-		resultType="com.iso.plogues.proof.model.dto.ProofDto">
-		<include refid="proofColumns" /> AND PROOF_NO = #{proofNo} </select>
+			resultType="com.iso.plogues.proof.model.dto.ProofDto">
+
+		<include refid="proofColumns"/>
+
+		AND PROOF_NO = #{proofNo}
+
+	</select>
+
+
+	<select id="listCount" resultType="_int">
+
+		SELECT
+			COUNT(*)
+		FROM
+			PROOF_BOARD
+		WHERE
+			DELETED = 'N'
+
+	</select>
+
+
+	<select id="findAll" resultType="com.iso.plogues.proof.model.dto.ProofDto">
+
+		<include refid="proofColumns"/>
+
+		ORDER BY
+			PROOF_NO DESC
+
+		OFFSET #{offset} ROWS
+		FETCH NEXT #{boardLimit} ROWS ONLY
+
+	</select>
+
 
 </mapper>

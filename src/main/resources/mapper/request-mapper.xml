@@ -15,6 +15,17 @@
 	       USER_ID = #{userId}
   </select>
   
+  <select id="countAcceptByJoinNo" resultType="_int">
+  	SELECT
+  	       COUNT(*)
+  	  FROM
+  	       JOIN_REQUEST
+  	 WHERE
+  	       JOIN_NO = #{joinNo}
+  	   AND
+  	       STATUS = 'ACCEPTED'
+  </select>
+  
   <select id="findByRequestNo" resultType="RequestDto">
   	SELECT
   	       JOIN_REQUEST_NO
@@ -31,9 +42,50 @@
   	       JOIN_REQUEST_NO = #{requestNo}
   </select>
   
+  <select id="countByUserIdStatus" resultType="_int">
+  	SELECT
+  	       COUNT(*)
+  	  FROM
+  	       JOIN_REQUEST
+  	 WHERE
+  	       USER_ID = #{userId}
+  	<if test="status != null and status != 'all'">
+  	   AND
+  	       STATUS = #{status}
+  	</if>
+  </select>
+  
+  <select id="findAll" resultType="RequestDto">
+  	SELECT
+  	       JOIN_REQUEST_NO
+  	     , ASPIRATION
+  	     , JR.STATUS
+  	     , JR.JOIN_NO
+  	     , JR.USER_ID
+  	     , JB.USER_ID AS host
+  	  FROM
+  	       JOIN_REQUEST JR
+  	  JOIN
+  	       JOIN_BOARD JB ON(JB.JOIN_NO = JR.JOIN_NO)
+  	 WHERE
+  	       JB.USER_ID = #{userId}
+  	<if test="status != null and status != 'all'">
+  	   AND
+  	       JR.STATUS = #{status}
+  	</if>
+  	 ORDER
+  	    BY
+  	       JOIN_REQUEST_NO DESC
+  	OFFSET
+  	       #{offset} ROWS
+	 FETCH
+	  NEXT
+	       #{boardLimit} ROWS ONLY
+  </select>
   
   
-  <insert id="requestJoin">
+  
+  <insert id="saveRequest">
   	INSERT
   	  INTO
   	       JOIN_REQUEST
@@ -41,7 +93,7 @@
   	       (
 		   SEQ_PLG_JR.NEXTVAL
 		 , #{aspiration}
-		 , 'WAITING'
+		 , #{status}
 		 , #{joinNo}
 		 , #{userId}
 		   )
@@ -65,6 +117,7 @@
   	       JOIN_REQUEST_NO = #{requestNo}    
   </update>
   
+
   <select id="findByUserIdJoin" resultType="RequestDto">
   	SELECT 
   	       JOIN_REQUEST_NO
@@ -81,5 +134,6 @@
   	   AND 
   	       JOIN_NO = #{joinNo}
   </select>
+
   
 </mapper>

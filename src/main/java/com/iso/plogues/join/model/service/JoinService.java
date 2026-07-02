@@ -2,6 +2,7 @@ package com.iso.plogues.join.model.service;
 
 import java.util.List;
 
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +16,7 @@ import com.iso.plogues.join.file.model.service.JoinFileService;
 import com.iso.plogues.join.model.dao.JoinMapper;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.vo.Join;
+import com.iso.plogues.request.model.dao.RequestMapper;
 import com.iso.plogues.request.model.dto.RequestDto;
 import com.iso.plogues.request.model.service.RequestService;
 import com.iso.plogues.util.dto.BoardResponse;
@@ -28,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class JoinService {
 	private final JoinMapper joinMapper;
 	private final JoinFileService fileService;
-//	private final RequestService requestService;
+	private final RequestMapper requestMapper;
 	
 	@Transactional
 	public void saveJoin(CustomUserDetails user, JoinDto join, MultipartFile file) {
@@ -44,12 +46,14 @@ public class JoinService {
 							  .build();
 		int result = joinMapper.saveJoin(joinEntity);
 		throwFailedInsertException(result);
+		
 		if(file == null || file.isEmpty()) {
 			return;
 		}
+		
 		fileService.saveFile(file, joinEntity.getJoinNo(), "join");
-//		RequestDto request = setRequest(user.getUsername(), joinEntity);
-//		requestService.saveRequest(request);
+		RequestDto request = setRequest(user.getUsername(), joinEntity);
+		requestMapper.saveRequest(request);
 	}
 	
 	private RequestDto setRequest(String userId, Join join) {

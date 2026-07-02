@@ -43,7 +43,7 @@ public class ProofController {
 		proofService.save(proof, files, user);
 
 		// 복수로 받으니 files
-		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created(null));
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("게시글 작성 성공", null));
 	}
 
 	@GetMapping("/detail")
@@ -52,6 +52,15 @@ public class ProofController {
 		ProofDto proof = proofService.findByProofNo(proofNo);
 
 		return ResponseEntity.status(200).body(ApiResponse.success("인증 게시글 상세 조회 성공", proof));
+	}
+
+	@GetMapping("/{proofNo}")
+	public ResponseEntity<ApiResponse<BoardResponse<ProofDto>>> findAll(
+			@RequestParam(name = "page", defaultValue = "1") int page) {
+
+		BoardResponse<ProofDto> br = proofService.findAll(page);
+
+		return ResponseEntity.status(200).body(ApiResponse.success("인증 게시글 전체 조회 성공", br));
 	}
 
 }

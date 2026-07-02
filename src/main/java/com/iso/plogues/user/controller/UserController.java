@@ -21,6 +21,7 @@ import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.user.model.dto.MyInfoDto;
 import com.iso.plogues.user.model.dto.UserDto;
 import com.iso.plogues.user.model.service.UserService;
+import com.iso.plogues.user.model.vo.MyPageResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +37,12 @@ public class UserController {
 	
 	@GetMapping
 	public ResponseEntity<ApiResponse<MyInfoDto>> selectMyInfo(@AuthenticationPrincipal CustomUserDetails user) {
-		MyInfoDto userInfo = userService.selectMyInfo(user);
-		return ResponseEntity.ok().body(ApiResponse.success("회원정보 조회 성공", userInfo));
+		return ResponseEntity.ok().body(ApiResponse.success("회원정보 조회 성공", userService.selectMyInfo(user)));
+	}
+	
+	@GetMapping("/requests")
+	public ResponseEntity<ApiResponse<MyPageResponse>> findAllRequest(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page, @RequestParam(value="status", defaultValue="all")String status) {
+		return ResponseEntity.ok().body(ApiResponse.success("참여 요청 목록 조회 성공", userService.findAllRequest(user,page,status)));
 	}
 	
 	@PostMapping

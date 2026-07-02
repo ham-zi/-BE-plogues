@@ -14,11 +14,15 @@ import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.DuplicateUserIdException;
 import com.iso.plogues.exception.FileUploadException;
 import com.iso.plogues.exception.user.InvalidUserPwdException;
+import com.iso.plogues.request.model.dto.RequestDto;
+import com.iso.plogues.request.model.service.RequestService;
 import com.iso.plogues.user.file.FileMapper;
 import com.iso.plogues.user.model.dao.UserMapper;
 import com.iso.plogues.user.model.dto.MyInfoDto;
 import com.iso.plogues.user.model.dto.UserDto;
+import com.iso.plogues.user.model.vo.MyPageResponse;
 import com.iso.plogues.user.model.vo.User;
+import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.file.File;
 import com.iso.plogues.util.file.FileService;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +37,12 @@ public class UserService {
 	private final FileMapper fileMapper;
 	private final PasswordEncoder passwordEncoder;
 	private final FileService fileService;
+	private final RequestService requestService;
 
 	
 
 	@Transactional(readOnly=true)
 	public MyInfoDto selectMyInfo(CustomUserDetails user) {
-		log.info("{}",user.getUsername());
 		return userMapper.selectMyInfo(user);
 	}
 	
@@ -70,15 +74,22 @@ public class UserService {
 	public void patchMyInfo(CustomUserDetails user, UserDto userInfo, MultipartFile file) {
 		userInfo.setUserId(user.getUsername());
 		int result = userMapper.patchMyInfo(userInfo);
-		log.info("{}, {}",file, result);
 		if(result == 1 && file != null) {
 			changeUserFile(user, file);
 		}
 	}
 	
+	@Transactional(readOnly=true)
+	public MyPageResponse findAllRequest(CustomUserDetails user, int page, String status) {
+		BoardResponse<RequestDto> boardResponse = requestService.findAll(user.getUsername(), page, status);
+		return MyPageResponse.builder().pageInfo(boardResponse.getPage())
+				.requestDto(boardResponse.getBoard())
+				.myInfo(userMapper.selectMyInfo(user))
+				.build();
+	}
+	
 	private void changeUserFile(CustomUserDetails user, MultipartFile file) {
 		File userFile = File.of(user.getUsername(), file.getOriginalFilename(), "user");
-		log.info("usernameuansemr~!@~!@{}",userFile);
 		fileMapper.deleteFile(user.getUsername());
 		int saveResult = fileMapper.saveFile(user.getUsername(),userFile);
 		invalidSaveFile(saveResult);
@@ -108,6 +119,8 @@ public class UserService {
 			throw new InvalidUserPwdException("비밀번호가 틀렸습니다.");
 		}
 	}
+
+
 
 
 
