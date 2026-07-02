@@ -25,7 +25,7 @@ mybatis:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.iso.plogues.join.model.dto, com.iso.plogues.request.model.dto, com.iso.plogues.proof.model.dto,com.iso.plogues.board.model.dto, com.iso.plogues.join.chat.model.dto
+  type-aliases-package: com.iso.plogues.join.model.dto, com.iso.plogues.request.model.dto, com.iso.plogues.proof.model.dto,com.iso.plogues.board.model.dto, com.iso.plogues.join.chat.model.dto, com.iso.plogues.report.model.dto
 
 jwt:
   secret: D9uLKVc4FE0IEheN3pLLEb8GKhHRsG8cdOxazHnEkRm3CGAeB+xVbt8Dbob1QhRB
