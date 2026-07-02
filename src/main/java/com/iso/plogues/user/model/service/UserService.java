@@ -2,6 +2,7 @@ package com.iso.plogues.user.model.service;
 
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
+import com.iso.plogues.board.model.dto.BoardDto;
+import com.iso.plogues.board.model.service.BoardService;
 import com.iso.plogues.exception.DuplicateUserIdException;
 import com.iso.plogues.exception.FileUploadException;
 import com.iso.plogues.exception.user.InvalidUserPwdException;
@@ -38,6 +41,7 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final FileService fileService;
 	private final RequestService requestService;
+	private final BoardService boardService;
 
 	
 
@@ -80,14 +84,23 @@ public class UserService {
 	}
 	
 	@Transactional(readOnly=true)
-	public MyPageResponse findAllRequest(CustomUserDetails user, int page, String status) {
+	public MyPageResponse<RequestDto> findAllMyRequest(CustomUserDetails user, int page, String status) {
 		BoardResponse<RequestDto> boardResponse = requestService.findAll(user.getUsername(), page, status);
-		return MyPageResponse.builder().pageInfo(boardResponse.getPage())
-				.requestDto(boardResponse.getBoard())
+		return MyPageResponse.<RequestDto>builder().pageInfo(boardResponse.getPage())
+				.list(boardResponse.getBoard())
+				.myInfo(userMapper.selectMyInfo(user))
+				.build();
+	}	
+	
+	@Transactional(readOnly=true)
+	public MyPageResponse<BoardDto> findAllMyBoards(CustomUserDetails user, int page) {
+		BoardResponse<BoardDto> boardResponse = boardService.selectMyBoardList(user, page);
+		return MyPageResponse.<BoardDto>builder().pageInfo(boardResponse.getPage())
+				.list(boardResponse.getBoard())
 				.myInfo(userMapper.selectMyInfo(user))
 				.build();
 	}
-	
+
 	private void changeUserFile(CustomUserDetails user, MultipartFile file) {
 		File userFile = File.of(user.getUsername(), file.getOriginalFilename(), "user");
 		fileMapper.deleteFile(user.getUsername());
@@ -118,12 +131,6 @@ public class UserService {
 		if(!passwordEncoder.matches(userPwd, user.getPassword())) {
 			throw new InvalidUserPwdException("비밀번호가 틀렸습니다.");
 		}
-	}
-
-
-	public MyPageResponse findAllRequest(CustomUserDetails user, int page, String status) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 
