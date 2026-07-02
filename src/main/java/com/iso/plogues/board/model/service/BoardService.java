@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.board.file.model.service.BoardFileService;
 import com.iso.plogues.board.model.dao.BoardMapper;
 import com.iso.plogues.board.model.dto.BoardDto;
+import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedUpdateException;
 import com.iso.plogues.util.dto.BoardResponse;
@@ -29,6 +30,23 @@ public class BoardService {
         int listCount = boardMapper.countBoardList();
         PageInfo page = PageInfo.of(listCount, currentPage, 10, 5);
         List<BoardDto> boardList = boardMapper.selectBoardList(page);
+        BoardResponse<BoardDto> response = new BoardResponse<>();
+        response.setPage(page);
+        response.setBoard(boardList);
+        return response;
+    }
+
+    
+    @Transactional(readOnly=true)
+    public BoardResponse<BoardDto> selectMyBoardList(CustomUserDetails user, int currentPage) {
+        int listCount = boardMapper.countMyBoardList(user.getUsername());
+        PageInfo page = PageInfo.of(
+                listCount,
+                currentPage,
+                10,
+                5
+        );
+        List<BoardDto> boardList = boardMapper.selectMyBoardList(user.getUsername(), page);
         BoardResponse<BoardDto> response = new BoardResponse<>();
         response.setPage(page);
         response.setBoard(boardList);
@@ -64,5 +82,13 @@ public class BoardService {
                 boardFileService.updateFile(file, boardNo);
             }
         }
+    }
+    
+    @Transactional
+    public void deleteBoard(CustomUserDetails user, Long boardNo) {
+        selectBoardDetail(boardNo);
+        int result = boardMapper.deleteBoard(user.getUsername(), boardNo);
+        if(result != 1) throw new FailedDeleteException("게시글 삭제에 실패했습니다.");
+        boardFileService.deleteFile(boardNo);
     }
 }

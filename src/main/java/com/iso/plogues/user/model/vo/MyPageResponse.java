@@ -1,8 +1,6 @@
 package com.iso.plogues.user.model.vo;
 
 import java.util.List;
-
-import com.iso.plogues.request.model.dto.RequestDto;
 import com.iso.plogues.user.model.dto.MyInfoDto;
 import com.iso.plogues.util.page.PageInfo;
 
@@ -11,9 +9,9 @@ import lombok.Value;
 
 @Value
 @Builder
-public class MyPageResponse {
+public class MyPageResponse<T>{
 
 	private PageInfo pageInfo;
-	private List<RequestDto> requestDto;
+	private List<T> list;
 	private MyInfoDto myInfo;
 }

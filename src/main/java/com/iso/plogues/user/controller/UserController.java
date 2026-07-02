@@ -2,6 +2,7 @@ package com.iso.plogues.user.controller;
 
 import java.util.Map;
 
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
+import com.iso.plogues.board.model.dto.BoardDto;
+import com.iso.plogues.request.model.dto.RequestDto;
 import com.iso.plogues.user.model.dto.MyInfoDto;
 import com.iso.plogues.user.model.dto.UserDto;
 import com.iso.plogues.user.model.service.UserService;
@@ -41,8 +44,13 @@ public class UserController {
 	}
 	
 	@GetMapping("/requests")
-	public ResponseEntity<ApiResponse<MyPageResponse>> findAllRequest(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page, @RequestParam(value="status", defaultValue="all")String status) {
-		return ResponseEntity.ok().body(ApiResponse.success("참여 요청 목록 조회 성공", userService.findAllRequest(user,page,status)));
+	public ResponseEntity<ApiResponse<MyPageResponse<RequestDto>>> findAllMyRequest(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page, @RequestParam(value="status", defaultValue="all")String status) {
+		return ResponseEntity.ok().body(ApiResponse.success("참여 요청 목록 조회 성공", userService.findAllMyRequest(user,page,status)));
+	}
+
+	@GetMapping("/boards")
+	public ResponseEntity<ApiResponse<MyPageResponse<BoardDto>>> findAllMyBoard(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page) {
+		return ResponseEntity.ok().body(ApiResponse.success("참여 요청 목록 조회 성공", userService.findAllMyBoards(user,page)));
 	}
 	
 	@PostMapping

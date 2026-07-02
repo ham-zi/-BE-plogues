@@ -128,5 +128,16 @@
 		BOARD_NO = #{boardNo}
 	</update>
 
+	<update id="deleteBoard">
+		UPDATE 
+		REVIEW_BOARD
+		SET
+		DELETED = 'Y'
+		WHERE
+		USER_ID = #{userId}
+		AND
+		BOARD_NO = #{boardNo}
+	</update>
+
 
 </mapper>
