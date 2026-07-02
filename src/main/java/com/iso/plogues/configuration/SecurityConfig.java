@@ -38,9 +38,7 @@ public class SecurityConfig {
 				   .cors(Customizer.withDefaults())
 				   .authorizeHttpRequests(requests -> { 
 
-             
-
-					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question", "/api/boards").authenticated();
+					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question", "/api/boards", "/api/chats").authenticated();
 					   requests.requestMatchers(HttpMethod.POST).permitAll();
 					   requests.requestMatchers(HttpMethod.PATCH).permitAll();
 					   requests.requestMatchers(HttpMethod.DELETE, "/api/joins/**").authenticated();

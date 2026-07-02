@@ -21,4 +21,7 @@ public interface RequestMapper {
 			                 @Param(value="boardLimit")int boardLimit,
 			                 @Param(value="userId")String userId,
 			                 @Param(value="status")String status);
+	
+	RequestDto findByUserIdJoin(@Param(value = "userId") String userId, @Param(value = "joinNo") Long joinNo);
+
 }
