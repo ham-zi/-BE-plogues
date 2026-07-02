@@ -30,6 +30,9 @@ public class RequestController {
 	public ResponseEntity<ApiResponse<Void>> saveRequest(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(value="joinNo")Long joinNo, @Valid @RequestBody RequestDto requestDto){
 		requestDto.setUserId(user.getUsername());
 		requestDto.setJoinNo(joinNo);
+		if(!"host".equals(requestDto.getAspiration())) {
+			requestDto.setStatus("WAITING");
+		}
 		requestService.saveRequest(requestDto);
 		return ResponseEntity.ok().body(ApiResponse.created("요청에 성공했습니다.", null));
 	}
