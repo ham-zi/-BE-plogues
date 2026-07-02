@@ -2,10 +2,7 @@ package com.iso.plogues.proof.model.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import com.iso.plogues.util.file.FileDto;
-
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

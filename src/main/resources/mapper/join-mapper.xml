@@ -72,6 +72,16 @@
   	       JOIN_NO DESC
   	OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY
   </select>
+  <select id="findAllByHost" resultType="joinDto">
+  	<include refid="joinColumns"/>
+  	   AND 
+  	       USER_ID = #{userId}
+  	 ORDER 
+  	    BY 
+  	       JOIN_NO DESC
+  	OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
+  </select>
+  
   <select id="findByJoinNo" resultType="joinDto">
   	<include refid="joinColumns"/>
   	   AND 
