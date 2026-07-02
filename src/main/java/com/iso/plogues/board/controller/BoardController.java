@@ -56,11 +56,11 @@ public class BoardController {
     
     @PatchMapping("/{boardNo}")
     public ResponseEntity<ApiResponse<Void>> updateBoard(
-            @AuthenticationPrincipal CustomUserDetails user,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable(name = "boardNo") Long boardNo,
-            BoardDto boardDto,
+            @Valid BoardDto boardDto,
             @RequestParam(name = "files", required = false) List<MultipartFile> files) {
-        boardService.updateBoard(user, boardNo, boardDto, files);
+        boardService.updateBoard(userDetails, boardNo, boardDto, files);
         return ResponseEntity.ok(ApiResponse.success("게시글 수정 성공", null));
     }
 }

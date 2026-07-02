@@ -42,7 +42,7 @@ public class BoardService {
         board.setFileList(files);
         return board;
     }
-
+    @Transactional
     public void insertBoard(BoardDto boardDto, List<MultipartFile> files) {
         boardMapper.insertBoard(boardDto);
         Long boardNo = boardDto.getBoardNo();

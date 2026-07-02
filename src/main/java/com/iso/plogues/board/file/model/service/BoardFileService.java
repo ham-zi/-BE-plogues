@@ -40,7 +40,7 @@ public class BoardFileService {
         return fileMapper.findByBno(refBno);
     }
 
-    @Transactional
+    @Transactional (readOnly = true)
     public void deleteFile(Long refBno) {
         if(findByBno(refBno).isEmpty()) {
             return;

@@ -4,7 +4,7 @@
 <mapper namespace="com.iso.plogues.board.model.dao.BoardMapper">
 
 	<select id="selectBoardList"
-		resultType="com.iso.plogues.board.model.dto.BoardDto">
+		resultType="BoardDto">
 
 		SELECT
 		RB.BOARD_NO AS boardNo,
@@ -39,7 +39,7 @@
 	</select>
 
 	<select id="selectBoardDetail"
-		resultType="com.iso.plogues.board.model.dto.BoardDto">
+		resultType="BoardDto">
 		SELECT
 		RB.BOARD_NO AS boardNo,
 		RB.TITLE AS title,
