@@ -1,5 +1,8 @@
 package com.iso.plogues.request.model.dto;
 import jakarta.validation.constraints.Size;
+
+import java.sql.Date;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,4 +24,7 @@ public class RequestDto {
 	private String aspiration;
 	private String status;
 	private String host;
+	private String category;
+	private String title;
+	private Date createDate;
 }

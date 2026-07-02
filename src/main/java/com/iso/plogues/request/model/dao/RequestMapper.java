@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.iso.plogues.request.model.dto.RequestDto;
+import com.iso.plogues.util.page.PageInfo;
 
 @Mapper
 public interface RequestMapper {
@@ -17,11 +18,13 @@ public interface RequestMapper {
 	void requestAccept(Long requestNo);
 	void requestDenied(Long requestNo);
 	int countByUserIdStatus(@Param(value="userId")String userId,@Param(value="status")String status);
-	List<RequestDto> findAll(@Param(value="offset")int offset,
+	RequestDto findByUserIdJoin(@Param(value = "userId") String userId, @Param(value = "joinNo") Long joinNo);
+	List<RequestDto> findAllByHost(@Param(value="offset")int offset,
 			                 @Param(value="boardLimit")int boardLimit,
 			                 @Param(value="userId")String userId,
 			                 @Param(value="status")String status);
-	
-	RequestDto findByUserIdJoin(@Param(value = "userId") String userId, @Param(value = "joinNo") Long joinNo);
-
+	List<RequestDto> findAllMyRequest(@Param(value="offset")int offset,
+			                 @Param(value="boardLimit")int boardLimit,
+			                 @Param(value="userId")String userId,
+			                 @Param(value="status")String status);
 }
