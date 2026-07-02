@@ -121,7 +121,7 @@ public class ProofService {
 
 		throwUpdateException(result);
 
-		proofFileService.updateFile(files, proofNo);
+		proofFileService.updateFile(files, proofNo, "proof");
 
 	}
 
