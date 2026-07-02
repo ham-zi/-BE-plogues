@@ -10,6 +10,7 @@ import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.board.file.model.service.BoardFileService;
 import com.iso.plogues.board.model.dao.BoardMapper;
 import com.iso.plogues.board.model.dto.BoardDto;
+import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedUpdateException;
 import com.iso.plogues.util.dto.BoardResponse;
@@ -64,5 +65,13 @@ public class BoardService {
                 boardFileService.updateFile(file, boardNo);
             }
         }
+    }
+    
+    @Transactional
+    public void deleteBoard(CustomUserDetails user, Long boardNo) {
+        selectBoardDetail(boardNo);
+        int result = boardMapper.deleteBoard(user.getUsername(), boardNo);
+        if(result != 1) throw new FailedDeleteException("게시글 삭제에 실패했습니다.");
+        boardFileService.deleteFile(boardNo);
     }
 }
