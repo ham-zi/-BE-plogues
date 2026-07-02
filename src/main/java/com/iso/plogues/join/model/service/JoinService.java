@@ -15,6 +15,8 @@ import com.iso.plogues.join.file.model.service.JoinFileService;
 import com.iso.plogues.join.model.dao.JoinMapper;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.vo.Join;
+import com.iso.plogues.request.model.dto.RequestDto;
+import com.iso.plogues.request.model.service.RequestService;
 import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.file.FileDto;
 import com.iso.plogues.util.page.PageInfo;
@@ -26,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class JoinService {
 	private final JoinMapper joinMapper;
 	private final JoinFileService fileService;
+//	private final RequestService requestService;
 	
 	@Transactional
 	public void saveJoin(CustomUserDetails user, JoinDto join, MultipartFile file) {
@@ -45,6 +48,17 @@ public class JoinService {
 			return;
 		}
 		fileService.saveFile(file, joinEntity.getJoinNo(), "join");
+//		RequestDto request = setRequest(user.getUsername(), joinEntity);
+//		requestService.saveRequest(request);
+	}
+	
+	private RequestDto setRequest(String userId, Join join) {
+		RequestDto request = new RequestDto();
+		request.setUserId(userId);
+		request.setJoinNo(join.getJoinNo());
+		request.setAspiration("host");
+		request.setStatus("ACCEPTED");
+		return request;
 	}
 	
 	private void throwFailedInsertException(int result) {

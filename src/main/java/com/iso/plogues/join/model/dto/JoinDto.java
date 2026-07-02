@@ -43,6 +43,7 @@ public class JoinDto {
 	@Pattern(regexp="^[a-zA-Z0-9가-힣]*$")
 	@Size(min=2, max=2000, message="내용은 2글자 이상 2000글자까지 작성가능합니다")
 	private String content;
+	private LocalDateTime createDate;
 	private List<FileDto> files;
 
 }

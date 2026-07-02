@@ -39,7 +39,7 @@ public class SecurityConfig {
 				   .authorizeHttpRequests(requests -> { 
 
              
-					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question").authenticated();
+					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question", "/api/chats").authenticated();
 					   requests.requestMatchers(HttpMethod.POST).permitAll();
 					   requests.requestMatchers(HttpMethod.PATCH).permitAll();
 					   requests.requestMatchers(HttpMethod.DELETE, "/api/joins/**").authenticated();

@@ -65,6 +65,21 @@
   	       JOIN_REQUEST_NO = #{requestNo}    
   </update>
   
-  
+  <select id="findByUserIdJoin" resultType="RequestDto">
+  	SELECT 
+  	       JOIN_REQUEST_NO
+  	     , ASPIRATION
+  	     , STATUS
+  	     , JOIN_NO
+  	     , USER_ID
+  	  FROM 
+  	       JOIN_REQUEST
+  	 WHERE 
+  	       STATUS = 'ACCEPTED'
+  	   AND 
+  	       USER_ID = #{userId}
+  	   AND 
+  	       JOIN_NO = #{joinNo}
+  </select>
   
 </mapper>
