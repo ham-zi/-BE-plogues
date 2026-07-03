@@ -79,15 +79,15 @@ public class UserService {
 		}
 	}
 	
-	public MyPageResponse<RequestDto> findAllMyRequest(CustomUserDetails user, int page, String status) {
-		BoardResponse<RequestDto> boardResponse = requestService.findAll(user.getUsername(), page, status);
+	public MyPageResponse<RequestDto> findAllRequest(CustomUserDetails user, int page, String status) { // 조회된 요청들
+		BoardResponse<RequestDto> boardResponse = requestService.findAllRequest(user, page, status);
 		return MyPageResponse.<RequestDto>builder().pageInfo(boardResponse.getPage())
 				.list(boardResponse.getBoard())
 				.myInfo(userMapper.selectMyInfo(user))
 				.build();
 	}	
 	
-	public MyPageResponse<BoardDto> findAllMyBoards(CustomUserDetails user, int page) {
+	public MyPageResponse<BoardDto> findAllMyBoards(CustomUserDetails user, int page) { //후기 게시판
 		BoardResponse<BoardDto> boardResponse = boardService.selectMyBoardList(user, page);
 		return MyPageResponse.<BoardDto>builder().pageInfo(boardResponse.getPage())
 				.list(boardResponse.getBoard())
@@ -96,7 +96,7 @@ public class UserService {
 	}
 
 	
-	public MyPageResponse<JoinDto> findAllMyGroups(CustomUserDetails user, int page) {
+	public MyPageResponse<JoinDto> findAllMyGroups(CustomUserDetails user, int page) { // 내가 모집한 모임
 		BoardResponse<JoinDto> boardResponse = joinService.findAllByHost(user, page);
 		return MyPageResponse.<JoinDto>builder().pageInfo(boardResponse.getPage())
 				.list(boardResponse.getBoard())
@@ -104,8 +104,8 @@ public class UserService {
 				.build();
 	}
 	
-	public MyPageResponse<RequestDto> findAllMyJoins(CustomUserDetails user, int page, String status) {
-		BoardResponse<RequestDto> boardResponse = requestService.findAllMyRequest(user, page, status);
+	public MyPageResponse<RequestDto> findAllMyJoins(CustomUserDetails user, int page, String status) { //내가 참여한 모임 (내가 요청 보냄)
+		BoardResponse<RequestDto> boardResponse = requestService.findAllMyJoins(user.getUsername(), page, status);
 		return MyPageResponse.<RequestDto>builder().pageInfo(boardResponse.getPage())
 				.list(boardResponse.getBoard())
 				.myInfo(userMapper.selectMyInfo(user))
