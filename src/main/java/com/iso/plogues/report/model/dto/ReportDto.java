@@ -23,10 +23,12 @@ public class ReportDto {
 	@NotBlank(message="내용을 입력해 주세요")
 	@Size(min=2, max=500, message="내용은 2글자 이상 500글자까지 작성가능합니다")
 	private String content;
-	private LocalDateTime creatDate;
-	private String update;
-	private String delete;
+	private LocalDateTime createDate;
+	private String updated;
+	private String deleted;
 	private Long targetNo;
+	private int count;
+	private String status;
 	
 	
 
