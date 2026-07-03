@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iso.plogues.board.comment.model.dao.BoardCommentMapper">
+
+    <select id="selectCommentList" resultType="BoardCommentDto">
+        SELECT
+            RC.COMMENT_NO   AS commentNo,
+            RC.CONTENT      AS content,
+            PU.USER_NAME    AS writer,
+            RC.CREATE_DATE  AS createDate,
+            RC.UPDATED      AS updated,
+            RC.BOARD_NO     AS boardNo,
+            RC.USER_ID      AS userId
+        FROM
+            REVIEW_COMMENT RC
+        JOIN
+            PLOGUES_USER PU ON RC.USER_ID = PU.USER_ID
+        WHERE
+            RC.BOARD_NO = #{boardNo}
+            AND RC.DELETED = 'N'
+        ORDER BY
+            RC.COMMENT_NO ASC
+    </select>
+
+    <insert id="insertComment"
+        useGeneratedKeys="true"
+        keyProperty="commentNo"
+        keyColumn="COMMENT_NO">
+        INSERT
+        INTO
+        		REVIEW_COMMENT
+        (
+        COMMENT_NO,
+        CONTENT,
+        BOARD_NO,
+        USER_ID
+        )
+        VALUES
+        (
+        SEQ_REVIEW_COMMENT.NEXTVAL,
+        #{content},
+        #{boardNo},
+        #{userId}
+        )
+    </insert>
+
+    <update id="updateComment">
+        UPDATE REVIEW_COMMENT
+        SET
+            CONTENT = #{content},
+            UPDATED = 'Y'
+        WHERE
+            COMMENT_NO = #{commentNo}
+            AND USER_ID = #{userId}
+            AND DELETED = 'N'
+    </update>
+
+    <update id="deleteComment">
+        UPDATE REVIEW_COMMENT
+        SET DELETED = 'Y'
+        WHERE
+            COMMENT_NO = #{commentNo}
+            AND USER_ID = #{userId}
+    </update>
+
+</mapper>
