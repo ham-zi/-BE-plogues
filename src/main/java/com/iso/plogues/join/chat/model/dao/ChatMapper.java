@@ -3,7 +3,6 @@ package com.iso.plogues.join.chat.model.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import com.iso.plogues.join.chat.model.dto.ChatDto;
 import com.iso.plogues.join.chat.model.vo.Chat;
@@ -14,5 +13,6 @@ public interface ChatMapper {
 	List<ChatDto> findAll(Long joinNo);
 	ChatDto findByChatNo(Long chatNo);
 	int updateChat(Chat chat);
+	int deleteChat(Long chatNo);
 
 }
