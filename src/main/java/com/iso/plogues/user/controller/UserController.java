@@ -58,6 +58,11 @@ public class UserController {
 	public ResponseEntity<ApiResponse<MyPageResponse<JoinDto>>> findAllMyGroups(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page) {
 		return ResponseEntity.ok().body(ApiResponse.success("참여 요청 목록 조회 성공", userService.findAllMyGroups(user,page)));
 	}
+
+	@GetMapping("/joins")
+	public ResponseEntity<ApiResponse<MyPageResponse<RequestDto>>> findAllMyJoins(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page, @RequestParam(value="status", defaultValue="all")String status) {
+		return ResponseEntity.ok().body(ApiResponse.success("참여 요청 목록 조회 성공", userService.findAllMyJoins(user,page, status)));
+	}
 	
 	@PostMapping
 	public ResponseEntity<ApiResponse<Void>> signUp(@RequestBody @Valid UserDto user){
