@@ -49,10 +49,7 @@ public class SecurityConfig {
 					   requests.requestMatchers(HttpMethod.DELETE, "/api/users", "/api/joins/**", "/api/request/**", "/api/joins/**").authenticated();
 					   requests.requestMatchers(HttpMethod.GET, "/api/report").hasRole("ADMIN");
 					   requests.requestMatchers(HttpMethod.POST, "/api/report").authenticated();
-					   requests.requestMatchers(HttpMethod.GET).permitAll();
 					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login").permitAll();
-					   requests.requestMatchers(HttpMethod.PATCH).permitAll();
-					   requests.requestMatchers(HttpMethod.DELETE).permitAll();
 					   requests.requestMatchers("/api/admin").hasRole("ADMIN");
 				   }).sessionManagement(manager -> 
 				   						manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
