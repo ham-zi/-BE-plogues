@@ -51,10 +51,7 @@ public class ReportService {
 	public BoardResponse<ReportDto> findAll(int page) {
 		PageInfo pageInfo = newPageInfo(reportMapper.listCount(), page);
 		List<ReportDto> list = reportMapper.findAll(pageInfo);
-		BoardResponse<ReportDto> br = new BoardResponse<>();
-		
-		br.setPage(pageInfo);
-		br.setBoard(list);
+		BoardResponse<ReportDto> br = new BoardResponse<>(pageInfo, list);
 		
 		return br;
 	}
