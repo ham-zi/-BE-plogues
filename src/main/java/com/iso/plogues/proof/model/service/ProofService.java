@@ -37,8 +37,14 @@ public class ProofService {
 			throw new FileUploadException("인증 사진은 2장을 등록해야 합니다.");
 		}
 
-		Proof p = Proof.builder().title(proof.getTitle()).content(proof.getContent()).userId(user.getUsername())
-				.category(proof.getCategory()).joinNo(proof.getJoinNo()).quantity(proof.getQuantity()).build();
+		Proof p = Proof.builder()
+					   .title(proof.getTitle())
+					   .content(proof.getContent())
+					   .userId(user.getUsername())
+					   .category(proof.getCategory())
+					   .joinNo(proof.getJoinNo())
+					   .quantity(proof.getQuantity())
+					   .build();
 
 		int result = proofMapper.save(p);
 

@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 @Slf4j
+@Transactional(readOnly=true)
 public class RequestService {
 
 	private final RequestMapper requestMapper;
@@ -45,13 +46,17 @@ public class RequestService {
 		requestMapper.requestDenied(requestNo);
 	}
 	
-	@Transactional(readOnly=true)
 	public BoardResponse<RequestDto> findAll(String userId, int page, String status) {
 		PageInfo pi = PageInfo.of(requestMapper.countByUserIdStatus(userId, status), page, 10, 5);
-		List<RequestDto> requests = requestMapper.findAll(pi.getOffset(),pi.getBoardLimit(),userId, status);
+		List<RequestDto> requests = requestMapper.findAllByHost(pi.getOffset(),pi.getBoardLimit(),userId, status);
 		BoardResponse<RequestDto> boardResponse = new BoardResponse<RequestDto>(pi, requests);
-//		boardResponse.setPage(pi);
-//		boardResponse.setBoard(requests);
+		return boardResponse;
+	}
+
+	public BoardResponse<RequestDto> findAllMyRequest(CustomUserDetails user, int page, String status) {
+		PageInfo pi = PageInfo.of(requestMapper.countByUserIdStatus(user.getUsername(), status), page, 10, 5);
+		List<RequestDto> requests = requestMapper.findAllMyRequest(pi.getOffset(),pi.getBoardLimit(),user.getUsername(), status);
+		BoardResponse<RequestDto> boardResponse = new BoardResponse<RequestDto>(pi, requests);
 		return boardResponse;
 	}
 	
@@ -123,5 +128,6 @@ public class RequestService {
 			throw new InValidJoinRequestException("모집이 완료된 모임입니다.");
 		}
 	}
+
 
 }

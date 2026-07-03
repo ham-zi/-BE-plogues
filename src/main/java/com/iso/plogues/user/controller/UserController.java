@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.board.model.dto.BoardDto;
+import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.request.model.dto.RequestDto;
 import com.iso.plogues.user.model.dto.MyInfoDto;
 import com.iso.plogues.user.model.dto.UserDto;
@@ -51,6 +52,16 @@ public class UserController {
 	@GetMapping("/boards")
 	public ResponseEntity<ApiResponse<MyPageResponse<BoardDto>>> findAllMyBoard(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page) {
 		return ResponseEntity.ok().body(ApiResponse.success("참여 요청 목록 조회 성공", userService.findAllMyBoards(user,page)));
+	}
+
+	@GetMapping("/groups")
+	public ResponseEntity<ApiResponse<MyPageResponse<JoinDto>>> findAllMyGroups(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page) {
+		return ResponseEntity.ok().body(ApiResponse.success("참여 요청 목록 조회 성공", userService.findAllMyGroups(user,page)));
+	}
+
+	@GetMapping("/joins")
+	public ResponseEntity<ApiResponse<MyPageResponse<RequestDto>>> findAllMyJoins(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page, @RequestParam(value="status", defaultValue="all")String status) {
+		return ResponseEntity.ok().body(ApiResponse.success("참여 요청 목록 조회 성공", userService.findAllMyJoins(user,page, status)));
 	}
 	
 	@PostMapping

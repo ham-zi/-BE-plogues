@@ -60,14 +60,21 @@ public class JoinService {
 	public BoardResponse<JoinDto> findAllPlant(int page) {
 		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
 		List<JoinDto> list = joinMapper.findAllPlant(pageInfo);
-		return new BoardResponse(pageInfo, list);
+		return new BoardResponse<JoinDto>(pageInfo, list);
 	}
 	
 	@Transactional
 	public BoardResponse<JoinDto> findAllPlog(int page) {
 		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
 		List<JoinDto> list = joinMapper.findAllPlog(pageInfo);
-		return new BoardResponse(pageInfo, list);
+		return new BoardResponse<JoinDto>(pageInfo, list);
+	}
+	
+	@Transactional
+	public BoardResponse<JoinDto> findAllByHost(CustomUserDetails user, int page) {
+		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
+		List<JoinDto> list = joinMapper.findAllByHost(user.getUsername(),pageInfo);
+		return new BoardResponse<JoinDto>(pageInfo, list);
 	}
 	
 	@Transactional
@@ -124,7 +131,6 @@ public class JoinService {
 		return PageInfo.of(listCount, page, 10, 5);
 	}
 	
-	
 	private void throwFindByException(JoinDto join) {
 		if(join == null) {
 			throw new FailedFindByNoException("해당 게시글을 찾지 못했습니다.");
@@ -142,5 +148,6 @@ public class JoinService {
 			throw new FailedUpdateException("게시글 수정에 실패했습니다.");
 		}
 	}
+
 
 }

@@ -45,6 +45,11 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(new ApiResponse(400, e.getMessage(), null));
 	}
 	
+	@ExceptionHandler(InValidJoinRequestException.class)
+	public ResponseEntity<ApiResponse> handlerInValidJoinRequest(InValidJoinRequestException e){
+		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+	}
+	
 	@ExceptionHandler(FailedInsertException.class)
 	public ResponseEntity<ApiResponse> handlerFailedInsert(FailedInsertException e){
 		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
@@ -67,11 +72,6 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(FailedFindAllException.class)
 	public ResponseEntity<ApiResponse> handlerFailedFindAll(FailedFindAllException e){
-		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
-	}
-	
-	@ExceptionHandler(InValidJoinRequestException.class)
-	public ResponseEntity<ApiResponse> handlerInValidJoinRequest(InValidJoinRequestException e){
 		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
 	}
 

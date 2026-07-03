@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import org.springframework.web.multipart.MultipartFile;
-import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.board.file.model.service.BoardFileService;
 import com.iso.plogues.board.model.dao.BoardMapper;
 import com.iso.plogues.board.model.dto.BoardDto;
@@ -46,14 +45,18 @@ public class BoardService {
         List<BoardDto> boardList = boardMapper.selectMyBoardList(user.getUsername(), page);
         return new BoardResponse<>(page, boardList);
     }
-
+    
+    @Transactional(readOnly = true)
     public BoardDto selectBoardDetail(Long boardNo) {
         BoardDto board = boardMapper.selectBoardDetail(boardNo);
-        if (board == null) throw new FailedFindByNoException("존재하지 않는 게시글입니다.");
+        if (board == null) {
+            throw new FailedFindByNoException("존재하지 않는 게시글입니다.");
+        }
         List<FileDto> files = boardMapper.selectFileList(boardNo);
         board.setFileList(files);
         return board;
     }
+    
     @Transactional
     public void insertBoard(BoardDto boardDto, List<MultipartFile> files) {
         boardMapper.insertBoard(boardDto);
@@ -70,7 +73,9 @@ public class BoardService {
         boardDto.setUserId(user.getUsername());
         boardDto.setBoardNo(boardNo);
         int result = boardMapper.updateBoard(boardDto);
-        if(result != 1) throw new FailedUpdateException("게시글 수정에 실패했습니다.");
+        if(result != 1) {
+            throw new FailedUpdateException("게시글 수정에 실패했습니다.");
+        }
         if(files != null && !files.isEmpty()) {
             for(MultipartFile file : files) {
                 boardFileService.updateFile(file, boardNo);
@@ -82,7 +87,9 @@ public class BoardService {
     public void deleteBoard(CustomUserDetails user, Long boardNo) {
         selectBoardDetail(boardNo);
         int result = boardMapper.deleteBoard(user.getUsername(), boardNo);
-        if(result != 1) throw new FailedDeleteException("게시글 삭제에 실패했습니다.");
+        if(result != 1) {
+            throw new FailedDeleteException("게시글 삭제에 실패했습니다.");
+        }
         boardFileService.deleteFile(boardNo);
     }
 }
