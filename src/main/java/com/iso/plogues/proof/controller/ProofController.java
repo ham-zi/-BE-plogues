@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/proof")
+@RequestMapping("/api/proof")
 @RequiredArgsConstructor
 public class ProofController {
 

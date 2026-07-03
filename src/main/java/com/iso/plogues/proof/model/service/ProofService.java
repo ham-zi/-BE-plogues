@@ -7,10 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
+import com.iso.plogues.exception.CustomAuthenticationException;
 import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedUpdateException;
 import com.iso.plogues.exception.FileUploadException;
+import com.iso.plogues.join.model.dto.JoinDto;
+import com.iso.plogues.join.model.service.JoinService;
 import com.iso.plogues.proof.file.model.service.ProofFileService;
 import com.iso.plogues.proof.model.dao.ProofMapper;
 import com.iso.plogues.proof.model.dto.ProofDto;
@@ -29,6 +32,7 @@ public class ProofService {
 
 	private final ProofMapper proofMapper;
 	private final ProofFileService proofFileService;
+	private final JoinService joinService;
 
 	@Transactional
 	public void save(ProofDto proof, List<MultipartFile> files, CustomUserDetails user) {
@@ -36,6 +40,12 @@ public class ProofService {
 		if (files == null || files.size() != 2) {
 			throw new FileUploadException("인증 사진은 2장을 등록해야 합니다.");
 		}
+		
+		JoinDto join = joinService.findByJoinNo(proof.getJoinNo());
+
+		if (!join.getUserId().equals(user.getUsername())) {
+		    throw new CustomAuthenticationException("모집장만 인증글을 작성할 수 있습니다.");
+		}	
 
 		Proof p = Proof.builder()
 					   .title(proof.getTitle())
@@ -139,5 +149,7 @@ public class ProofService {
 		}
 
 	}
+	
+	
 
 }
