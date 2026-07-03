@@ -55,7 +55,7 @@
   	</if>
   </select>
   
-  <select id="findAll" resultType="RequestDto">
+  <select id="findAllByHost" resultType="RequestDto">
   	SELECT
   	       JOIN_REQUEST_NO
   	     , ASPIRATION
@@ -69,6 +69,37 @@
   	       JOIN_BOARD JB ON(JB.JOIN_NO = JR.JOIN_NO)
   	 WHERE
   	       JB.USER_ID = #{userId}
+  	<if test="status != null and status != 'all'">
+  	   AND
+  	       JR.STATUS = #{status}
+  	</if>
+  	 ORDER
+  	    BY
+  	       JOIN_REQUEST_NO DESC
+  	OFFSET
+  	       #{offset} ROWS
+	 FETCH
+	  NEXT
+	       #{boardLimit} ROWS ONLY
+  </select>
+  
+  <select id="findAllMyRequest" resultType="RequestDto">
+  	SELECT
+  	       JOIN_REQUEST_NO
+  	     , ASPIRATION
+  	     , JR.STATUS
+  	     , JR.JOIN_NO
+  	     , JR.USER_ID AS USER_ID
+  	     , JB.USER_ID AS HOST
+  	     , JB.CATEGORY AS CATEGORY
+  	     , JB.TITLE AS TITLE
+  	     , JB.CREATE_DATE AS CREATE_DATE
+  	  FROM
+  	       JOIN_REQUEST JR
+  	  JOIN
+  	       JOIN_BOARD JB ON(JB.JOIN_NO = JR.JOIN_NO)
+  	 WHERE
+  	       JR.USER_ID = #{userId}
   	<if test="status != null and status != 'all'">
   	   AND
   	       JR.STATUS = #{status}
