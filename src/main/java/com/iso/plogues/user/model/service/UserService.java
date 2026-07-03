@@ -104,6 +104,14 @@ public class UserService {
 				.build();
 	}
 	
+	public MyPageResponse<RequestDto> findAllMyJoins(CustomUserDetails user, int page, String status) {
+		BoardResponse<RequestDto> boardResponse = requestService.findAllMyRequest(user, page, status);
+		return MyPageResponse.<RequestDto>builder().pageInfo(boardResponse.getPage())
+				.list(boardResponse.getBoard())
+				.myInfo(userMapper.selectMyInfo(user))
+				.build();
+	}
+	
 	private void changeUserFile(CustomUserDetails user, MultipartFile file) {
 		File userFile = File.of(user.getUsername(), file.getOriginalFilename(), "user");
 		fileMapper.deleteFile(user.getUsername());
@@ -135,6 +143,7 @@ public class UserService {
 			throw new InvalidUserPwdException("비밀번호가 틀렸습니다.");
 		}
 	}
+
 
 
 
