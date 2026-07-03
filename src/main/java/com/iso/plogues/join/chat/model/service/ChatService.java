@@ -51,8 +51,8 @@ public class ChatService {
 		}
 	}
 	
-	private void throwFindAllException(Object obj) {
-		if(obj == null) {
+	private <T> void throwFindAllException(List<T> list) {
+		if(list == null || list.isEmpty()) {
 			throw new FailedFindAllException("작성된 채팅이 없습니다.");
 		}
 	}
