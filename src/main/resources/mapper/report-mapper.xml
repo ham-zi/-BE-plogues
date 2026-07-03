@@ -7,7 +7,6 @@
 		VALUES
 			   (
 				  SEQ_PLG_RB.NEXTVAL
-				  #{reportNo}
 			    , #{userId}
 			    , #{reportCategory}
 			    , #{boardType}
@@ -18,7 +17,40 @@
 			    , #{targetNo}
 			   )
 	</insert>
-
+	<select id="listCount" resultType="_int">
+	  	SELECT 
+	  			COUNT(*)
+	  	  FROM
+	  	  		REPORT_BOARD
+		 WHERE	
+		 		DELETED = 'N'  		
+	</select>
+	
+	<sql id="reportColumns">
+		SELECT
+				REPORT_NO
+			  , USER_ID
+			  , REPORT_CATEGORY
+			  , BOARD_TYPE
+			  ,	CONTENT
+			  ,	CREATE_DATE
+			  ,	UPDATED
+			  , DELETED
+			  , TARGET_NO
+	      FROM
+	      		REPORT_BOARD
+	     WHERE
+	     		DELETED = 'N' 			
+	</sql>
+	
+	<select id="findAll" resultType="reportDto">
+		<include refid="reportColumns"/>
+		 ORDER
+		    BY
+		   		REPORT_NO DESC
+		OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY
+	</select>
+	
 
 
 
