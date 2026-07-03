@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.iso.plogues.board.comment.model.dao.BoardCommentMapper;
+import com.iso.plogues.board.comment.model.dto.BoardCommentDto;
 import com.iso.plogues.board.file.model.service.BoardFileService;
 import com.iso.plogues.board.model.dao.BoardMapper;
 import com.iso.plogues.board.model.dto.BoardDto;
@@ -24,6 +27,7 @@ public class BoardService {
 
     private final BoardMapper boardMapper;
     private final BoardFileService boardFileService;
+    private final BoardCommentMapper commentMapper;
 
     public BoardResponse<BoardDto> selectBoardList(int currentPage) {
         int listCount = boardMapper.countBoardList();
@@ -46,14 +50,19 @@ public class BoardService {
         return new BoardResponse<>(page, boardList);
     }
     
-    @Transactional(readOnly = true)
+    @Transactional
     public BoardDto selectBoardDetail(Long boardNo) {
         BoardDto board = boardMapper.selectBoardDetail(boardNo);
         if (board == null) {
             throw new FailedFindByNoException("존재하지 않는 게시글입니다.");
         }
+        boardMapper.increaseViewCount(boardNo);
         List<FileDto> files = boardMapper.selectFileList(boardNo);
         board.setFileList(files);
+        
+        List<BoardCommentDto> comments = commentMapper.selectCommentList(boardNo);
+        board.setCommentList(comments);
+        
         return board;
     }
     

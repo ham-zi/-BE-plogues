@@ -36,12 +36,13 @@ public class NoticeService {
 	    return response;
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional
 	public NoticeDto selectNoticeDetail(Long noticeNo) {
 	    NoticeDto notice = noticeMapper.selectNoticeDetail(noticeNo);
 	    if (notice == null) {
-			throw new FailedFindByNoException("존재하지 않는 게시글입니다.");
+			throw new FailedFindByNoException("존재하지 않는 공지사항 입니다.");
 		}
+	    noticeMapper.increaseViewCount(noticeNo);
 	    List<FileDto> files = noticeMapper.selectFileList(noticeNo);
 	    notice.setFileList(files);
 	    return notice;

@@ -19,6 +19,7 @@ public interface NoticeMapper {
     List<FileDto> selectFileList(@Param("noticeNo") Long noticeNo);
     
     int updateNotice(@Param("notice") NoticeDto noticeDto);
+    int increaseViewCount(Long noticeNo);
     int deleteNotice(@Param("noticeNo") Long noticeNo);
     
     int insertNotice(@Param("notice") NoticeDto noticeDto);
