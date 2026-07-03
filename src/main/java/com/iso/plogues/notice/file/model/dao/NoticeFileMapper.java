@@ -12,7 +12,7 @@ import com.iso.plogues.util.file.FileDto;
 @Mapper
 public interface NoticeFileMapper {
 
-    @Select("SELECT FILE_NO AS fileNo, NOTICE_NO AS refBoardNo, ORIGIN_NAME AS originName, CHANGE_NAME AS changeName, FILE_PATH AS filePath FROM NOTICE_FILE WHERE DELETED = 'N' AND NOTICE_NO = #{noticeNo}")
+    @Select("SELECT FILE_NO, NOTICE_NO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH FROM NOTICE_FILE WHERE DELETED = 'N' AND NOTICE_NO = #{noticeNo}")
     List<FileDto> findByBno(Long noticeNo);
 
     @Update("UPDATE NOTICE_FILE SET DELETED = 'Y' WHERE NOTICE_NO = #{noticeNo}")

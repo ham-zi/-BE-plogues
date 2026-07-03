@@ -47,6 +47,10 @@ public class SecurityConfig {
 					   requests.requestMatchers(HttpMethod.PATCH).permitAll();
 					   requests.requestMatchers(HttpMethod.DELETE).permitAll();
 					   requests.requestMatchers("/api/admin").hasRole("ADMIN");
+					   requests.requestMatchers(HttpMethod.POST, "/api/notices").hasRole("ADMIN");
+					   requests.requestMatchers(HttpMethod.PATCH, "/api/notices/**").hasRole("ADMIN");
+					   requests.requestMatchers(HttpMethod.DELETE, "/api/notices/**").hasRole("ADMIN");
+					   requests.requestMatchers(HttpMethod.GET, "/api/notices/**").permitAll();
 				   }).sessionManagement(manager -> 
 				   						manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				   .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
