@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iso.plogues.question.comment.model.dao.AnswerMapper">
+
+
+	<insert id="saveComment" parameterType="AnswerDto">
+        INSERT
+          INTO
+               QUESTION_ANSWER
+        VALUES 
+               (
+               SEQ_PLG_QA.NEXTVAL 
+             , #{userId}
+             , #{boardNo}
+             , SYSDATE
+             , #{content}
+             , 'ORIGINAL' 
+             , 'N'
+               )
+    </insert>
+    
+	<select id="findComment" resultType="AnswerDto">
+	    SELECT
+	           ANSWER_NO,
+	           USER_ID,
+	           BOARD_NO,
+	           CREATED_DATE,
+	           CONTENT,
+	           UPDATED,
+	           DELETED
+	      FROM QUESTION_ANSWER
+	     WHERE BOARD_NO = #{boardNo}
+	       AND DELETED = 'N'
+	</select>
+    
+    <update id="updateComment">
+	    UPDATE
+	           QUESTION_ANSWER
+	       SET 
+	           CONTENT = #{content}
+	         , UPDATED = 'EDITED'   
+	     WHERE 
+	           BOARD_NO = #{boardNo}
+	       AND 
+	           DELETED = 'N'          
+	</update>
+    
+    <update id="deleteComment">
+	    UPDATE
+	           QUESTION_ANSWER
+	       SET
+	           DELETED = 'Y'
+	     WHERE
+	           BOARD_NO = #{boardNo}
+	</update>
+
+
+</mapper>

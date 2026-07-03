@@ -16,7 +16,7 @@
              , #{category}
              , SYSDATE
              , #{content}
-             , 'N'
+             , 'WAITING'
              , 'N'
                )
     </insert>
@@ -32,6 +32,7 @@
 	           CATEGORY = #{category}
 	        </if>
 	    </where>
+	     ORDER BY BOARD_NO DESC
 	</select>
 	
 	<select id="findByUser">
@@ -47,6 +48,7 @@
 	           CATEGORY = #{category}
 	       </if>
 	    </where>
+	     ORDER BY BOARD_NO DESC
 	</select>
 	
 	<select id="listCount" resultType="int">
@@ -94,24 +96,42 @@
                BOARD_NO = #{boardNo}
     </select>
 	
+	<select id="findBoardStatus" resultType="QuestionDto">
+	    SELECT 
+	            USER_ID AS userId
+	          , DELETED AS deleted
+	      FROM 
+	            QUESTION_BOARD 
+	     WHERE 
+	            BOARD_NO = #{boardNo}
+	</select>
+	
 	<update id="deleteByQuestion">
+	    UPDATE
+	            QUESTION_BOARD
+	       SET 
+	            DELETED = 'Y'
+	     WHERE 
+	            BOARD_NO = #{boardNo}
+	</update>
+	
+	<update id="restoreByQuestion">
 	    UPDATE
 	           QUESTION_BOARD
 	       SET 
-	           DELETED = 'Y'
+	           DELETED = 'N'
 	     WHERE 
 	           BOARD_NO = #{boardNo}
 	</update>
-    
-    <select id="findAuthorByBoardNo" resultType="java.lang.String">
-        SELECT 
-               USER_ID 
-          FROM 
-               QUESTION_BOARD 
-         WHERE 
-               BOARD_NO = #{boardNo}
-    </select>
 	
-    
-
+	<!-- 답변 완료 상태로 업데이트 -->
+    <update id="updateStatus">
+        UPDATE
+               QUESTION_BOARD
+           SET
+               UPDATED = 'COMPLETED'
+         WHERE
+               BOARD_NO = #{boardNo}
+    </update>
+	
 </mapper>

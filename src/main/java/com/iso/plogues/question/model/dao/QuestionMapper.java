@@ -4,22 +4,24 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import com.iso.plogues.question.model.dto.QuestionDto;
 import com.iso.plogues.question.model.vo.Question;
-import com.iso.plogues.util.page.PageInfo;
 
 @Mapper
 public interface QuestionMapper {
 
 	int save(Question q);
     int listCount(@Param("category") String category);
-    List<QuestionDto> findByAll(@Param("pageInfo") PageInfo pageInfo, @Param("category") String category);
+    List<QuestionDto> findByAll(RowBounds rowBounds, @Param("category") String category);
     int listCountByUser(@Param("category") String category, @Param("userId") String user);
-    List<QuestionDto> findByUser(@Param("pageInfo") PageInfo pageInfo,@Param("category") String category,@Param("userId") String user);
+    List<QuestionDto> findByUser(RowBounds rowBounds, @Param("category") String category, @Param("userId") String userId);
 	QuestionDto findByOne(Long boardNo);
-	void deleteByQuestion(Long boardNo);
-	String findAuthorByBoardNo(Long boardNo);
+	QuestionDto findBoardStatus(Long boardNo);
+    int deleteByQuestion(Long boardNo);
+	int restoreByQuestion(Long boardNo);
+	int updateStatus(@Param("boardNo") Long boardNo, @Param("updated") String updated);
 
 	
 

@@ -23,7 +23,7 @@ mybatis:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.iso.plogues.question.model.dto;
+  type-aliases-package: com.iso.plogues.question.model.dto, com.iso.plogues.question.comment.model.dto;
   
 jwt:
   secret: p7Vq3mZ8kL1Xo9R2bT6nW4cF0HsJ8vQeA5uD3mZx7LpN2kV9sR1cG6hT0bY8fJ

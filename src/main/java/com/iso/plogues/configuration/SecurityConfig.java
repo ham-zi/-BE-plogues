@@ -41,9 +41,9 @@ public class SecurityConfig {
 					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question").authenticated();
 					   requests.requestMatchers(HttpMethod.GET, "/api/question/**").authenticated();
 					   requests.requestMatchers(HttpMethod.DELETE, "/api/question/**").authenticated();
+					   requests.requestMatchers(HttpMethod.PATCH, "/api/question/**").authenticated();
+					   requests.requestMatchers(HttpMethod.POST, "/api/question/**").authenticated();
 					   requests.requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll();
-					   requests.requestMatchers(HttpMethod.GET).permitAll();
-					   requests.requestMatchers("/api/admin").hasRole("ADMIN");
 				   }).sessionManagement(manager -> 
 				   						manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				   .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

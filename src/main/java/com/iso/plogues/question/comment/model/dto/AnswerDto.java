@@ -26,6 +26,4 @@ public class AnswerDto {
 	private String updated;
 	private String deleted;
 	
-	
-
 }
