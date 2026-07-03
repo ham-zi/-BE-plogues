@@ -9,7 +9,8 @@ import lombok.Value;
 @Builder
 public class Chat {
 	private Long chatNo;
-	private Long requestNo;
+	private String userId;
+	private Long joinNo;
 	private String content;
 	private LocalDateTime createDate;
 	private String updated;

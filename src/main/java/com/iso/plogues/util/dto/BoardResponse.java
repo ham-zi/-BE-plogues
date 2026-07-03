@@ -5,14 +5,11 @@ import java.util.List;
 import com.iso.plogues.util.page.PageInfo;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class BoardResponse<T> {
 	private PageInfo page;
