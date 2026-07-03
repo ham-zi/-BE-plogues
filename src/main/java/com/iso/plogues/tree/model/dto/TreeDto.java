@@ -2,6 +2,8 @@ package com.iso.plogues.tree.model.dto;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ public class TreeDto {
 	private String manager;
 	@NotBlank(message="센서의 구역을 입력해주세요.")
 	private String zoneName;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date measureTime;
 	@NotNull(message="온도를 입력해주세요.")
 	private double temperature;

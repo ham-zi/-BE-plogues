@@ -18,6 +18,7 @@ import com.iso.plogues.proof.file.model.service.ProofFileService;
 import com.iso.plogues.proof.model.dao.ProofMapper;
 import com.iso.plogues.proof.model.dto.ProofDto;
 import com.iso.plogues.proof.model.vo.Proof;
+import com.iso.plogues.tree.model.dto.TreeCountDto;
 import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.file.FileDto;
 import com.iso.plogues.util.page.PageInfo;
@@ -150,6 +151,9 @@ public class ProofService {
 
 	}
 	
+	public void getCarbonReduction() {
+		List<TreeCountDto> countDto = proofMapper.treeCountByYear();
+		log.info("{}", countDto);
+	}
 	
-
 }
