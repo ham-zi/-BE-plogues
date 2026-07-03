@@ -7,7 +7,6 @@
 		VALUES
 			   (
 				  SEQ_PLG_RB.NEXTVAL
-				  #{reportNo}
 			    , #{userId}
 			    , #{reportCategory}
 			    , #{boardType}
