@@ -1,10 +1,12 @@
 package com.iso.plogues.join.chat.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +47,12 @@ public class ChatController {
 		chat.setChatNo(chatNo);
 		chatService.updateChat(user, chat);
 		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("채팅 수정 성공", null));
+	}
+	
+	@DeleteMapping("/{chatNo}")
+	public ResponseEntity<ApiResponse<Void>> DeleteChat(@AuthenticationPrincipal CustomUserDetails user, @Valid @RequestBody Map<String, Long> joinNo, @PathVariable(name="chatNo") Long chatNo) {
+		chatService.deleteChat(user, joinNo.get("joinNo"), chatNo);
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("채팅 삭제 성공", null));
 	}
 
 }

@@ -85,5 +85,50 @@
 		AND
 				DELETED = 'N'
 	</select>
+	
+	<update id="updateNotice">
+    	UPDATE 
+    			NOTICE_BOARD
+    	SET
+        		TITLE = #{notice.title},
+        		CONTENT = #{notice.content},
+        		UPDATED = 'Y'
+    	WHERE
+        		NOTICE_NO = #{notice.noticeNo}
+        AND 
+        		DELETED = 'N'
+	</update>
 
+	<update id="deleteNotice">
+    	UPDATE 
+    			NOTICE_BOARD
+    	SET 
+    			DELETED = 'Y'
+   		WHERE
+        		NOTICE_NO = #{noticeNo}
+	</update>
+
+	<insert id="insertNotice"
+    		useGeneratedKeys="true"
+    		keyProperty="notice.noticeNo"
+    		keyColumn="NOTICE_NO">
+    	INSERT
+    	INTO
+    		NOTICE_BOARD
+    		(
+    		NOTICE_NO,
+    		CATEGORY,
+    		TITLE,
+    		CONTENT,
+    		USER_ID
+    		)
+    		VALUES
+    		(
+    		SEQ_NOTICE_BOARD.NEXTVAL,
+    		#{notice.category},
+    		#{notice.title},
+    		#{notice.content},
+    		#{notice.userId}
+    		)
+	</insert>
 </mapper>

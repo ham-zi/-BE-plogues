@@ -29,12 +29,6 @@ public class JoinFileService {
 		fileService.fileTransferTo(file, fileEntity.getChangeName(), boardType);
 	}
 	
-	private void throwFileInsertException(int result) {
-		if(result != 1) {
-			throw new FailedInsertException("파일 추가에 실패했습니다.");
-		}
-	}
-	
 	@Transactional
 	public List<FileDto> findByBno(Long refBno) {
 		return fileMapper.findByBno(refBno);
@@ -49,18 +43,24 @@ public class JoinFileService {
 		throwFailedDeleteException(result);
 	}
 	
-	private void throwFailedDeleteException(int result) {
-		if(result != 1) {
-			throw new FailedDeleteException("파일 삭제에 실패했습니다.");
-		}
-	}
-	
 	@Transactional
 	public void updateFile(MultipartFile file, Long refBno, String boardType) {
 		if(!findByBno(refBno).isEmpty()) {
 			hardDeleteFile(refBno);
 		}
 		saveFile(file, refBno, boardType);
+	}
+	
+	private void throwFileInsertException(int result) {
+		if(result != 1) {
+			throw new FailedInsertException("파일 추가에 실패했습니다.");
+		}
+	}
+	
+	private void throwFailedDeleteException(int result) {
+		if(result != 1) {
+			throw new FailedDeleteException("파일 삭제에 실패했습니다.");
+		}
 	}
 	
 	private void hardDeleteFile(Long refBno) {

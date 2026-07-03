@@ -14,6 +14,12 @@ public interface NoticeMapper {
 	
 	int countNoticeList(@Param("category") String category);
     List<NoticeDto> selectNoticeList(@Param(value="category")String category, @Param(value="pi") PageInfo pi);
+    
     NoticeDto selectNoticeDetail(@Param("noticeNo") Long noticeNo);
     List<FileDto> selectFileList(@Param("noticeNo") Long noticeNo);
+    
+    int updateNotice(@Param("notice") NoticeDto noticeDto);
+    int deleteNotice(@Param("noticeNo") Long noticeNo);
+    
+    int insertNotice(@Param("notice") NoticeDto noticeDto);
 }
