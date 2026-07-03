@@ -10,11 +10,35 @@
   		VALUES 
   		       (
 			   SEQ_PLG_JC.NEXTVAL
-			 , #{requestNo}
+			 , #{userId}
+			 , #{joinNo}
 			 , #{content}
 			 , SYSDATE
 			 , 'N'
 			 , 'N'
 			   )
   	</insert>
+  	<select id="findAll" resultType="ChatResponse">
+  		SELECT 
+  		       CHAT_NO
+  		     , C.USER_ID
+  		     , U.USER_NAME
+  		     , F.FILE_PATH
+  		     , B.TITLE
+  		     , C.JOIN_NO
+  		     , C.CONTENT
+  		     , C.CREATE_DATE
+  		     , C.UPDATED
+  		     , C.DELETED
+  		  FROM 
+  		       JOIN_CHAT C
+  		  LEFT JOIN 
+  		       PLOGUES_USER U ON C.USER_ID = U.USER_ID
+  		  LEFT JOIN 
+  		       USER_FILE F ON C.USER_ID = F.USER_ID
+  		  LEFT JOIN 
+  		       JOIN_BOARD B ON C.JOIN_NO = B.JOIN_NO
+  		 WHERE 
+  		       C.JOIN_NO = #{joinNo}
+  	</select>
   </mapper>

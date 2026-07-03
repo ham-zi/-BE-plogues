@@ -50,8 +50,23 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
 	}
 	
+	@ExceptionHandler(FailedUpdateException.class)
+	public ResponseEntity<ApiResponse> handlerFailedUpdate(FailedUpdateException e){
+		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+	}
+	
+	@ExceptionHandler(FailedDeleteException.class)
+	public ResponseEntity<ApiResponse> handlerFailedDelete(FailedDeleteException e){
+		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+	}
+
 	@ExceptionHandler(FailedFindByNoException.class)
 	public ResponseEntity<ApiResponse> handlerFailedFindByNo(FailedFindByNoException e){
+		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+	}
+	
+	@ExceptionHandler(FailedFindAllException.class)
+	public ResponseEntity<ApiResponse> handlerFailedFindAll(FailedFindAllException e){
 		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
 	}
 	

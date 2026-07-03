@@ -80,12 +80,7 @@ public class ProofService {
 
 		List<ProofDto> list = proofMapper.findAll(pageInfo);
 
-		BoardResponse<ProofDto> br = new BoardResponse<>();
-
-		br.setPage(pageInfo);
-		br.setBoard(list);
-
-		return br;
+		return new BoardResponse<>(pageInfo, list);
 	}
 
 	@Transactional

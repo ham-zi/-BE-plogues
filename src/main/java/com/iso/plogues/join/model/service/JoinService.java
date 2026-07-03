@@ -55,6 +55,55 @@ public class JoinService {
 		RequestDto request = setRequest(user.getUsername(), joinEntity);
 		requestMapper.saveRequest(request);
 	}
+
+	@Transactional
+	public BoardResponse<JoinDto> findAllPlant(int page) {
+		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
+		List<JoinDto> list = joinMapper.findAllPlant(pageInfo);
+		return new BoardResponse(pageInfo, list);
+	}
+	
+	@Transactional
+	public BoardResponse<JoinDto> findAllPlog(int page) {
+		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
+		List<JoinDto> list = joinMapper.findAllPlog(pageInfo);
+		return new BoardResponse(pageInfo, list);
+	}
+	
+	@Transactional
+	public JoinDto findByJoinNo(Long joinNo) {
+		JoinDto join = joinMapper.findByJoinNo(joinNo);
+		throwFindByException(join);
+		List<FileDto> file = fileService.findByBno(joinNo);
+		join.setFiles(file);
+		return join;
+	}
+	
+	@Transactional
+	public void deleteJoin(CustomUserDetails user, Long joinNo) {
+		findByJoinNo(joinNo);
+		int result = joinMapper.deleteJoin(user.getUsername(), joinNo);
+		throwDeleteException(result);
+		fileService.deleteFile(joinNo);
+	}
+	
+	@Transactional
+	public void updateJoin(CustomUserDetails user, Long joinNo, JoinDto join, MultipartFile file) {
+		findByJoinNo(join.getJoinNo());
+		Join joinEntity = Join.builder()
+				.joinNo(joinNo)
+				.userId(user.getUsername())
+				.participants(join.getParticipants())
+				.region(join.getRegion())
+				.startDate(join.getStartDate())
+				.endDate(join.getEndDate())
+				.title(join.getTitle())
+				.content(join.getContent())
+				.build();
+		int result = joinMapper.updateJoin(joinEntity);
+		throwUpdateException(result);
+		fileService.updateFile(file, join.getJoinNo(), "join");
+	}
 	
 	private RequestDto setRequest(String userId, Join join) {
 		RequestDto request = new RequestDto();
@@ -75,34 +124,6 @@ public class JoinService {
 		return PageInfo.of(listCount, page, 10, 5);
 	}
 	
-	@Transactional
-	public BoardResponse<JoinDto> findAllPlant(int page) {
-		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
-		List<JoinDto> list = joinMapper.findAllPlant(pageInfo);
-		BoardResponse<JoinDto> br = new BoardResponse();
-		br.setPage(pageInfo);
-		br.setBoard(list);
-		return br;
-	}
-	
-	@Transactional
-	public BoardResponse<JoinDto> findAllPlog(int page) {
-		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
-		List<JoinDto> list = joinMapper.findAllPlog(newPageInfo(joinMapper.listCount(), page));
-		BoardResponse<JoinDto> br = new BoardResponse();
-		br.setPage(pageInfo);
-		br.setBoard(list);
-		return br;
-	}
-	
-	@Transactional
-	public JoinDto findByJoinNo(Long joinNo) {
-		JoinDto join = joinMapper.findByJoinNo(joinNo);
-		throwFindByException(join);
-		List<FileDto> file = fileService.findByBno(joinNo);
-		join.setFiles(file);
-		return join;
-	}
 	
 	private void throwFindByException(JoinDto join) {
 		if(join == null) {
@@ -110,36 +131,10 @@ public class JoinService {
 		}
 	}
 	
-	@Transactional
-	public void deleteJoin(CustomUserDetails user, Long joinNo) {
-		findByJoinNo(joinNo);
-		int result = joinMapper.deleteJoin(user.getUsername(), joinNo);
-		throwDeleteException(result);
-		fileService.deleteFile(joinNo);
-	}
-	
 	private void throwDeleteException(int result) {
 		if(result != 1) {
 			throw new FailedDeleteException("게시글 삭제에 실패했습니다.");
 		}
-	}
-	
-	@Transactional
-	public void updateJoin(CustomUserDetails user, Long joinNo, JoinDto join, MultipartFile file) {
-		findByJoinNo(join.getJoinNo());
-		Join joinEntity = Join.builder()
-							  .joinNo(joinNo)
-							  .userId(user.getUsername())
-							  .participants(join.getParticipants())
-							  .region(join.getRegion())
-							  .startDate(join.getStartDate())
-							  .endDate(join.getEndDate())
-							  .title(join.getTitle())
-							  .content(join.getContent())
-							  .build();
-		int result = joinMapper.updateJoin(joinEntity);
-		throwUpdateException(result);
-		fileService.updateFile(file, join.getJoinNo(), "join");
 	}
 	
 	private void throwUpdateException(int result) {

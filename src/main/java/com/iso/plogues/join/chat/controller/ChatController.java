@@ -1,11 +1,15 @@
 package com.iso.plogues.join.chat.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
@@ -25,6 +29,12 @@ public class ChatController {
 	public ResponseEntity<ApiResponse<Void>> saveChat(@AuthenticationPrincipal CustomUserDetails user, @RequestBody ChatDto chat) {
 		chatService.saveChat(user, chat);
 		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("채팅 작성 성공", null));
+	}
+	
+	@GetMapping
+	public ResponseEntity<ApiResponse<List<ChatDto>>> findAll(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(name="bno") Long joinNo) {
+		List<ChatDto> list = chatService.findAll(user, joinNo);
+		return ResponseEntity.status(200).body(ApiResponse.success("채팅 목록 조회 성공", list));
 	}
 
 }

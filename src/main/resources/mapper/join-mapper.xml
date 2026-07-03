@@ -40,24 +40,44 @@
   <sql id="joinColumns">
   	SELECT 
   	       JOIN_NO
-  	     , USER_ID
-  	     , CATEGORY
-  	     , PARTICIPANTS
-  	     , REGION
-  	     , START_DATE
-  	     , END_DATE
-  	     , TITLE
-  	     , CONTENT
-  	     , CREATE_DATE
+  	     , b.USER_ID
+  	     , b.CATEGORY
+  	     , b.PARTICIPANTS
+  	     , b.REGION
+  	     , b.START_DATE
+  	     , b.END_DATE
+  	     , b.TITLE
+  	     , b.CONTENT
+  	     , b.CREATE_DATE
+  	     , count(*) current_count
   	  FROM 
-  	       JOIN_BOARD
+  	       JOIN_BOARD b
+  	  JOIN 
+  	       JOIN_REQUEST r USING(JOIN_NO)
   	 WHERE 
-  	       DELETED = 'N'
+  	       b.DELETED = 'N'
+  	   and 
+  	       r.STATUS = 'ACCEPTED'
+  </sql>
+  <sql id="groupColumns">
+  	 GROUP 
+  	    BY 
+  	       JOIN_NO
+  	     , b.USER_ID
+  	     , b.CATEGORY
+  	     , b.PARTICIPANTS
+  	     , b.REGION
+  	     , b.START_DATE
+  	     , b.END_DATE
+  	     , b.TITLE
+  	     , b.CONTENT
+  	     , b.CREATE_DATE
   </sql>
   <select id="findAllPlant" resultType="joinDto">
   	<include refid="joinColumns"/>
   	   AND 
-  	       CATEGORY = 'PLANT'
+  	       b.CATEGORY = 'PLANT'
+  	<include refid="groupColumns"/>
   	 ORDER 
   	    BY 
   	       JOIN_NO DESC
@@ -66,7 +86,7 @@
   <select id="findAllPlog" resultType="joinDto">
   	<include refid="joinColumns"/>
   	   AND 
-  	       CATEGORY = 'PLOG'
+  	       b.CATEGORY = 'PLOG'
   	 ORDER 
   	    BY 
   	       JOIN_NO DESC
