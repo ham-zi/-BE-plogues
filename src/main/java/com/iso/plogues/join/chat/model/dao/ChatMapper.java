@@ -12,5 +12,7 @@ import com.iso.plogues.join.chat.model.vo.Chat;
 public interface ChatMapper {
 	int saveChat(Chat chat);
 	List<ChatDto> findAll(Long joinNo);
+	ChatDto findByChatNo(Long chatNo);
+	int updateChat(Chat chat);
 
 }
