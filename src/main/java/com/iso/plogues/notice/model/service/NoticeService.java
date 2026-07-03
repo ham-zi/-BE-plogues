@@ -34,9 +34,7 @@ public class NoticeService {
 	    int listCount = noticeMapper.countNoticeList(category);
 	    PageInfo page = PageInfo.of(listCount, currentPage, 10, 5);
 	    List<NoticeDto> noticeList = noticeMapper.selectNoticeList(category, page);
-	    BoardResponse<NoticeDto> response = new BoardResponse<>();
-	    response.setPage(page);
-	    response.setBoard(noticeList);
+	    BoardResponse<NoticeDto> response = new BoardResponse<>(page, noticeList);
 	    return response;
 	}
 

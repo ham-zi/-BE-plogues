@@ -29,10 +29,7 @@ public class BoardService {
         int listCount = boardMapper.countBoardList();
         PageInfo page = PageInfo.of(listCount, currentPage, 10, 5);
         List<BoardDto> boardList = boardMapper.selectBoardList(page);
-        BoardResponse<BoardDto> response = new BoardResponse<>();
-        response.setPage(page);
-        response.setBoard(boardList);
-        return response;
+        return new BoardResponse<>(page, boardList);
     }
 
     
@@ -46,10 +43,7 @@ public class BoardService {
                 5
         );
         List<BoardDto> boardList = boardMapper.selectMyBoardList(user.getUsername(), page);
-        BoardResponse<BoardDto> response = new BoardResponse<>();
-        response.setPage(page);
-        response.setBoard(boardList);
-        return response;
+        return new BoardResponse<>(page, boardList);
     }
     
     @Transactional(readOnly = true)
