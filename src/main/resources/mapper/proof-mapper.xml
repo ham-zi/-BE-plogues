@@ -118,6 +118,21 @@
 				USER_ID = #{userId}
 
 	</update>
+	
+	<select id="treeCountByYear" resultType="TreeCountDto">
+		SELECT
+		       EXTRACT(YEAR FROM CREATE_DATE) AS YEAR,
+		       SUM(QUANTITY) AS TREE_COUNT
+		  FROM
+		       PROOF_BOARD
+		 WHERE
+		       CATEGORY = 'PLANT'
+		   AND
+		       DELETED = 'N'
+		 GROUP
+		    BY
+		       EXTRACT(YEAR FROM CREATE_DATE)
+	</select>
 
 
 </mapper>

@@ -1,5 +1,7 @@
 package com.iso.plogues.tree.model.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.iso.plogues.tree.model.dao.TreeMapper;
@@ -24,4 +26,13 @@ public class TreeService {
 				                            .temperature(treeDto.getTemperature())
 				                            .build());
 	}
+	
+	public List<TreeDto> findDataByWeek() {
+		return treeMapper.findDataByWeek();
+	}
+	
+	
+	
+	
+	
 }

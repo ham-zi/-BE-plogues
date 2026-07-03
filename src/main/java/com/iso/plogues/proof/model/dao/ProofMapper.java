@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.iso.plogues.proof.model.dto.ProofDto;
 import com.iso.plogues.proof.model.vo.Proof;
+import com.iso.plogues.tree.model.dto.TreeCountDto;
 import com.iso.plogues.util.page.PageInfo;
 
 @Mapper
@@ -23,4 +24,6 @@ public interface ProofMapper {
 	int deleteProof(@Param("userId") String userId, @Param("proofNo") Long proofNo);
 
 	int updateProof(Proof proof);
+	
+	List<TreeCountDto>treeCountByYear();
 }
