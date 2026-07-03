@@ -37,15 +37,13 @@ public class SecurityConfig {
 				   .csrf(AbstractHttpConfigurer::disable)
 				   .cors(Customizer.withDefaults())
 				   .authorizeHttpRequests(requests -> { 
+					   
 
+					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "api/tree").permitAll();
 					   requests.requestMatchers(HttpMethod.GET, "/api/users/**").authenticated();
 					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question", "/api/auth/refresh", "/api/request/**", "/api/chats" , "/api/boards").authenticated();
 					   requests.requestMatchers(HttpMethod.PATCH, "/api/users", "/api/request/**").authenticated();					   
 					   requests.requestMatchers(HttpMethod.DELETE, "/api/users", "/api/joins/**", "/api/request/**", "/api/joins/**").authenticated();
-					   requests.requestMatchers(HttpMethod.GET).permitAll();
-					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "api/tree").permitAll();
-					   requests.requestMatchers(HttpMethod.PATCH).permitAll();
-					   requests.requestMatchers(HttpMethod.DELETE).permitAll();
 					   requests.requestMatchers("/api/admin").hasRole("ADMIN");
 				   }).sessionManagement(manager -> 
 				   						manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

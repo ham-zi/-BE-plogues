@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
+import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.request.InValidJoinRequestException;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.service.JoinService;
@@ -58,7 +59,19 @@ public class RequestService {
 		BoardResponse<RequestDto> boardResponse = new BoardResponse<RequestDto>(pi, requests);
 		return boardResponse;
 	}
-
+	
+	@Transactional
+	public void findByUserIdJoin(String userId, Long joinNo) {
+		RequestDto request = requestMapper.findByUserIdJoin(userId, joinNo);
+		validateRequest(request);
+	}
+	
+	private void validateRequest(RequestDto request) {
+		if(request == null) {
+			throw new FailedFindByNoException("참여요청이 수락된 후 이용할 수 있습니다.");
+		}
+	}
+	
 	private void isDuplicateRequest(RequestDto requestDto) {
 		if(requestMapper.countByUserIdJoinNo(requestDto) > 0) {
 			throw new InValidJoinRequestException("이미 신청한 요청입니다.");
