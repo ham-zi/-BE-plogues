@@ -115,6 +115,7 @@
 		DELETED = 'N'
 	</select>
 	
+	
 	<insert id="insertBoard"
 		useGeneratedKeys="true"
 		keyProperty="boardNo"
@@ -150,6 +151,15 @@
 		BOARD_NO = #{boardNo}
 	</update>
 
+	<update id="increaseViewCount">
+    	UPDATE 
+    			REVIEW_BOARD
+    	SET 
+    			VIEW_COUNT = VIEW_COUNT + 1
+    	WHERE 
+    			BOARD_NO = #{boardNo}
+	</update>
+	
 	<update id="deleteBoard">
 		UPDATE 
 		REVIEW_BOARD

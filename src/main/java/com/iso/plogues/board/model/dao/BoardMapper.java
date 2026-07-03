@@ -25,6 +25,8 @@ public interface BoardMapper {
 	
 	int deleteBoard(@Param(value="userId") String userId, @Param(value="boardNo") Long boardNo);
 	
+	int increaseViewCount(Long boardNo);
+	
 }
 
 

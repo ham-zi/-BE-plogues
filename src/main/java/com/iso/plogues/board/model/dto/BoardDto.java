@@ -3,6 +3,7 @@ package com.iso.plogues.board.model.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.iso.plogues.board.comment.model.dto.BoardCommentDto;
 import com.iso.plogues.util.file.FileDto;
 
 import jakarta.validation.constraints.NotBlank;
@@ -22,4 +23,5 @@ public class BoardDto {
     private String content;
     private String userId;    
     private List<FileDto> fileList;
+    private List<BoardCommentDto> commentList;
 }

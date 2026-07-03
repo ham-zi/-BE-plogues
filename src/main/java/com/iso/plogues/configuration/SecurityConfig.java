@@ -41,6 +41,10 @@ public class SecurityConfig {
 					   requests.requestMatchers(HttpMethod.GET, "/api/notices/**", "/api/joins/**").permitAll();
 					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "api/tree").permitAll();
 					   requests.requestMatchers(HttpMethod.GET, "/api/users/**").authenticated();
+					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question", "/api/auth/refresh", "/api/request/**", "/api/chats" , "/api/boards", "api/notices", "/api/boards/*/comments").authenticated();
+					   requests.requestMatchers(HttpMethod.PATCH, "/api/users", "/api/request/**", "/api/boards/*/comments/**").authenticated();					   
+					   requests.requestMatchers(HttpMethod.DELETE, "/api/users", "/api/joins/**", "/api/request/**", "/api/joins/**", "/api/boards/*/comments/**").authenticated();
+        			   requests.requestMatchers(HttpMethod.GET, "/api/users/**", "/api/chats").authenticated();
 					   requests.requestMatchers(HttpMethod.POST, "/api/proof**").authenticated();
 					   requests.requestMatchers(HttpMethod.GET, "/api/proof/**").authenticated();
 					   requests.requestMatchers(HttpMethod.PATCH, "/api/proof/**").authenticated();
@@ -55,6 +59,10 @@ public class SecurityConfig {
 					   requests.requestMatchers(HttpMethod.POST, "/api/notices").hasRole("ADMIN");
 					   requests.requestMatchers(HttpMethod.PATCH, "/api/notices/**").hasRole("ADMIN");
 					   requests.requestMatchers(HttpMethod.DELETE, "/api/notices/**").hasRole("ADMIN");
+
+					   requests.requestMatchers(HttpMethod.GET, "/api/notices/**").permitAll();
+					   requests.requestMatchers(HttpMethod.GET, "/api/boards/**").permitAll();
+
 				   }).sessionManagement(manager -> 
 				   						manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				   .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

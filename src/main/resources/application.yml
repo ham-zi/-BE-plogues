@@ -26,7 +26,7 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mapper/*.xml
 
-  type-aliases-package: com.iso.plogues.join.model.dto, com.iso.plogues.request.model.dto, com.iso.plogues.board.model.dto, com.iso.plogues.notice.model.dto, com.iso.plogues.proof.model.dto,  com.iso.plogues.join.chat.model.dto, com.iso.plogues.report.model.dto
+  type-aliases-package: com.iso.plogues.join.model.dto, com.iso.plogues.request.model.dto, com.iso.plogues.board.model.dto, com.iso.plogues.notice.model.dto, com.iso.plogues.proof.model.dto,  com.iso.plogues.join.chat.model.dto, com.iso.plogues.report.model.dto, com.iso.plogues.board.comment.model.dto
 
   
 jwt:
