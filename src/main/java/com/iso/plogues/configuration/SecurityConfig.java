@@ -41,6 +41,9 @@ public class SecurityConfig {
 
 					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "api/tree").permitAll();
 					   requests.requestMatchers(HttpMethod.GET, "/api/users/**").authenticated();
+					   requests.requestMatchers(HttpMethod.POST, "/api/proof**").authenticated();
+					   requests.requestMatchers(HttpMethod.GET, "/api/proof/**").authenticated();
+					   requests.requestMatchers(HttpMethod.PATCH, "/api/proof/**").authenticated();
 					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question", "/api/auth/refresh", "/api/request/**", "/api/chats" , "/api/boards").authenticated();
 					   requests.requestMatchers(HttpMethod.PATCH, "/api/users", "/api/request/**").authenticated();					   
 					   requests.requestMatchers(HttpMethod.DELETE, "/api/users", "/api/joins/**", "/api/request/**", "/api/joins/**").authenticated();
