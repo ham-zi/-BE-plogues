@@ -40,6 +40,11 @@
   		       JOIN_BOARD B ON C.JOIN_NO = B.JOIN_NO
   		 WHERE 
   		       C.JOIN_NO = #{joinNo}
+  		   AND 
+  		       C.DELETED = 'N'
+  		 ORDER 
+  		    BY 
+  		       C.CHAT_NO DESC
   	</select>
   	<select id="findByChatNo" resultType="ChatDto">
   		SELECT 
@@ -62,6 +67,14 @@
   		   SET 
   		       UPDATED = 'Y',
   		       CONTENT = #{content}
+  		 WHERE 
+  		       CHAT_NO = #{chatNo}
+  	</update>
+  	<update id="deleteChat">
+  		UPDATE 
+  		       JOIN_CHAT
+  		   SET 
+  		       DELETED = 'Y'
   		 WHERE 
   		       CHAT_NO = #{chatNo}
   	</update>
