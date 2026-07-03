@@ -44,7 +44,7 @@ public class SecurityConfig {
 					   requests.requestMatchers(HttpMethod.GET, "/api/users/**", "/api/chats").authenticated();
 					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins/**", "/api/question", "/api/auth/refresh", "/api/requests/**", "/api/chats" , "/api/boards", "api/notices", "/api/report").authenticated();
 					   requests.requestMatchers(HttpMethod.PATCH, "/api/users", "/api/request/**","/api/joins/**", "/api/chats/**").authenticated();					   
-					   requests.requestMatchers(HttpMethod.DELETE, "/api/users", "/api/joins/**", "/api/request/**", "/api/chats/**", "/api/joins/**").authenticated();
+					   requests.requestMatchers(HttpMethod.DELETE, "/api/users", "/api/joins/**", "/api/request/**", "/api/chats/**").authenticated();
 					   requests.requestMatchers(HttpMethod.GET, "/api/report").hasRole("ADMIN");
 					   requests.requestMatchers(HttpMethod.POST, "/api/notices").hasRole("ADMIN");
 					   requests.requestMatchers(HttpMethod.PATCH, "/api/notices/**").hasRole("ADMIN");
