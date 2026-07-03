@@ -50,12 +50,13 @@ public class BoardService {
         return new BoardResponse<>(page, boardList);
     }
     
-    @Transactional(readOnly = true)
+    @Transactional
     public BoardDto selectBoardDetail(Long boardNo) {
         BoardDto board = boardMapper.selectBoardDetail(boardNo);
         if (board == null) {
             throw new FailedFindByNoException("존재하지 않는 게시글입니다.");
         }
+        boardMapper.increaseViewCount(boardNo);
         List<FileDto> files = boardMapper.selectFileList(boardNo);
         board.setFileList(files);
         
