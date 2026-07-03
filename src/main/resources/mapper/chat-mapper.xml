@@ -53,6 +53,8 @@
   		       JOIN_CHAT
   		 WHERE 
   		       CHAT_NO = #{chatNo}
+  		   AND 
+  		       DELETED = 'N'
   	</select>
   	<update id="updateChat">
   		UPDATE 
@@ -62,7 +64,5 @@
   		       CONTENT = #{content}
   		 WHERE 
   		       CHAT_NO = #{chatNo}
-  		   AND 
-  		       DELETED = 'N'
   	</update>
   </mapper>
