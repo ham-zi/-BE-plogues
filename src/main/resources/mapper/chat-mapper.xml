@@ -62,5 +62,7 @@
   		       CONTENT = #{content}
   		 WHERE 
   		       CHAT_NO = #{chatNo}
+  		   AND 
+  		       DELETED = 'N'
   	</update>
   </mapper>
