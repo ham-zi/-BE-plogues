@@ -36,7 +36,7 @@ public class File {
 		this.originName = originName;
 		this.changeName = getChangeName(originName);
 		this.boardType = boardType;
-		this.filePath = "http://localhost/uploads/"+ boardType + "/"+ changeName;
+		this.filePath = "http://localhost/uploads/"+ boardType + "/";
 		this.deleted = "N";
 	}
 	
@@ -47,7 +47,7 @@ public class File {
 		this.originName = originName;
 		this.changeName = getChangeName(originName);
 		this.boardType = boardType;
-		this.filePath = "http://localhost/uploads/"+ boardType + "/"+ changeName;
+		this.filePath = "http://localhost/uploads/"+ boardType + "/";
 		this.deleted = "N";
 	}
 	
