@@ -2,9 +2,9 @@ package com.iso.plogues.request.model.service;
 
 import java.util.List;
 
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.request.InValidJoinRequestException;
@@ -14,7 +14,6 @@ import com.iso.plogues.request.model.dao.RequestMapper;
 import com.iso.plogues.request.model.dto.RequestDto;
 import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.page.PageInfo;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,16 +45,16 @@ public class RequestService {
 		requestMapper.requestDenied(requestNo);
 	}
 	
-	public BoardResponse<RequestDto> findAll(String userId, int page, String status) {
-		PageInfo pi = PageInfo.of(requestMapper.countByUserIdStatus(userId, status), page, 10, 5);
-		List<RequestDto> requests = requestMapper.findAllByHost(pi.getOffset(),pi.getBoardLimit(),userId, status);
+	public BoardResponse<RequestDto> findAllMyJoins(String userId, int page, String status) { //???
+		PageInfo pi = PageInfo.of(requestMapper.countMyJoins(userId, status), page, 10, 5);
+		List<RequestDto> requests = requestMapper.findAllMyJoins(pi.getOffset(),pi.getBoardLimit(),userId, status);
 		BoardResponse<RequestDto> boardResponse = new BoardResponse<RequestDto>(pi, requests);
 		return boardResponse;
 	}
 
-	public BoardResponse<RequestDto> findAllMyRequest(CustomUserDetails user, int page, String status) {
-		PageInfo pi = PageInfo.of(requestMapper.countByUserIdStatus(user.getUsername(), status), page, 10, 5);
-		List<RequestDto> requests = requestMapper.findAllMyRequest(pi.getOffset(),pi.getBoardLimit(),user.getUsername(), status);
+	public BoardResponse<RequestDto> findAllRequest(CustomUserDetails user, int page, String status) {
+		PageInfo pi = PageInfo.of(requestMapper.countByHostStatus(user.getUsername(), status), page, 10, 5);
+		List<RequestDto> requests = requestMapper.findAllRequest(pi.getOffset(),pi.getBoardLimit(),user.getUsername(), status);
 		BoardResponse<RequestDto> boardResponse = new BoardResponse<RequestDto>(pi, requests);
 		return boardResponse;
 	}
