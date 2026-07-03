@@ -20,4 +20,6 @@ public interface NoticeMapper {
     
     int updateNotice(@Param("notice") NoticeDto noticeDto);
     int deleteNotice(@Param("noticeNo") Long noticeNo);
+    
+    int insertNotice(@Param("notice") NoticeDto noticeDto);
 }

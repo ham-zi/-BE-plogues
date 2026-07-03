@@ -12,9 +12,6 @@ import com.iso.plogues.util.file.FileDto;
 @Mapper
 public interface NoticeFileMapper {
 
-    @Insert("INSERT INTO NOTICE_FILE VALUES(SEQ_NOTICE_FILE.NEXTVAL, #{originName}, #{changeName}, #{filePath}, 'N', #{refBoardNo})")
-    int saveFile(File file);
-
     @Select("SELECT FILE_NO AS fileNo, NOTICE_NO AS refBoardNo, ORIGIN_NAME AS originName, CHANGE_NAME AS changeName, FILE_PATH AS filePath FROM NOTICE_FILE WHERE DELETED = 'N' AND NOTICE_NO = #{noticeNo}")
     List<FileDto> findByBno(Long noticeNo);
 
@@ -23,4 +20,8 @@ public interface NoticeFileMapper {
 
     @Delete("DELETE FROM NOTICE_FILE WHERE NOTICE_NO = #{noticeNo}")
     int hardDeleteFile(Long noticeNo);
+    
+    @Insert("INSERT INTO NOTICE_FILE VALUES(SEQ_NOTICE_FILE.NEXTVAL, #{originName}, #{changeName}, #{filePath}, 'N', #{refBoardNo})")
+    int saveFile(File file);
+
 }

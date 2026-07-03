@@ -97,7 +97,7 @@
         		NOTICE_NO = #{notice.noticeNo}
         AND 
         		DELETED = 'N'
-</update>
+	</update>
 
 	<update id="deleteNotice">
     	UPDATE 
@@ -106,6 +106,29 @@
     			DELETED = 'Y'
    		WHERE
         		NOTICE_NO = #{noticeNo}
-</update>
+	</update>
 
+	<insert id="insertNotice"
+    		useGeneratedKeys="true"
+    		keyProperty="notice.noticeNo"
+    		keyColumn="NOTICE_NO">
+    	INSERT
+    	INTO
+    		NOTICE_BOARD
+    		(
+    		NOTICE_NO,
+    		CATEGORY,
+    		TITLE,
+    		CONTENT,
+    		USER_ID
+    		)
+    		VALUES
+    		(
+    		SEQ_NOTICE_BOARD.NEXTVAL,
+    		#{notice.category},
+    		#{notice.title},
+    		#{notice.content},
+    		#{notice.userId}
+    		)
+	</insert>
 </mapper>

@@ -25,5 +25,8 @@ public class NoticeDto {
 	    private Date createDate;
 	    private String updated;
 	    private int views;
+	    private String userId;
 	    private List<FileDto> fileList;
+	    
+	
 }

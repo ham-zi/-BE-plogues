@@ -10,6 +10,7 @@ import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.CustomAuthenticationException;
 import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedFindByNoException;
+import com.iso.plogues.exception.FailedInsertException;
 import com.iso.plogues.exception.FailedUpdateException;
 import com.iso.plogues.notice.file.model.service.NoticeFileService;
 import com.iso.plogues.notice.model.dao.NoticeMapper;
@@ -26,7 +27,7 @@ public class NoticeService {
 
 	private final NoticeMapper noticeMapper;
 	private final NoticeFileService noticeFileService;
-	private static final String ADMIN_ID1 = "admin";
+	private static final String ADMIN_ID = "admin";
 	
 	@Transactional(readOnly = true)
 	public BoardResponse<NoticeDto> selectNoticeList(String category, int currentPage) {
@@ -50,11 +51,11 @@ public class NoticeService {
 	    return notice;
 	}
 
-	private static final String ADMIN_ID = "admin";
+	
 
 	@Transactional
 	public void updateNotice(CustomUserDetails user, Long noticeNo, NoticeDto noticeDto, List<MultipartFile> files) {
-	    if (!ADMIN_ID1.equals(user.getUsername())) {
+	    if (!ADMIN_ID.equals(user.getUsername())) {
 	        throw new CustomAuthenticationException("관리자만 수정할 수 있습니다.");
 	    }
 	    noticeDto.setNoticeNo(noticeNo);
@@ -71,12 +72,29 @@ public class NoticeService {
 
 	@Transactional
 	public void deleteNotice(CustomUserDetails user, Long noticeNo) {
-	    if (!ADMIN_ID1.equals(user.getUsername())) {
+	    if (!ADMIN_ID.equals(user.getUsername())) {
 	        throw new CustomAuthenticationException("관리자만 삭제할 수 있습니다.");
 	    }
 	    int result = noticeMapper.deleteNotice(noticeNo);
 	    if (result != 1) {
 	        throw new FailedDeleteException("공지사항 삭제에 실패했습니다.");
+	    }
+	}
+	
+	@Transactional
+	public void insertNotice(CustomUserDetails user, NoticeDto noticeDto, List<MultipartFile> files) {
+	    if (!ADMIN_ID.equals(user.getUsername())) {
+	        throw new CustomAuthenticationException("관리자만 작성할 수 있습니다.");
+	    }
+	    noticeDto.setUserId(user.getUsername());
+	    int result = noticeMapper.insertNotice(noticeDto);
+	    if (result != 1) {
+	        throw new FailedInsertException("공지사항 작성에 실패했습니다.");
+	    }
+	    if (files != null && !files.isEmpty()) {
+	        for (MultipartFile file : files) {
+	            noticeFileService.saveFile(file, noticeDto.getNoticeNo());
+	        }
 	    }
 	}
 }
