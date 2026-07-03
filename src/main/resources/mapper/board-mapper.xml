@@ -137,26 +137,6 @@
 		)
 	</insert>
 
-	<insert id="insertFile">
-		INSERT INTO
-		REVIEW_FILE
-		(
-		FILE_NO,
-		ORIGIN_NAME,
-		CHANGE_NAME,
-		FILE_PATH,
-		BOARD_NO
-		)
-		VALUES
-		(
-		SEQ_REVIEW_FILE.NEXTVAL,
-		#{originName},
-		#{changeName},
-		#{filePath},
-		#{refBoardNo}
-		)
-	</insert>
-
 	<update id="updateBoard">
 		UPDATE
 		REVIEW_BOARD
