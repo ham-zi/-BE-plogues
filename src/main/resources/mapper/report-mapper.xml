@@ -37,6 +37,18 @@
 			  ,	UPDATED
 			  , DELETED
 			  , TARGET_NO
+			  , (
+			  		SELECT
+			  				COUNT(*)
+			  		  FROM
+			  		  		REPORT_BOARD R2
+			  		 WHERE
+			  		 		R2.TARGET_NO = REPORT_BOARD.TARGET_NO
+			  		   AND
+			  		   		R2.BOARD_TYPE = REPORT_BOARD.BOARD_TYPE
+			  		   AND
+			  		   		R2.DELETED = 'N'
+			    ) COUNT
 	      FROM
 	      		REPORT_BOARD
 	     WHERE
@@ -51,7 +63,20 @@
 		OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY
 	</select>
 	
-
+	<select id="existsReport" resultType="_int">
+		SELECT
+				COUNT(*)
+		  FROM
+		  		REPORT_BOARD
+		 WHERE
+		 		USER_ID = #{userId}
+		   AND
+		   		TARGET_NO = #{targetNo}
+		   AND
+		   		BOARD_TYPE = #{boardType}
+		   AND
+		   		DELETED = 'N'
+	</select>
 
 
 

@@ -14,5 +14,6 @@ public interface ReportMapper {
 	int saveReport(Report report);
 	int listCount();
 	List<ReportDto> findAll(PageInfo page);
+	int existsReport(Report report);
 
 }
