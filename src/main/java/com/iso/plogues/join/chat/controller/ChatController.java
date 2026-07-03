@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,13 @@ public class ChatController {
 	public ResponseEntity<ApiResponse<List<ChatDto>>> findAll(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(name="bno") Long joinNo) {
 		List<ChatDto> list = chatService.findAll(user, joinNo);
 		return ResponseEntity.status(200).body(ApiResponse.success("채팅 목록 조회 성공", list));
+	}
+	
+	@PatchMapping("/{chatNo}")
+	public ResponseEntity<ApiResponse<Void>> updateChat(@AuthenticationPrincipal CustomUserDetails user, @Valid @RequestBody ChatDto chat, @PathVariable(name="chatNo") Long chatNo) {
+		chat.setChatNo(chatNo);
+		chatService.updateChat(user, chat);
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("채팅 수정 성공", null));
 	}
 
 }

@@ -41,4 +41,26 @@
   		 WHERE 
   		       C.JOIN_NO = #{joinNo}
   	</select>
+  	<select id="findByChatNo" resultType="ChatDto">
+  		SELECT 
+  		       CHAT_NO
+  		     , USER_ID
+  		     , JOIN_NO
+  		     , CREATE_DATE
+  		     , UPDATED
+  		     , DELETED
+  		  FROM 
+  		       JOIN_CHAT
+  		 WHERE 
+  		       CHAT_NO = #{chatNo}
+  	</select>
+  	<update id="updateChat">
+  		UPDATE 
+  		       JOIN_CHAT
+  		   SET 
+  		       UPDATED = 'Y',
+  		       CONTENT = #{content}
+  		 WHERE 
+  		       CHAT_NO = #{chatNo}
+  	</update>
   </mapper>

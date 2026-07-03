@@ -7,7 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.FailedFindAllException;
+import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedInsertException;
+import com.iso.plogues.exception.FailedUpdateException;
 import com.iso.plogues.join.chat.model.dao.ChatMapper;
 import com.iso.plogues.join.chat.model.dto.ChatDto;
 import com.iso.plogues.join.chat.model.vo.Chat;
@@ -41,13 +43,38 @@ public class ChatService {
 		return list;
 	}
 	
+	@Transactional
+	public void updateChat(CustomUserDetails user, ChatDto chat) {
+		validUser(user.getUsername(), chat.getJoinNo());
+		validChat(chat);
+		Chat chatEntity = Chat.builder()
+				  .chatNo(chat.getChatNo())
+				  .content(chat.getContent())
+				  .build();
+		int result = chatMapper.updateChat(chatEntity);
+		throwFailedUpdateException(result);
+	}
+	
 	private void validUser(String userId, Long joinNo) {
 		requestService.findByUserIdJoin(userId, joinNo);
+	}
+	
+	private void validChat(ChatDto chat) {
+		ChatDto chatDto = chatMapper.findByChatNo(chat.getChatNo());
+		if(chatDto == null) {
+			throw new FailedFindByNoException("해당하는 채팅이 없습니다.");
+		}
 	}
 	
 	private void throwFailedInsertException(int result) {
 		if(result != 1) {
 			throw new FailedInsertException("채팅 작성에 실패했습니다.");
+		}
+	}
+	
+	private void throwFailedUpdateException(int result) {
+		if(result != 1) {
+			throw new FailedUpdateException("채팅 수정에 실패했습니다.");
 		}
 	}
 	
