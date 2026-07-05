@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.iso.plogues.request.model.dao.RequestMapper">
+<mapper namespace="com.iso.plogues.join.request.model.dao.RequestMapper">
   
   <select id="countByUserIdJoinNo" resultType="_int">
 	SELECT

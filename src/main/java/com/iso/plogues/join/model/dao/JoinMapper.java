@@ -13,9 +13,10 @@ import com.iso.plogues.util.page.PageInfo;
 public interface JoinMapper {
 	int saveJoin(Join join);
 	int listCount();
+	int countMyJoins(@Param(value="userId")String userId, @Param(value="status")String status);
 	List<JoinDto> findAllPlant(PageInfo page);
-	List<JoinDto> findAllByHost(@Param(value="userId")String userId,@Param(value="pi")PageInfo pi);
 	List<JoinDto> findAllPlog(PageInfo page);
+	List<JoinDto> findAllByHost(@Param(value="userId")String userId,@Param(value="pi")PageInfo pi);
 	JoinDto findByJoinNo(Long joinNo);
 	int deleteJoin(@Param(value="userId") String userId, @Param(value="joinNo") Long joinNo);
 	int updateJoin(Join join);

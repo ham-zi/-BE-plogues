@@ -1,19 +1,21 @@
-package com.iso.plogues.request.model.service;
+package com.iso.plogues.join.request.model.service;
 
 import java.util.List;
 
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.request.InValidJoinRequestException;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.service.JoinService;
-import com.iso.plogues.request.model.dao.RequestMapper;
-import com.iso.plogues.request.model.dto.RequestDto;
+import com.iso.plogues.join.request.model.dao.RequestMapper;
+import com.iso.plogues.join.request.model.dto.RequestDto;
+import com.iso.plogues.join.request.model.vo.Request;
 import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.page.PageInfo;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,9 +30,18 @@ public class RequestService {
 	
 	@Transactional
 	public void saveRequest(RequestDto requestDto) {
-		validateJoinNo(requestDto.getJoinNo());
-		isDuplicateRequest(requestDto);
-		requestMapper.saveRequest(requestDto);
+		if(!"ACCEPTED".equals(requestDto.getStatus())) {
+			JoinDto join = joinService.findByJoinNo(requestDto.getJoinNo());
+			join.validateParticipants();
+			isDuplicateRequest(requestDto);
+		}
+		Request requestEntity = Request.builder()
+									   .joinNo(requestDto.getJoinNo())
+									   .userId(requestDto.getUserId())
+									   .aspiration(requestDto.getAspiration())
+									   .status("WAITING")
+									   .build();
+		requestMapper.saveRequest(requestEntity);
 	}
 	
 	@Transactional
@@ -81,7 +92,8 @@ public class RequestService {
 		RequestDto request = requestMapper.findByRequestNo(requestNo);
 		validateRequestNo(requestNo);
 		checkAccepted(request.getStatus());
-		validateJoinNo(request.getJoinNo());
+		JoinDto join = joinService.findByJoinNo(request.getJoinNo());
+		join.validateParticipants();
 		validateHost(userId, request.getHost());
 		
 	}
@@ -114,17 +126,6 @@ public class RequestService {
 	private void validateHost(String userId, String host) {
 		if(!host.equals(userId)) {			
 			throw new InValidJoinRequestException("요청에 대한 승인 권한이 없습니다.");
-		}
-	}
-	
-	private void validateJoinNo(Long joinNo) {
-		JoinDto joinDto = joinService.findByJoinNo(joinNo);
-		validateParticipants(joinDto.getParticipants(), joinNo);
-	}
-	
-	private void validateParticipants(int participants, Long joinNo) {
-		if(participants <= requestMapper.countAcceptByJoinNo(joinNo)) {			
-			throw new InValidJoinRequestException("모집이 완료된 모임입니다.");
 		}
 	}
 

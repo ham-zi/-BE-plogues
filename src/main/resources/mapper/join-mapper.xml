@@ -39,7 +39,7 @@
   </select>
   <sql id="joinColumns">
   	SELECT 
-  	       JOIN_NO
+  	       b.JOIN_NO
   	     , b.USER_ID
   	     , b.CATEGORY
   	     , b.PARTICIPANTS
@@ -53,7 +53,7 @@
   	  FROM 
   	       JOIN_BOARD b
   	  JOIN 
-  	       JOIN_REQUEST r USING(JOIN_NO)
+  	       JOIN_REQUEST r ON b.JOIN_NO = r.JOIN_NO
   	 WHERE 
   	       b.DELETED = 'N'
   	   and 
@@ -62,7 +62,7 @@
   <sql id="groupColumns">
   	 GROUP 
   	    BY 
-  	       JOIN_NO
+  	       b.JOIN_NO
   	     , b.USER_ID
   	     , b.CATEGORY
   	     , b.PARTICIPANTS
@@ -80,25 +80,27 @@
   	<include refid="groupColumns"/>
   	 ORDER 
   	    BY 
-  	       JOIN_NO DESC
+  	       b.JOIN_NO DESC
   	OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY
   </select>
   <select id="findAllPlog" resultType="joinDto">
   	<include refid="joinColumns"/>
   	   AND 
   	       b.CATEGORY = 'PLOG'
+  	<include refid="groupColumns"/>
   	 ORDER 
   	    BY 
-  	       JOIN_NO DESC
+  	       b.JOIN_NO DESC
   	OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY
   </select>
   <select id="findAllByHost" resultType="joinDto">
   	<include refid="joinColumns"/>
   	   AND 
-  	       USER_ID = #{userId}
+  	       b.USER_ID = #{userId}
+  	<include refid="groupColumns"/>
   	 ORDER 
   	    BY 
-  	       JOIN_NO DESC
+  	       b.JOIN_NO DESC
   	OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
   </select>
   

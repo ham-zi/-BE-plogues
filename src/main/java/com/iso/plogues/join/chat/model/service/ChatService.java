@@ -14,7 +14,7 @@ import com.iso.plogues.exception.FailedUpdateException;
 import com.iso.plogues.join.chat.model.dao.ChatMapper;
 import com.iso.plogues.join.chat.model.dto.ChatDto;
 import com.iso.plogues.join.chat.model.vo.Chat;
-import com.iso.plogues.request.model.service.RequestService;
+import com.iso.plogues.join.request.model.service.RequestService;
 
 import lombok.RequiredArgsConstructor;
 

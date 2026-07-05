@@ -1,4 +1,4 @@
-package com.iso.plogues.request.controller;
+package com.iso.plogues.join.request.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
-import com.iso.plogues.request.model.dto.RequestDto;
-import com.iso.plogues.request.model.service.RequestService;
+import com.iso.plogues.join.request.model.dto.RequestDto;
+import com.iso.plogues.join.request.model.service.RequestService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +30,6 @@ public class RequestController {
 	public ResponseEntity<ApiResponse<Void>> saveRequest(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(value="joinNo")Long joinNo, @Valid @RequestBody RequestDto requestDto){
 		requestDto.setUserId(user.getUsername());
 		requestDto.setJoinNo(joinNo);
-		if(!"host".equals(requestDto.getAspiration())) {
-			requestDto.setStatus("WAITING");
-		}
 		requestService.saveRequest(requestDto);
 		return ResponseEntity.ok().body(ApiResponse.created("요청에 성공했습니다.", null));
 	}

@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.iso.plogues.exception.request.InValidJoinRequestException;
 import com.iso.plogues.util.file.FileDto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,5 +43,11 @@ public class JoinDto {
 	private LocalDateTime createDate;
 	private int currentCount;
 	private List<FileDto> files;
+	
+	public void validateParticipants() {
+		if(this.participants > 0 && this.currentCount > 0 && this.participants <= this.currentCount) {			
+			throw new InValidJoinRequestException("모집이 완료된 모임입니다.");
+		}
+	}
 
 }
