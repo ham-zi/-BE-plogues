@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.iso.plogues.question.comment.model.dto.AnswerDto;
 import com.iso.plogues.question.comment.model.vo.Answer;
+import com.iso.plogues.question.model.dto.QuestionDto;
 
 @Mapper
 public interface AnswerMapper {
@@ -15,5 +16,5 @@ public interface AnswerMapper {
 	int updateComment(AnswerDto answer);
 	int deleteComment(Long boardNo);
 	List<AnswerDto> selectAnswerList(@Param("boardNo")Long boardNo);
-
+	QuestionDto selectQuestionDetail(Long boardNo);
 }
