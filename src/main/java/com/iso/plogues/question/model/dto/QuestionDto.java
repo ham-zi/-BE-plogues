@@ -25,7 +25,6 @@ public class QuestionDto {
 	private String category;
 	private LocalDateTime createDate;
 	@NotBlank
-	@Size(max=20)
 	private String content;
 	private String updated;
 	private String deleted;
