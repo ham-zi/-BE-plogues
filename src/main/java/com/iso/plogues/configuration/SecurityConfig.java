@@ -48,6 +48,11 @@ public class SecurityConfig {
 					   requests.requestMatchers(HttpMethod.POST, "/api/notices").hasRole("ADMIN");
 					   requests.requestMatchers(HttpMethod.PATCH, "/api/notices/**").hasRole("ADMIN");
 					   requests.requestMatchers(HttpMethod.DELETE, "/api/notices/**").hasRole("ADMIN");
+					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question").authenticated();
+					   requests.requestMatchers(HttpMethod.GET, "/api/question/**").authenticated();
+					   requests.requestMatchers(HttpMethod.DELETE, "/api/question/**").authenticated();
+					   requests.requestMatchers(HttpMethod.PATCH, "/api/question/**").authenticated();
+					   requests.requestMatchers(HttpMethod.POST, "/api/question/**").authenticated();
 					   
 				   }).sessionManagement(manager -> 
 				   						manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
