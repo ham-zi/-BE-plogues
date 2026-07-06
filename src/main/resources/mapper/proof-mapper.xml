@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iso.plogues.proof.model.dao.ProofMapper">
+
+
+	<insert id="save" parameterType="com.iso.plogues.proof.model.vo.Proof">
+
+		<selectKey keyProperty="proofNo" resultType="long" order="BEFORE">
+			SELECT SEQ_PLG_PB.NEXTVAL FROM DUAL
+		</selectKey> 
+		INSERT 
+		  INTO
+				PROOF_BOARD 
+			   ( 
+				PROOF_NO
+			   , USER_ID
+			   , JOIN_NO
+			   , TITLE
+			   , CATEGORY
+			   , QUANTITY
+			   , CONTENT
+			   , CREATE_DATE
+			   , DELETED
+			   , UPDATED 
+			   ) 
+		VALUES 
+			   ( 
+				  #{proofNo}
+			    , #{userId}
+			    , #{joinNo}
+			    , #{title}
+			    , #{category}
+			    , #{quantity}
+			    , #{content}
+			    , SYSDATE
+			    , 'N'
+			    , 'N' 
+			    ) 
+	</insert>
+
+
+	<sql id="proofColumns">
+		SELECT
+		        PROOF_NO
+			  , USER_ID
+			  , JOIN_NO
+			  , TITLE
+			  , CATEGORY
+			  , QUANTITY
+			  , CONTENT
+			  , CREATE_DATE
+		  FROM
+			   PROOF_BOARD
+		  WHERE
+			   DELETED = 'N'
+	</sql>
+
+
+	<select id="findByProofNo"
+		resultType="ProofDto">
+
+		<include refid="proofColumns" /> 
+		AND 
+			PROOF_NO = #{proofNo} 
+	</select>
+
+	<select id="listCount" resultType="_int">
+
+		SELECT
+			   COUNT(*)
+		  FROM
+			   PROOF_BOARD
+		 WHERE
+			   DELETED = 'N'
+
+	</select>
+
+
+	<select id="findAll" resultType="ProofDto">
+
+		<include refid="proofColumns" /> 
+		ORDER 
+		   BY 
+		   	  PROOF_NO DESC 
+	   OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY 
+	</select>
+
+	<update id="deleteProof">
+
+		UPDATE
+			   PROOF_BOARD
+
+		   SET
+			   DELETED = 'Y'
+
+		 WHERE
+			   USER_ID = #{userId}
+
+		   AND
+			   PROOF_NO = #{proofNo}
+
+	</update>
+	
+	<update id="updateProof">
+
+		UPDATE 
+				PROOF_BOARD
+		   SET
+		 		TITLE = #{title}
+		 	  , CATEGORY = #{category}
+		 	  , QUANTITY = #{quantity}
+		 	  , CONTENT = #{content}
+		 	  , UPDATED = 'Y'
+		  WHERE
+				PROOF_NO = #{proofNo}
+			AND
+				USER_ID = #{userId}
+
+	</update>
+	
+	<select id="treeCountByYear" resultType="TreeCountDto">
+		SELECT
+		       EXTRACT(YEAR FROM CREATE_DATE) AS YEAR,
+		       SUM(QUANTITY) AS TREE_COUNT
+		  FROM
+		       PROOF_BOARD
+		 WHERE
+		       CATEGORY = 'PLANT'
+		   AND
+		       DELETED = 'N'
+		 GROUP
+		    BY
+		       EXTRACT(YEAR FROM CREATE_DATE)
+	</select>
+
+
+</mapper>

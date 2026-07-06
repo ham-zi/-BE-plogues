@@ -37,13 +37,18 @@ public class SecurityConfig {
 				   .csrf(AbstractHttpConfigurer::disable)
 				   .cors(Customizer.withDefaults())
 				   .authorizeHttpRequests(requests -> { 
-             
-					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins", "/api/question").authenticated();
-					   requests.requestMatchers(HttpMethod.POST).permitAll();
-					   requests.requestMatchers(HttpMethod.PATCH).permitAll();
-					   requests.requestMatchers(HttpMethod.DELETE).permitAll();
-					   requests.requestMatchers(HttpMethod.GET).permitAll();
-					   requests.requestMatchers("/api/admin").hasRole("ADMIN");
+
+					   requests.requestMatchers(HttpMethod.GET, "/api/notices/**", "/api/joins/**", "/api/home", "/api/boards/**").permitAll();
+					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "api/tree").permitAll();
+					   requests.requestMatchers(HttpMethod.GET, "/api/users/**", "/api/chats", "/api/proof/**").authenticated();
+					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins/**", "/api/question", "/api/auth/refresh", "/api/request/**", "/api/chats" , "/api/boards", "api/notices", "/api/report", "/api/boards/*/comments", "/api/proof/**").authenticated();
+					   requests.requestMatchers(HttpMethod.PATCH, "/api/users", "/api/request/**","/api/joins/**", "/api/chats/**", "/api/boards/*/comments/**", "/api/proof/**").authenticated();					   
+					   requests.requestMatchers(HttpMethod.DELETE, "/api/users", "/api/joins/**", "/api/request/**", "/api/chats/**", "/api/boards/*/comments/**").authenticated();
+					   requests.requestMatchers(HttpMethod.GET, "/api/report").hasRole("ADMIN");
+					   requests.requestMatchers(HttpMethod.POST, "/api/notices").hasRole("ADMIN");
+					   requests.requestMatchers(HttpMethod.PATCH, "/api/notices/**").hasRole("ADMIN");
+					   requests.requestMatchers(HttpMethod.DELETE, "/api/notices/**").hasRole("ADMIN");
+					   
 				   }).sessionManagement(manager -> 
 				   						manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				   .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

@@ -1,6 +1,5 @@
 package com.iso.plogues.question.model.dto;
 
-
 import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotBlank;

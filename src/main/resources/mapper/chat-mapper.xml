@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.iso.plogues.join.chat.model.dao.ChatMapper">
+  	<insert id="saveChat">
+  		INSERT 
+  		  INTO 
+  		       JOIN_CHAT
+  		VALUES 
+  		       (
+			   SEQ_PLG_JC.NEXTVAL
+			 , #{userId}
+			 , #{joinNo}
+			 , #{content}
+			 , SYSDATE
+			 , 'N'
+			 , 'N'
+			   )
+  	</insert>
+  	<select id="findAll" resultType="ChatResponse">
+  		SELECT 
+  		       CHAT_NO
+  		     , C.USER_ID
+  		     , U.USER_NAME
+  		     , F.FILE_PATH
+  		     , B.TITLE
+  		     , C.JOIN_NO
+  		     , C.CONTENT
+  		     , C.CREATE_DATE
+  		     , C.UPDATED
+  		     , C.DELETED
+  		  FROM 
+  		       JOIN_CHAT C
+  		  JOIN 
+  		       PLOGUES_USER U ON C.USER_ID = U.USER_ID
+  		  LEFT JOIN 
+  		       USER_FILE F ON C.USER_ID = F.USER_ID
+  		  JOIN 
+  		       JOIN_BOARD B ON C.JOIN_NO = B.JOIN_NO
+  		 WHERE 
+  		       C.JOIN_NO = #{joinNo}
+  		   AND 
+  		       C.DELETED = 'N'
+  		 ORDER 
+  		    BY 
+  		       C.CHAT_NO DESC
+  	</select>
+  	<select id="findByChatNo" resultType="ChatDto">
+  		SELECT 
+  		       CHAT_NO
+  		     , USER_ID
+  		     , JOIN_NO
+  		     , CREATE_DATE
+  		     , UPDATED
+  		     , DELETED
+  		  FROM 
+  		       JOIN_CHAT
+  		 WHERE 
+  		       CHAT_NO = #{chatNo}
+  		   AND 
+  		       DELETED = 'N'
+  	</select>
+  	<update id="updateChat">
+  		UPDATE 
+  		       JOIN_CHAT
+  		   SET 
+  		       UPDATED = 'Y',
+  		       CONTENT = #{content}
+  		 WHERE 
+  		       CHAT_NO = #{chatNo}
+  	</update>
+  	<update id="deleteChat">
+  		UPDATE 
+  		       JOIN_CHAT
+  		   SET 
+  		       DELETED = 'Y'
+  		 WHERE 
+  		       CHAT_NO = #{chatNo}
+  	</update>
+  </mapper>

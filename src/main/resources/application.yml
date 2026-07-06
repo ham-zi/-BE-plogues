@@ -1,28 +1,33 @@
 spring:
   application:
-    name: unknown
+    name: plogues
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521:XE
+    url: jdbc:oracle:thin:@192.168.51.34:1521:XE
     username: C##KH_ISO
     password: 1234
     driver-class-name: oracle.jdbc.driver.OracleDriver
-web:
-  resource:
-    static-locations: file:uploads/
-mvc:
-  static-path-pattern: /uploads/**
+  web:
+    resources:
+      static-locations: file:uploads/
+  mvc:
+    static-path-pattern: /uploads/**
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+
 server:
   port: 80
+
 mybatis:
   configuration:
     jdbc-type-for-null: VARCHAR
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.iso.plogues.join.model.dto, com.iso.plogues.join.request.model.dto, com.iso.plogues.board.model.dto, com.iso.plogues.notice.model.dto, com.iso.plogues.proof.model.dto,  com.iso.plogues.join.chat.model.dto, com.iso.plogues.report.model.dto, com.iso.plogues.board.comment.model.dto, com.iso.plogues.tree.model.dto
+
+
   
 jwt:
   secret: D9uLKVc4FE0IEheN3pLLEb8GKhHRsG8cdOxazHnEkRm3CGAeB+xVbt8Dbob1QhRB

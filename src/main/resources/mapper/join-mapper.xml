@@ -29,4 +29,110 @@
 		   , SYSDATE
 		   )
   </insert>
+  <select id="listCount" resultType="_int">
+  	SELECT 
+  	       COUNT(*)
+  	  FROM 
+  	       JOIN_BOARD
+  	 WHERE 
+  	       DELETED = 'N'
+  </select>
+  <sql id="joinColumns">
+  	SELECT 
+  	       b.JOIN_NO
+  	     , b.USER_ID
+  	     , b.CATEGORY
+  	     , b.PARTICIPANTS
+  	     , b.REGION
+  	     , b.START_DATE
+  	     , b.END_DATE
+  	     , b.TITLE
+  	     , b.CONTENT
+  	     , b.CREATE_DATE
+  	     , count(*) current_count
+  	  FROM 
+  	       JOIN_BOARD b
+  	  JOIN 
+  	       JOIN_REQUEST r ON b.JOIN_NO = r.JOIN_NO
+  	 WHERE 
+  	       b.DELETED = 'N'
+  	   and 
+  	       r.STATUS = 'ACCEPTED'
+  </sql>
+  <sql id="groupColumns">
+  	 GROUP 
+  	    BY 
+  	       b.JOIN_NO
+  	     , b.USER_ID
+  	     , b.CATEGORY
+  	     , b.PARTICIPANTS
+  	     , b.REGION
+  	     , b.START_DATE
+  	     , b.END_DATE
+  	     , b.TITLE
+  	     , b.CONTENT
+  	     , b.CREATE_DATE
+  </sql>
+  <select id="findAllPlant" resultType="joinDto">
+  	<include refid="joinColumns"/>
+  	   AND 
+  	       b.CATEGORY = 'PLANT'
+  	<include refid="groupColumns"/>
+  	 ORDER 
+  	    BY 
+  	       b.JOIN_NO DESC
+  	OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY
+  </select>
+  <select id="findAllPlog" resultType="joinDto">
+  	<include refid="joinColumns"/>
+  	   AND 
+  	       b.CATEGORY = 'PLOG'
+  	<include refid="groupColumns"/>
+  	 ORDER 
+  	    BY 
+  	       b.JOIN_NO DESC
+  	OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY
+  </select>
+  <select id="findAllByHost" resultType="joinDto">
+  	<include refid="joinColumns"/>
+  	   AND 
+  	       b.USER_ID = #{userId}
+  	<include refid="groupColumns"/>
+  	 ORDER 
+  	    BY 
+  	       b.JOIN_NO DESC
+  	OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
+  </select>
+  
+  <select id="findByJoinNo" resultType="joinDto">
+  	<include refid="joinColumns"/>
+  	   AND 
+  	       JOIN_NO = #{joinNo}
+  </select>
+  <update id="deleteJoin">
+  	UPDATE 
+  	       JOIN_BOARD
+  	   SET 
+  	       DELETED = 'Y'
+  	 WHERE 
+  	       USER_ID = #{userId}
+  	   AND 
+  	       JOIN_NO = #{joinNo}
+  </update>
+  <update id="updateJoin">
+  	UPDATE 
+  	       JOIN_BOARD
+  	   SET 
+  	       PARTICIPANTS = #{participants}
+  	     , REGION = #{region}
+  	     , START_DATE = #{startDate}
+  	     , END_DATE = #{endDate}
+  	     , TITLE = #{title}
+  	     , CONTENT = #{content}
+  	     , UPDATED = 'Y'
+  	 WHERE 
+  	       USER_ID = #{userId}
+  	   AND 
+  	       JOIN_NO = #{joinNo}
+  </update>
 </mapper>
