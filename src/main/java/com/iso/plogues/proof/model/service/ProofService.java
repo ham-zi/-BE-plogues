@@ -151,9 +151,8 @@ public class ProofService {
 
 	}
 	
-	public void getCarbonReduction() {
-		List<TreeCountDto> countDto = proofMapper.treeCountByYear();
-		log.info("{}", countDto);
+	public List<TreeCountDto> getTreeCountByYear() {
+		return proofMapper.treeCountByYear();
 	}
 	
 }
