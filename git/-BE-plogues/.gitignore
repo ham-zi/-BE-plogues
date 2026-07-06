@@ -1,0 +1,46 @@
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+!gradlew
+!gradlew.bat
+.apt_generated/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+.vscode/
+*.yml
+src/main/resources/application.yml
+src/main/resources/application.yaml
+src/main/resources/application.properties
+src/main/resources/application-*.yml
+src/main/resources/application-*.yaml
+src/main/resources/application-*.properties
+*.log
+logs/
+*.tmp
+*.bak
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+# macOS
+.DS_Store
+._*
+# Linux
+*~
+.directory
