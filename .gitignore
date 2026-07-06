@@ -4,7 +4,6 @@ build/
 !gradle/wrapper/gradle-wrapper.properties
 !gradlew
 !gradlew.bat
-
 .apt_generated/
 .classpath
 .factorypath
@@ -15,16 +14,12 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-
 .idea/
 *.iws
 *.iml
 *.ipr
 out/
-
 .vscode/
-.metadata/
-
 *.yml
 src/main/resources/application.yml
 src/main/resources/application.yaml
@@ -32,13 +27,10 @@ src/main/resources/application.properties
 src/main/resources/application-*.yml
 src/main/resources/application-*.yaml
 src/main/resources/application-*.properties
-
-
 *.log
 logs/
 *.tmp
 *.bak
-
 # Windows
 Thumbs.db
 Thumbs.db:encryptable

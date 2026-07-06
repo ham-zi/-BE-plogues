@@ -1,8 +1,8 @@
 package com.iso.plogues.util.page;
 
-import lombok.Builder;
-import lombok.ToString;
-import lombok.Value; 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Value;
 
 @Value
 public class PageInfo {
@@ -11,15 +11,16 @@ public class PageInfo {
 	private int boardLimit;
 	private int pageLimit;
 	private int maxPage;
-	private int startPage; 
+	private int startPage;
 	private int endPage;
+	@JsonIgnore
 	private int offset;
 	
 	private PageInfo(int listCount, int currentPage, int boardLimit, int pageLimit) {
 		if(currentPage < 1) {
 			currentPage = 1;
 		}
-		this.listCount = listCount; 
+		this.listCount = listCount;
 		this.currentPage = currentPage;
 		this.boardLimit = boardLimit;
 		this.pageLimit = pageLimit;

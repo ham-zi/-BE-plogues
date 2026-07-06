@@ -1,17 +1,13 @@
 package com.iso.plogues.exception;
 
-import java.util.List;
-
-
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
-import com.iso.plogues.exception.request.InValidJoinRequestException;
 import com.iso.plogues.exception.user.InvalidUserPwdException;
+import com.iso.plogues.exception.user.NotPermissionException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,47 +42,20 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(new ApiResponse(400, e.getMessage(), null));
 	}
 	
-	@ExceptionHandler(InValidJoinRequestException.class)
-	public ResponseEntity<ApiResponse> handlerInValidJoinRequest(InValidJoinRequestException e){
-		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
-	}
-	
 	@ExceptionHandler(FailedInsertException.class)
 	public ResponseEntity<ApiResponse> handlerFailedInsert(FailedInsertException e){
 		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
 	}
 	
-	@ExceptionHandler(FailedUpdateException.class)
-	public ResponseEntity<ApiResponse> handlerFailedUpdate(FailedUpdateException e){
-		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+	@ExceptionHandler(NotPermissionException.class)
+	public ResponseEntity<ApiResponse> handlerNotPermission(NotPermissionException e){
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.badRequest(e.getMessage(), null));
 	}
 	
-	@ExceptionHandler(FailedDeleteException.class)
-	public ResponseEntity<ApiResponse> handlerFailedDelete(FailedDeleteException e){
-		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
-	}
-
 	@ExceptionHandler(FailedFindByNoException.class)
 	public ResponseEntity<ApiResponse> handlerFailedFindByNo(FailedFindByNoException e){
 		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
 	}
 	
-	@ExceptionHandler(FailedFindAllException.class)
-	public ResponseEntity<ApiResponse> handlerFailedFindAll(FailedFindAllException e){
-		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
-	}
-
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ApiResponse> handlerMethodArgumentNotValid(MethodArgumentNotValidException e){
-		List<String> messages = e.getBindingResult()
-	            .getFieldErrors()
-	            .stream()
-	            .map(FieldError::getDefaultMessage)
-	            .toList();
-
-	    return ResponseEntity
-	            .badRequest()
-	            .body(ApiResponse.badRequest("입력값 검증에 실패했습니다.", messages));
-	}
 
 }

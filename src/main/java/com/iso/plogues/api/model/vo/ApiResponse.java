@@ -1,15 +1,9 @@
 package com.iso.plogues.api.model.vo;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
-@Builder
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 public class ApiResponse<T> {
 	private int code;
@@ -37,10 +31,6 @@ public class ApiResponse<T> {
 	// 204 성공 응답
 	public static <T> ApiResponse<T> noContent(T data){
 		return new ApiResponse<>(204, "요청에 성공했습니다.", data);
-	}
-	
-	public static <T> ApiResponse<T> noContent(String message, T data){
-		return new ApiResponse<>(204, message, data);
 	}
 	
 	// 400 실패 응답

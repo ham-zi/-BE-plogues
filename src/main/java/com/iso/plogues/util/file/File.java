@@ -5,10 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
-@ToString
 public class File {
 	private Long fileNo; 
 	private Long refBoardNo;
@@ -18,7 +16,7 @@ public class File {
 	private String filePath;
 	private String deleted;
 	private String boardType;
-	private List<String>extensions = List.of(".jpg", ".png", ".jpeg", ".svg", ".heif", ".heic", ".gif");
+	private List<String>extensions = List.of(".jpg", ".png", ".jpeg", ".svg", ".heif", ".heic");
 	
 	public static File of(Long refBoardNo, String originName, String boardType) {
 		return new File(refBoardNo,originName, boardType);
@@ -35,8 +33,7 @@ public class File {
 		this.refBoardNo = refBoardNo;
 		this.originName = originName;
 		this.changeName = getChangeName(originName);
-		this.boardType = boardType;
-		this.filePath = "http://localhost/uploads/"+ boardType + "/";
+		this.filePath = "http://localhost/uploads/"+ boardType + "/"+ changeName;
 		this.deleted = "N";
 	}
 	
@@ -46,8 +43,7 @@ public class File {
 		this.refUserId = refUserId;
 		this.originName = originName;
 		this.changeName = getChangeName(originName);
-		this.boardType = boardType;
-		this.filePath = "http://localhost/uploads/"+ boardType + "/";
+		this.filePath = "http://localhost/uploads/"+ boardType + "/"+ changeName;
 		this.deleted = "N";
 	}
 	
