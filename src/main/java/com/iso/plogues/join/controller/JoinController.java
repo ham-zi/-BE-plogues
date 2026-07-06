@@ -15,10 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
-import com.iso.plogues.join.chat.model.dto.ChatDto;
-import com.iso.plogues.join.chat.model.service.ChatService;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.service.JoinService;
+import com.iso.plogues.join.request.model.dto.RequestDto;
+import com.iso.plogues.join.request.model.service.RequestService;
 import com.iso.plogues.util.dto.BoardResponse;
 
 import jakarta.validation.Valid;
@@ -30,10 +30,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JoinController {
 	private final JoinService joinService;
+	private final RequestService requestService;
 	
 	@PostMapping
 	public ResponseEntity<ApiResponse<Void>> saveJoin(@AuthenticationPrincipal CustomUserDetails user, @Valid JoinDto join, @RequestParam(name="file", required=false) MultipartFile file) {
-		joinService.saveJoin(user, join, file);
+		Long joinNo = joinService.saveJoin(user, join, file);
+		requestService.saveRequest(RequestDto.hostRequestDto(user.getUsername(), joinNo));
 		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("게시글 작성 성공", null));
 	}
 	

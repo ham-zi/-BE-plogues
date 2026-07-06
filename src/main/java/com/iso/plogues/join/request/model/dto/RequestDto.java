@@ -1,4 +1,4 @@
-package com.iso.plogues.request.model.dto;
+package com.iso.plogues.join.request.model.dto;
 import jakarta.validation.constraints.Size;
 
 import java.sql.Date;
@@ -27,4 +27,13 @@ public class RequestDto {
 	private String category;
 	private String title;
 	private Date createDate;
+	
+	public static RequestDto hostRequestDto(String userId, Long joinNo) {
+		RequestDto request = new RequestDto();
+		request.setUserId(userId);
+		request.setJoinNo(joinNo);
+		request.setAspiration("host");
+		request.setStatus("ACCEPTED");
+		return request;
+	}
 }

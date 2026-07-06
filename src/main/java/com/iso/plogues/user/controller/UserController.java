@@ -21,7 +21,7 @@ import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.board.model.dto.BoardDto;
 import com.iso.plogues.join.model.dto.JoinDto;
-import com.iso.plogues.request.model.dto.RequestDto;
+import com.iso.plogues.join.request.model.dto.RequestDto;
 import com.iso.plogues.user.model.dto.MyInfoDto;
 import com.iso.plogues.user.model.dto.UserDto;
 import com.iso.plogues.user.model.service.UserService;
