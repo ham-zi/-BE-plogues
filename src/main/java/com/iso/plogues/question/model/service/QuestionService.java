@@ -108,7 +108,7 @@ public class QuestionService {
 
 	  @Transactional
 	    public QuestionDto selectQuestionDetail(Long boardNo) {
-	        QuestionDto question = questionMapper.selectQuestionDetail(boardNo);
+	        QuestionDto question = questionMapper.findByOne(boardNo);
 	        if (question == null) {
 	            throw new FailedFindByNoException("존재하지 않는 게시글입니다.");
 	        }

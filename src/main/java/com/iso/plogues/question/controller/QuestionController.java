@@ -2,6 +2,7 @@ package com.iso.plogues.question.controller;
 
 import java.util.List;
 
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.question.comment.model.dto.AnswerDto;
@@ -23,7 +23,6 @@ import com.iso.plogues.question.comment.model.service.AnswerService;
 import com.iso.plogues.question.model.dto.QuestionDto;
 import com.iso.plogues.question.model.service.QuestionService;
 import com.iso.plogues.util.dto.BoardResponse;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,15 +52,6 @@ public class QuestionController {
     	  return ResponseEntity.ok(
                  ApiResponse.success(questionService.findByAll(page, category, user)));
 	}
-	/*
-	@GetMapping("/{boardNo}")
-	public ResponseEntity<ApiResponse<QuestionDto>> findByOne(@PathVariable(name="boardNo")Long boardNo,
-															  @AuthenticationPrincipal CustomUserDetails user) {
-		QuestionDto question = questionService.findByOne(boardNo, user);
-		return ResponseEntity.status(200).body(ApiResponse.success(question));
-	}
-	*/
-	
 
     @GetMapping("/{boardNo}")
     public ResponseEntity<ApiResponse<QuestionDto>> selectQuestionDetail(@PathVariable(name="boardNo")Long boardNo,
