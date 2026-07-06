@@ -4,6 +4,7 @@ package com.iso.plogues.question.model.dto;
 import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class QuestionDto {
 	private String category;
 	private LocalDateTime createDate;
 	@NotBlank
+	@Size(max=20)
 	private String content;
 	private String updated;
 	private String deleted;
