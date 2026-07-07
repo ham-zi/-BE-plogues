@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.dto.LoginRequestDto;
 import com.iso.plogues.auth.model.dto.LoginResponse;
+import com.iso.plogues.auth.model.dto.LogoutResponse;
 import com.iso.plogues.auth.model.service.AuthService;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 
@@ -45,8 +46,9 @@ public class AuthController {
 	}
 
 	@PostMapping("/logout")
-	public ResponseEntity<ApiResponse<Map<String, String>>> logout(@AuthenticationPrincipal CustomUserDetails user, @RequestBody String refreshToken){
-		authService.logout(user, refreshToken);
+	public ResponseEntity<ApiResponse<Map<String, String>>> logout(@AuthenticationPrincipal CustomUserDetails user, @RequestBody LogoutResponse logout){
+		log.info("{}",logout.getRefreshToken());
+		authService.logout(user, logout.getRefreshToken());
 		return ResponseEntity.status(200).body(ApiResponse.success("로그아웃 성공", null));
 	}
 }

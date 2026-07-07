@@ -52,6 +52,7 @@ public class TokenService {
 		hasRefreshToken(token);
 		Map<String, String> tokens = createTokens(user);
 		saveToken(tokens.get("refreshToken"), userId);
+		tokenMapper.deleteToken(userId, refreshToken);
 		return tokens;
 	}
 	
