@@ -87,7 +87,8 @@
 		PU.USER_NAME AS writer,
 		RB.CREATE_DATE AS createDate,
 		RB.CONTENT AS content,
-		RB.UPDATED AS updated
+		RB.UPDATED AS updated,
+		RB.USER_ID AS userId
 		FROM
 		REVIEW_BOARD RB
 		JOIN
