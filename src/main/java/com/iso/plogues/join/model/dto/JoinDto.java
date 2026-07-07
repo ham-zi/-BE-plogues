@@ -42,6 +42,7 @@ public class JoinDto {
 	private String content;
 	private LocalDateTime createDate;
 	private int currentCount;
+	private List<ParticipantDto> userProfiles;
 	private List<FileDto> files;
 	
 	public void validateParticipants() {
