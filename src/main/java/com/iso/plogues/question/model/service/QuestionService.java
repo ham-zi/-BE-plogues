@@ -36,7 +36,7 @@ public class QuestionService {
 							 .userId(user.getUsername())
 							 .title(question.getTitle())
 							 .content(question.getContent())
-							 .category(question.getCategory())
+							 .category(changeCategory(question.getCategory()))
 							 .build();
 		int result = questionMapper.save(q);
 		
