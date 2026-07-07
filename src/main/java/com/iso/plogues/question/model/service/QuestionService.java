@@ -19,7 +19,9 @@ import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.page.PageInfo;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
@@ -34,7 +36,7 @@ public class QuestionService {
 							 .userId(user.getUsername())
 							 .title(question.getTitle())
 							 .content(question.getContent())
-							 .category(question.getCategory())
+							 .category(changeCategory(question.getCategory()))
 							 .build();
 		int result = questionMapper.save(q);
 		
@@ -49,9 +51,10 @@ public class QuestionService {
 	}
 
 	  @Transactional
-	    public BoardResponse<QuestionDto> findByAll(int page, String category, CustomUserDetails user) {
-		  
-
+	    public BoardResponse<QuestionDto> findByAll(int page, String category, CustomUserDetails user, String updated) {
+		  	String changeUpdated = changeUpdated(updated);
+		  	String changeCategory = changeCategory(category);
+		  	log.info("{}",changeUpdated);
 		    boolean isAdmin = user.getAuthorities().stream()
 		            .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
 		    
@@ -59,8 +62,8 @@ public class QuestionService {
 
 		    // count
 		    int totalCount = isAdmin
-		            ? questionMapper.listCount(category)
-		            : questionMapper.listCountByUser(category, user.getUsername());
+		            ? questionMapper.listCount(changeCategory, changeUpdated)
+		            : questionMapper.listCountByUser(changeCategory, user.getUsername());
 
 		    // pageInfo
 		    PageInfo pageInfo = newPageInfo(totalCount, page);
@@ -71,10 +74,11 @@ public class QuestionService {
 
 		    // list
 		    List<QuestionDto> list = isAdmin
-		            ? questionMapper.findByAll(rowBounds, category)
-		            : questionMapper.findByUser(rowBounds, category, user.getUsername());
+		            ? questionMapper.findByAll(rowBounds, changeCategory, changeUpdated)
+		            : questionMapper.findByUser(rowBounds, changeCategory, user.getUsername());
 
-
+		    log.info("{}",list);
+		    
 		    // response
 		    BoardResponse<QuestionDto> br = new BoardResponse<>();
 		    br.setPage(pageInfo);
@@ -83,28 +87,37 @@ public class QuestionService {
 
 		    return br;
 	}
-	  	/*
-	  public QuestionDto findByOne(Long boardNo, CustomUserDetails user) {
-	      QuestionDto result = questionMapper.findByOne(boardNo);
-
-	      if (result == null) {
-	          throw new IllegalArgumentException("해당 게시글이 존재하지 않습니다.");
-	      }
-
-	      if ("Y".equals(result.getDeleted())) {
-	          throw new IllegalStateException("삭제된 게시글입니다.");
-	      }
-
-	      boolean isAdmin = user.getAuthorities().stream()
-	              .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
-	              
-	      if (!isAdmin && !result.getUserId().equals(user.getUsername())) {
-	          throw new NotPermissionException("본인이 작성한 문의글만 조회할 수 있습니다.");
-	      }
-
-	      return result;
+	  private String changeUpdated(String updated) {
+		  if("답변대기".equals(updated)) {
+			  updated = "WAITING";
+			  return updated;
+		  }
+		  if("처리완료".equals(updated)) {
+			  updated = "COMPLETED";
+			  return updated;
+		  }
+		  if(updated == null || !"ALL".equals(updated)) {
+			  updated = "ALL";
+		  }
+		  return updated;
 	  }
-	  */
+	  
+	  private String changeCategory(String category) {
+		  if("에러".equals(category)) {
+			  category = "ERROR";
+			  return category;
+		  }
+		  if("이벤트".equals(category)) {
+			  category = "EVENT";
+			  return category;
+		  }
+		  if(category == null || !"ALL".equals(category)) {
+			  category = "ALL";
+		  }
+		  return category;
+	  }
+	 
+
 
 	  @Transactional
 	    public QuestionDto selectQuestionDetail(Long boardNo) {

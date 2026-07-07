@@ -35,7 +35,7 @@ public class AnswerService {
 		if(result !=1 ) {
 			throw new FailedInsertException("답변 작성에 실패하였습니다. 다시 작성해주세요.");
 		}
-		
+		questionMapper.updateStatus(boardNo);
 	}
     @Transactional(readOnly = true)
     public List<AnswerDto> findComment(Long boardNo, CustomUserDetails user) {

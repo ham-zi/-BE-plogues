@@ -39,9 +39,9 @@ public class SecurityConfig {
 				   .authorizeHttpRequests(requests -> { 
 
 					   requests.requestMatchers(HttpMethod.GET, "/api/notices/**", "/api/joins/**", "/api/home", "/api/boards/**").permitAll();
-					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "api/tree").permitAll();
+					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "api/tree", "/api/auth/refresh").permitAll();
 					   requests.requestMatchers(HttpMethod.GET, "/api/users/**", "/api/chats", "/api/proof/**").authenticated();
-					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins/**", "/api/question", "/api/auth/refresh", "/api/request/**", "/api/chats" , "/api/boards", "api/notices", "/api/report", "/api/boards/*/comments", "/api/proof/**").authenticated();
+					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins/**", "/api/question", "/api/request/**", "/api/chats" , "/api/boards", "api/notices", "/api/report", "/api/boards/*/comments", "/api/proof/**").authenticated();
 					   requests.requestMatchers(HttpMethod.PATCH, "/api/users", "/api/request/**","/api/joins/**", "/api/chats/**","/api/boards/**", "/api/boards/*/comments/**", "/api/proof/**").authenticated();					   
 					   requests.requestMatchers(HttpMethod.DELETE, "/api/users", "/api/joins/**", "/api/request/**", "/api/chats/**","/api/boards/**", "/api/boards/*/comments/**").authenticated();
 					   requests.requestMatchers(HttpMethod.GET, "/api/report").hasRole("ADMIN");

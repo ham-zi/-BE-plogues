@@ -25,13 +25,16 @@
 	    SELECT *
 	      FROM 
 	           QUESTION_BOARD
-	    <where>
+	     WHERE
 	           DELETED = 'N'
-	        <if test="category != null and category != ''">
+	        <if test="category != 'ALL'">
 	       AND 
 	           CATEGORY = #{category}
 	        </if>
-	    </where>
+	        <if test="updated !='ALL'">
+	       AND 
+	           UPDATED = #{updated}
+	        </if>
 	     ORDER BY BOARD_NO DESC
 	</select>
 	
@@ -43,10 +46,10 @@
 	           DELETED = 'N'
 	       AND
 	           USER_ID = #{userId}
-	       <if test="category != null and category != ''">
-	       AND
+	        <if test="category != 'ALL'">
+	       AND 
 	           CATEGORY = #{category}
-	       </if>
+	        </if>
 	    </where>
 	     ORDER BY BOARD_NO DESC
 	</select>
@@ -58,9 +61,13 @@
 	           QUESTION_BOARD
 	    <where>
 	           DELETED = 'N'
-	        <if test="category != null and category != ''">
+	        <if test="category != 'ALL'">
 	       AND 
 	           CATEGORY = #{category}
+	        </if>
+	        <if test="updated != 'ALL'">
+	       AND 
+	           UPDATED = #{updated}
 	        </if>
 	    </where>
 	</select>
@@ -75,9 +82,10 @@
 	       AND
 	           USER_ID = #{userId}
 	
-	    <if test="category != null and category != ''">
-	       AND CATEGORY = #{category}
-	    </if>
+	        <if test="category != 'ALL'">
+	       AND 
+	           CATEGORY = #{category}
+	        </if>
 	</select>
 	
 	<select id="findByOne" resultType="QuestionDto">

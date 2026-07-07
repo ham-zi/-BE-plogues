@@ -46,11 +46,12 @@ public class QuestionController {
     public ResponseEntity<ApiResponse<BoardResponse<QuestionDto>>> findByAll(
             @RequestParam(name="page", defaultValue = "1") int page,
             @RequestParam(name="category", required = false) String category,
+            @RequestParam(name="updated", required = false) String updated,
             @AuthenticationPrincipal CustomUserDetails user
     ) {
 
     	  return ResponseEntity.ok(
-                 ApiResponse.success(questionService.findByAll(page, category, user)));
+                 ApiResponse.success(questionService.findByAll(page, category, user, updated)));
 	}
 
     @GetMapping("/{boardNo}")
