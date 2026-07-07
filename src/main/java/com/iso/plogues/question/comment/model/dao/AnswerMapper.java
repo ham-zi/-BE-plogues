@@ -14,7 +14,7 @@ public interface AnswerMapper {
 	int saveComment(Answer a);
 	List<AnswerDto> findComment(Long boardNo);
 	int updateComment(AnswerDto answer);
-	int deleteComment(Long boardNo);
+	int deleteComment(@Param("boardNo")Long boardNo, @Param("answerNo")Long answerNo);
 	List<AnswerDto> selectAnswerList(@Param("boardNo")Long boardNo);
 	QuestionDto selectQuestionDetail(Long boardNo);
 }

@@ -50,7 +50,9 @@
 	         , UPDATED = 'EDITED'   
 	     WHERE 
 	           BOARD_NO = #{boardNo}
-	       AND 
+	       AND
+	           ANSWER_NO = #{answerNo} 
+	       AND
 	           DELETED = 'N'          
 	</update>
     
@@ -61,6 +63,8 @@
 	           DELETED = 'Y'
 	     WHERE
 	           BOARD_NO = #{boardNo}
+	       AND
+	           ANSWER_NO = #{answerNo} 
 	</update>
 	
 	<select id="selectAnswerList"

@@ -65,11 +65,11 @@ public class AnswerService {
     }
 
     @Transactional
-    public void deleteComment(Long boardNo) {
+    public void deleteComment(Long boardNo, Long answerNo) {
 
         validateQuestion(boardNo);
 
-        int result = answerMapper.deleteComment(boardNo);
+        int result = answerMapper.deleteComment(boardNo, answerNo);
 
         if (result != 1) {
             throw new IllegalStateException("답변 삭제에 실패했습니다.");
@@ -78,7 +78,7 @@ public class AnswerService {
 
     private void validateQuestion(Long boardNo) {
 
-        QuestionDto question = questionMapper.findByBoardNo(boardNo);
+        QuestionDto question = questionMapper.findByOne(boardNo);
 
         if (question == null) {
             throw new IllegalArgumentException("해당 게시글이 존재하지 않습니다.");

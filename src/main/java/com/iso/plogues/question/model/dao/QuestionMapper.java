@@ -22,7 +22,6 @@ public interface QuestionMapper {
     int deleteByQuestion(Long boardNo);
 	int restoreByQuestion(Long boardNo);
 	int updateStatus(@Param("boardNo") Long boardNo);
-	QuestionDto findByBoardNo(Long boardNo);
 
 	
 

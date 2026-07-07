@@ -107,20 +107,23 @@ public class QuestionController {
 	*/
 	
 	
-	@PatchMapping("/{boardNo}/comments")
+	@PatchMapping("/{boardNo}/comments/{answerNo}")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<ApiResponse<Void>> updateComment(@Valid @RequestBody AnswerDto answer,
-														   @PathVariable(name="boardNo") Long boardNo) {
+														   @PathVariable(name="boardNo") Long boardNo,
+														   @PathVariable(name="answerNo") Long answerNo) {
+		answer.setAnswerNo(answerNo);
 		answerService.updateComment(answer, boardNo);												   
 		return ResponseEntity.ok().body(ApiResponse.success("답변이 성공적으로 수정되었습니다.", null));
 	}
 	
 	
-	@DeleteMapping("/{boardNo}/comments")
+	@DeleteMapping("/{boardNo}/comments/{answerNo}")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public ResponseEntity<ApiResponse<Void>> deleteComment(@PathVariable(name="boardNo") Long boardNo){
+	public ResponseEntity<ApiResponse<Void>> deleteComment(@PathVariable(name="boardNo") Long boardNo,
+			                                               @PathVariable(name="answerNo") Long answerNo){
 	
-		answerService.deleteComment(boardNo);
+		answerService.deleteComment(boardNo, answerNo);
 		return ResponseEntity.ok().body(ApiResponse.created("답변을 성공적으로 삭제하였습니다.", null));
 	}
 	
