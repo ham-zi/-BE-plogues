@@ -12,7 +12,7 @@ import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedUpdateException;
 import com.iso.plogues.exception.FileUploadException;
-import com.iso.plogues.join.model.dto.JoinDto;
+import com.iso.plogues.join.model.dto.DetailJoinDto;
 import com.iso.plogues.join.model.service.JoinService;
 import com.iso.plogues.proof.file.model.service.ProofFileService;
 import com.iso.plogues.proof.model.dao.ProofMapper;
@@ -42,7 +42,7 @@ public class ProofService {
 			throw new FileUploadException("인증 사진은 2장을 등록해야 합니다.");
 		}
 		
-		JoinDto join = joinService.findByJoinNo(proof.getJoinNo());
+		DetailJoinDto join = joinService.findByJoinNo(proof.getJoinNo());
 
 		if (!join.getUserId().equals(user.getUsername())) {
 		    throw new CustomAuthenticationException("모집장만 인증글을 작성할 수 있습니다.");

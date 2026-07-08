@@ -21,16 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class JwtUtil {
-	// 토큰을 만드는 기능, 토큰을 검증하는 기능
-	
-	// header, payload, signature
 	@Value("${jwt.secret}")
 	private String secretKey;
 	private SecretKey key;
 	
 	@PostConstruct
 	public void init() {
-		// log.info("{}", secretKey);
 		byte[] arr = Base64.getDecoder().decode(secretKey);
 		this.key = Keys.hmacShaKeyFor(arr);
 	}
@@ -39,8 +35,6 @@ public class JwtUtil {
 		return Jwts.builder()
 				   .subject(user.getUsername())
 				   .issuedAt(new Date())
-//				   .expiration(new Date(System.currentTimeMillis() + (1000 * 60 * 15)))
-//				   .expiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMinutes(15)))
 				   .expiration(Date.from(Instant.now().plus(Duration.ofMinutes(15))))
 				   .claim("memberName", user.getMemberName())
 				   .signWith(key)
@@ -51,7 +45,7 @@ public class JwtUtil {
 		return Jwts.builder()
 				   .subject(user.getUsername())
 				   .issuedAt(new Date())
-				   .expiration(Date.from(Instant.now().plus(Duration.ofDays(5))))
+				   .expiration(Date.from(Instant.now().plus(Duration.ofDays(2))))
 				   .claim("memberName", user.getMemberName())
 				   .signWith(key)
 				   .compact();

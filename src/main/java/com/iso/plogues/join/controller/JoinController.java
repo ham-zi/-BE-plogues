@@ -1,7 +1,6 @@
 package com.iso.plogues.join.controller;
 
 import org.springframework.http.HttpStatus;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
+import com.iso.plogues.join.model.dto.DetailJoinDto;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.service.JoinService;
 import com.iso.plogues.join.request.model.dto.RequestDto;
@@ -52,8 +52,8 @@ public class JoinController {
 	}
 	
 	@GetMapping("/{joinNo}")
-	public ResponseEntity<ApiResponse<JoinDto>> findByJoinNo(@PathVariable(name="joinNo") Long joinNo) {
-		JoinDto join = joinService.findByJoinNo(joinNo);
+	public ResponseEntity<ApiResponse<DetailJoinDto>> findByJoinNo(@PathVariable(name="joinNo") Long joinNo) {
+		DetailJoinDto join = joinService.findByJoinNo(joinNo);
 		return ResponseEntity.status(200).body(ApiResponse.success("게시글 조회 성공", join));
 	}
 	

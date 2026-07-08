@@ -51,11 +51,15 @@
          , b.TITLE
          , b.CONTENT
          , b.CREATE_DATE
-         , r.USER_ID AS REQ_USER_ID , f.FILE_PATH || f.CHANGE_NAME AS PROFILE
          , (SELECT COUNT(*) 
               FROM JOIN_REQUEST sub_r 
              WHERE sub_r.JOIN_NO = b.JOIN_NO 
                AND sub_r.STATUS = 'ACCEPTED') AS CURRENT_COUNT
+  </sql>
+  
+  <sql id="join">
+         , r.USER_ID AS REQ_USER_ID
+         , f.FILE_PATH || f.CHANGE_NAME AS PROFILE
       FROM 
            JOIN_BOARD b
       JOIN 
@@ -70,7 +74,7 @@
            r.STATUS = 'ACCEPTED'
   </sql>
   
-  <resultMap id="joinDtoMap" type="joinDto">
+  <resultMap id="joinDtoMap" type="JoinDto">
     <id property="joinNo" column="JOIN_NO" />
     <result property="userId" column="USER_ID" />
     <result property="category" column="CATEGORY" />
@@ -92,6 +96,7 @@
   
   <select id="findAllPlant" resultMap="joinDtoMap">
   	<include refid="joinColumns"/>
+  	<include refid="join"/>
   	   AND 
   	       b.CATEGORY = 'PLANT'
   	 ORDER 
@@ -102,6 +107,7 @@
   
   <select id="findAllPlog" resultMap="joinDtoMap">
   	<include refid="joinColumns"/>
+  	<include refid="join"/>
   	   AND 
   	       b.CATEGORY = 'PLOG'
   	 ORDER 
@@ -112,6 +118,7 @@
   
   <select id="findAllByHost" resultMap="joinDtoMap">
   	<include refid="joinColumns"/>
+  	<include refid="join"/>
   	   AND 
   	       b.USER_ID = #{userId}
   	 ORDER 
@@ -120,8 +127,15 @@
   	OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
   </select>
   
-  <select id="findByJoinNo" resultMap="joinDtoMap">
+  <select id="findByJoinNo" resultType="DetailJoinDto">
   	<include refid="joinColumns"/>
+  		 , u.USER_NAME
+  	  FROM 
+  	       JOIN_BOARD b
+  	  JOIN 
+           PLOGUES_USER u ON b.USER_ID = u.USER_ID
+     WHERE 
+           b.DELETED = 'N'
   	   AND 
   	       b.JOIN_NO = #{joinNo}
   </select>
