@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly=true)
 public class ReportService {
 	
 	private final ReportMapper reportMapper;
@@ -56,6 +57,11 @@ public class ReportService {
 		List<ReportDto> list = reportMapper.findAll(pageInfo, report);
 		BoardResponse<ReportDto> br = new BoardResponse<>(pageInfo, list);
 		return br;
+	}
+	
+	@Transactional
+	public void completeReport(Long reportNo) {
+		reportMapper.completeReport(reportNo);
 	}
 	
 	private ReportDto changeRequest(ReportRequestDto request) {

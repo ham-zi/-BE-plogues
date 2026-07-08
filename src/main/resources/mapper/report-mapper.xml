@@ -41,54 +41,62 @@
 	
 	<select id="findAll" resultType="reportDto">	
 	SELECT
-		O.REPORT_NO
-	  , O.USER_ID
-	  , O.REPORT_CATEGORY
-	  , O.BOARD_TYPE
-	  ,	O.CONTENT
-	  ,	O.CREATE_DATE
-	  ,	O.UPDATED
-	  , O.DELETED
-	  , O.TARGET_NO
-	  , C.REPORT_COUNT
-  FROM
-  		REPORT_BOARD O
-  JOIN
-       (SELECT
-       BOARD_TYPE
-     , TARGET_NO
-     , COUNT(*) AS REPORT_COUNT
-  FROM
-       REPORT_BOARD
- GROUP
-    BY
-       BOARD_TYPE, TARGET_NO) C
-    ON 
-       O.BOARD_TYPE = C.BOARD_TYPE
-   AND
-       O.TARGET_NO = C.TARGET_NO
- WHERE
- 		O.DELETED = 'N'
- 	<if test="report.updated != 'ALL'">
-   AND
-       O.UPDATED = #{report.updated}
-    </if>
-   <if test="report.reportCategory != 'ALL'">
-   AND
-       O.REPORT_CATEGORY = #{report.reportCategory}
-   </if>
-   <if test="report.boardType != 'ALL'">
-   AND
-       O.BOARD_TYPE = #{report.boardType}
-   </if>
- ORDER
-    BY
-   		O.REPORT_NO DESC
-OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
-		</select>
+		   O.REPORT_NO
+		 , O.USER_ID
+		 , O.REPORT_CATEGORY
+		 , O.BOARD_TYPE
+		 , O.CONTENT
+		 , O.CREATE_DATE
+		 , O.UPDATED
+		 , O.DELETED
+		 , O.TARGET_NO
+		 , C.REPORT_COUNT
+	  FROM
+	  	   REPORT_BOARD O
+	  JOIN
+	       (SELECT
+	       BOARD_TYPE
+	     , TARGET_NO
+	     , COUNT(*) AS REPORT_COUNT
+	  FROM
+	       REPORT_BOARD
+	 GROUP
+	    BY
+	       BOARD_TYPE, TARGET_NO) C
+	    ON 
+	       O.BOARD_TYPE = C.BOARD_TYPE
+	   AND
+	       O.TARGET_NO = C.TARGET_NO
+	 <where>
+	 	<if test="report.updated != 'ALL'">
+	       O.UPDATED = #{report.updated}
+	    </if>
+	   <if test="report.reportCategory != 'ALL'">
+	   AND
+	       O.REPORT_CATEGORY = #{report.reportCategory}
+	   </if>
+	   <if test="report.boardType != 'ALL'">
+	   AND
+	       O.BOARD_TYPE = #{report.boardType}
+	   </if>
+	 </where>
+	 ORDER
+	    BY
+	   		O.REPORT_NO DESC
+	OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
+	</select>
 
 
-
+	<update id="completeReport">
+		UPDATE
+		       REPORT_BOARD
+		   SET
+		       UPDATED = 'Y'
+		 WHERE
+		       REPORT_NO = #{reportNo}
+		   AND
+		       UPDATED = 'N'
+	</update>
 
 
 

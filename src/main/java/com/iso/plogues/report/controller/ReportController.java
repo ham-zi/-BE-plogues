@@ -5,6 +5,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +47,12 @@ public class ReportController {
 		return ResponseEntity.status(200).body(ApiResponse.success("신고게시판 전체 조회 성공", br));
 	}
 	
+	@PatchMapping("/{reportNo}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<ApiResponse<Void>> completeReport(@PathVariable(value="reportNo")Long reportNo) {
+		reportService.completeReport(reportNo);
+		return ResponseEntity.ok().body(ApiResponse.success("신고 처리 완료했습니다.", null));
+	}
 	
 	
 

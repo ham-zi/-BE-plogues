@@ -15,5 +15,6 @@ public interface ReportMapper {
 	int saveReport(Report report);
 	int listCount(ReportDto report);
 	List<ReportDto> findAll(@Param(value="pi")PageInfo pi,@Param(value="report")ReportDto report);
+	void completeReport(Long reportNo);
 
 }
