@@ -70,10 +70,11 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("계정 생성 성공", null));
 	}
 	
+	
 	@PatchMapping
-	public ResponseEntity<ApiResponse<Void>> patchMyInfo(@AuthenticationPrincipal CustomUserDetails user, @ModelAttribute UserDto userInfo, @RequestParam(value="file")MultipartFile file) {
-		userService.patchMyInfo(user, userInfo, file);
-		return ResponseEntity.ok().body(ApiResponse.success("회원정보 수정 성공", null));
+	public ResponseEntity<ApiResponse<Void>> patchMyInfo(@AuthenticationPrincipal CustomUserDetails user, @ModelAttribute UserDto userInfo, @RequestParam(value="file", required = false) MultipartFile file) {
+	    userService.patchMyInfo(user, userInfo, file);
+	    return ResponseEntity.ok().body(ApiResponse.success("회원정보 수정 성공", null));
 	}
 	
 	
