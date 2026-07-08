@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.request.InValidJoinRequestException;
+import com.iso.plogues.join.model.dto.DetailJoinDto;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.service.JoinService;
 import com.iso.plogues.join.request.model.dao.RequestMapper;
@@ -31,7 +32,7 @@ public class RequestService {
 	@Transactional
 	public void saveRequest(RequestDto requestDto) {
 		if(!"ACCEPTED".equals(requestDto.getStatus())) {
-			JoinDto join = joinService.findByJoinNo(requestDto.getJoinNo());
+			DetailJoinDto join = joinService.findByJoinNo(requestDto.getJoinNo());
 			join.validateParticipants();
 			isDuplicateRequest(requestDto);
 		}
@@ -92,7 +93,7 @@ public class RequestService {
 		RequestDto request = requestMapper.findByRequestNo(requestNo);
 		validateRequestNo(requestNo);
 		checkAccepted(request.getStatus());
-		JoinDto join = joinService.findByJoinNo(request.getJoinNo());
+		DetailJoinDto join = joinService.findByJoinNo(request.getJoinNo());
 		join.validateParticipants();
 		validateHost(userId, request.getHost());
 		

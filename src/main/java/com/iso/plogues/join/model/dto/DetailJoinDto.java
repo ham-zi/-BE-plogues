@@ -20,7 +20,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class JoinDto {
+public class DetailJoinDto {
 	private Long joinNo;
 	private String userId;
 	@NotBlank
@@ -43,7 +43,6 @@ public class JoinDto {
 	private LocalDateTime createDate;
 	private int currentCount;
 	private String userName;
-	private List<ParticipantDto> userProfiles;
 	private List<FileDto> files;
 	
 	public void validateParticipants() {
