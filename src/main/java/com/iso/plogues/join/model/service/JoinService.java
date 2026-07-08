@@ -13,6 +13,7 @@ import com.iso.plogues.exception.FailedInsertException;
 import com.iso.plogues.exception.FailedUpdateException;
 import com.iso.plogues.join.file.model.service.JoinFileService;
 import com.iso.plogues.join.model.dao.JoinMapper;
+import com.iso.plogues.join.model.dto.DetailJoinDto;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.vo.Join;
 import com.iso.plogues.util.dto.BoardResponse;
@@ -71,8 +72,8 @@ public class JoinService {
 	}
 	
 	@Transactional
-	public JoinDto findByJoinNo(Long joinNo) {
-		JoinDto join = joinMapper.findByJoinNo(joinNo);
+	public DetailJoinDto findByJoinNo(Long joinNo) {
+		DetailJoinDto join = joinMapper.findByJoinNo(joinNo);
 		throwFindByException(join);
 		List<FileDto> file = fileService.findByBno(joinNo);
 		join.setFiles(file);
@@ -115,7 +116,7 @@ public class JoinService {
 		return PageInfo.of(listCount, page, 10, 5);
 	}
 	
-	private void throwFindByException(JoinDto join) {
+	private void throwFindByException(DetailJoinDto join) {
 		if(join == null) {
 			throw new FailedFindByNoException("해당 게시글을 찾지 못했습니다.");
 		}

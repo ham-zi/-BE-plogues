@@ -16,7 +16,7 @@ public interface JoinFileMapper {
 	@Insert("INSERT INTO JOIN_FILE VALUES(SEQ_PLG_JBF.NEXTVAL, #{refBoardNo}, #{originName}, #{changeName}, #{filePath}, 'N')")
 	int saveFile(File file);
 	
-	@Select("SELECT FILE_NO, JOIN_NO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH || CHANGENAME FILE_PATH FROM JOIN_FILE WHERE DELETED = 'N' AND JOIN_NO = #{joinNo}")
+	@Select("SELECT FILE_NO, JOIN_NO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH || CHANGE_NAME FILE_PATH FROM JOIN_FILE WHERE DELETED = 'N' AND JOIN_NO = #{joinNo}")
 	List<FileDto> findByBno(Long joinNo);
 	
 	@Update("UPDATE JOIN_FILE SET DELETED = 'Y' WHERE JOIN_NO = #{joinNo}")
