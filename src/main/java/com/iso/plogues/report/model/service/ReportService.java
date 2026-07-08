@@ -2,6 +2,7 @@ package com.iso.plogues.report.model.service;
 
 import java.util.List;
 
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,6 +10,7 @@ import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.FailedInsertException;
 import com.iso.plogues.report.model.dao.ReportMapper;
 import com.iso.plogues.report.model.dto.ReportDto;
+import com.iso.plogues.report.model.dto.ReportRequestDto;
 import com.iso.plogues.report.model.vo.Report;
 import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.page.PageInfo;
@@ -48,12 +50,59 @@ public class ReportService {
 	}
 	
 	@Transactional
-	public BoardResponse<ReportDto> findAll(int page) {
-		PageInfo pageInfo = newPageInfo(reportMapper.listCount(), page);
-		List<ReportDto> list = reportMapper.findAll(pageInfo);
+	public BoardResponse<ReportDto> findAll(int page, ReportRequestDto request) {
+		ReportDto report = changeRequest(request);
+		PageInfo pageInfo = newPageInfo(reportMapper.listCount(report), page);
+		List<ReportDto> list = reportMapper.findAll(pageInfo, report);
 		BoardResponse<ReportDto> br = new BoardResponse<>(pageInfo, list);
-		
 		return br;
+	}
+	
+	private ReportDto changeRequest(ReportRequestDto request) {
+		ReportDto report = new ReportDto();
+		report.setBoardType(getBoardType(request.getBoardType()));
+		report.setReportCategory(getCategory(request.getCategory()));
+		report.setUpdated(getStatus(request.getStatus()));
+		return report;
+	}
+	
+	private String getStatus(String status) {
+		String updated;
+		switch (status) {
+		case "N" -> updated = "N";
+		case "Y" -> updated = "Y";
+		default -> updated = "ALL";
+		}
+		return updated;
+	}
+	
+	private String getCategory(String category) {
+		String change;
+		switch (category) {
+		case "SPAM" -> change="SPAM";
+		case "ABUSE" -> change="ABUSE";
+		case "FLOOD" -> change="FLOOD";
+		case "AD" -> change="AD";
+		default -> change="ALL";
+		}
+		return change;
+	}
+	
+	private String getBoardType(String boardType) {
+		String type = "ALL";
+		switch (boardType) {
+			case "PROOF" :
+				type = "PROOF"; break;
+			case "REVIEW" :
+				type = "REVIEW"; break;
+			case "NOTICE" :
+				type = "NOTICE"; break;
+			case "JOIN" :
+				type = "JOIN"; break;
+			default :
+				break;		
+		}
+		return type;
 	}
 
 }
