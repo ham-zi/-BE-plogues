@@ -51,15 +51,15 @@
          , b.TITLE
          , b.CONTENT
          , b.CREATE_DATE
-  </sql>
-  
-  <sql id="subAndJoin">
-         , r.USER_ID AS REQ_USER_ID
-         , f.FILE_PATH || f.CHANGE_NAME AS PROFILE
          , (SELECT COUNT(*) 
               FROM JOIN_REQUEST sub_r 
              WHERE sub_r.JOIN_NO = b.JOIN_NO 
                AND sub_r.STATUS = 'ACCEPTED') AS CURRENT_COUNT
+  </sql>
+  
+  <sql id="join">
+         , r.USER_ID AS REQ_USER_ID
+         , f.FILE_PATH || f.CHANGE_NAME AS PROFILE
       FROM 
            JOIN_BOARD b
       JOIN 
@@ -96,7 +96,7 @@
   
   <select id="findAllPlant" resultMap="joinDtoMap">
   	<include refid="joinColumns"/>
-  	<include refid="subAndJoin"/>
+  	<include refid="join"/>
   	   AND 
   	       b.CATEGORY = 'PLANT'
   	 ORDER 
@@ -107,7 +107,7 @@
   
   <select id="findAllPlog" resultMap="joinDtoMap">
   	<include refid="joinColumns"/>
-  	<include refid="subAndJoin"/>
+  	<include refid="join"/>
   	   AND 
   	       b.CATEGORY = 'PLOG'
   	 ORDER 
@@ -118,7 +118,7 @@
   
   <select id="findAllByHost" resultMap="joinDtoMap">
   	<include refid="joinColumns"/>
-  	<include refid="subAndJoin"/>
+  	<include refid="join"/>
   	   AND 
   	       b.USER_ID = #{userId}
   	 ORDER 
