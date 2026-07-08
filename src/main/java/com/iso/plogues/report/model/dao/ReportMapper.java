@@ -16,5 +16,6 @@ public interface ReportMapper {
 	int listCount(ReportDto report);
 	List<ReportDto> findAll(@Param(value="pi")PageInfo pi,@Param(value="report")ReportDto report);
 	void completeReport(Long reportNo);
+  int existsReport(Report report);
 
 }

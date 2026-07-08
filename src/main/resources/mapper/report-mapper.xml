@@ -38,7 +38,6 @@
 		   </if>
 	</select>
 
-	
 	<select id="findAll" resultType="reportDto">	
 	SELECT
 		   O.REPORT_NO
@@ -84,6 +83,21 @@
 	    BY
 	   		O.REPORT_NO DESC
 	OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
+	</select>
+
+	<select id="existsReport" resultType="_int">
+		SELECT
+				COUNT(*)
+		  FROM
+		  		REPORT_BOARD
+		 WHERE
+		 		USER_ID = #{userId}
+		   AND
+		   		TARGET_NO = #{targetNo}
+		   AND
+		   		BOARD_TYPE = #{boardType}
+		   AND
+		   		DELETED = 'N'
 	</select>
 
 

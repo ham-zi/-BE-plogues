@@ -26,6 +26,8 @@ public class ReportService {
 	
 	private final ReportMapper reportMapper;
 	
+	
+	
 	@Transactional
 	public void saveReport(CustomUserDetails user, ReportDto report) {
 		Report reportEntity = Report.builder()
@@ -35,6 +37,10 @@ public class ReportService {
 									.content(report.getContent())
 									.targetNo(report.getTargetNo())
 									.build();
+		
+		if (reportMapper.existsReport(reportEntity) > 0) {
+		    throw new IllegalArgumentException("이미 신고한 게시글입니다.");
+		}
 		
 		int result = reportMapper.saveReport(reportEntity);
 		throwFailedInsertException(result);
