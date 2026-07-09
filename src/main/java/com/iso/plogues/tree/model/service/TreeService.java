@@ -10,6 +10,7 @@ import com.iso.plogues.proof.model.service.ProofService;
 import com.iso.plogues.tree.model.dao.TreeMapper;
 import com.iso.plogues.tree.model.dto.TreeCountDto;
 import com.iso.plogues.tree.model.dto.TreeDto;
+import com.iso.plogues.tree.model.dto.TreeResponse;
 import com.iso.plogues.tree.model.vo.CarbonReductionResponse;
 import com.iso.plogues.tree.model.vo.Tree;
 
@@ -38,6 +39,10 @@ public class TreeService {
 	//나무 환경 센서 일주일 데이터 조회
 	public List<TreeDto> findDataByWeek() {
 		return treeMapper.findDataByWeek();
+	}
+	
+	public List<TreeResponse> findDataByDay() {
+		return treeMapper.findDataByDay();
 	}
 	
 	//연도별 탄소 감축량 예측
