@@ -23,6 +23,9 @@ public interface BoardFileMapper {
     @Update("UPDATE REVIEW_FILE SET DELETED = 'Y' WHERE BOARD_NO = #{boardNo}")
     int deleteFile(Long boardNo);
     
+    @Update("UPDATE REVIEW_FILE SET DELETED = 'Y' WHERE FILE_NO = #{fileNo}")
+    int deleteFileByNo(Long fileNo);
+    
     @Delete("DELETE FROM REVIEW_FILE WHERE BOARD_NO = #{boardNo}")
     int hardDeleteFile(Long boardNo);
 }

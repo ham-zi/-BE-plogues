@@ -65,19 +65,28 @@ public class NoticeService {
 	}
 
 	@Transactional
-	public void updateNotice(CustomUserDetails user, Long noticeNo, NoticeDto noticeDto, List<MultipartFile> files) {
+	public void updateNotice(CustomUserDetails user, Long noticeNo, NoticeDto noticeDto,
+	                          List<MultipartFile> files, List<Long> deleteFileNos) {
 	    noticeDto.setNoticeNo(noticeNo);
 	    int result = noticeMapper.updateNotice(noticeDto);
 	    if (result != 1) {
 	        throw new FailedUpdateException("공지사항 수정에 실패했습니다.");
 	    }
+
+	    // 사용자가 화면에서 지운 기존 파일만 삭제
+	    if (deleteFileNos != null && !deleteFileNos.isEmpty()) {
+	        for (Long fileNo : deleteFileNos) {
+	            noticeFileService.deleteFileByNo(fileNo);
+	        }
+	    }
+
+	    // 새로 추가된 파일만 저장
 	    if (files != null && !files.isEmpty()) {
 	        for (MultipartFile file : files) {
-	            noticeFileService.updateFile(file, noticeNo);
+	            noticeFileService.saveFile(file, noticeNo);
 	        }
 	    }
 	}
-
 	@Transactional
 	public void deleteNotice(CustomUserDetails user, Long noticeNo) {
 	    int result = noticeMapper.deleteNotice(noticeNo);

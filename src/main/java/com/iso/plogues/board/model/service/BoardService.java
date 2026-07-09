@@ -78,16 +78,26 @@ public class BoardService {
     }
 
     @Transactional
-    public void updateBoard(CustomUserDetails user, Long boardNo, BoardDto boardDto, List<MultipartFile> files) {
+    public void updateBoard(CustomUserDetails user, Long boardNo, BoardDto boardDto,
+                             List<MultipartFile> files, List<Long> deleteFileNos) {
         boardDto.setUserId(user.getUsername());
         boardDto.setBoardNo(boardNo);
         int result = boardMapper.updateBoard(boardDto);
         if(result != 1) {
             throw new FailedUpdateException("게시글 수정에 실패했습니다.");
         }
+
+        // 사용자가 화면에서 지운 기존 파일만 삭제
+        if(deleteFileNos != null && !deleteFileNos.isEmpty()) {
+            for(Long fileNo : deleteFileNos) {
+                boardFileService.deleteFileByNo(fileNo);
+            }
+        }
+
+        // 새로 추가된 파일만 저장 (기존 파일 그대로)
         if(files != null && !files.isEmpty()) {
             for(MultipartFile file : files) {
-                boardFileService.updateFile(file, boardNo);
+                boardFileService.saveFile(file, boardNo);
             }
         }
     }
