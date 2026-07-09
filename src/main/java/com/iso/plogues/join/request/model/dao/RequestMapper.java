@@ -17,6 +17,7 @@ public interface RequestMapper {
 	void saveRequest(Request request);
 	void requestAccept(Long requestNo);
 	void requestDenied(Long requestNo);
+	void requestCanceled(Long requestNo);
 	int countByHostStatus(@Param(value="userId")String userId, @Param(value="status")String status); 
 	int countMyJoins(@Param(value="userId")String userId, @Param(value="status")String status);  
 	RequestDto findByUserIdJoin(@Param(value = "userId") String userId, @Param(value = "joinNo") Long joinNo);

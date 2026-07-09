@@ -15,9 +15,9 @@ public interface ProofMapper {
 
 	int save(Proof p);
 
-	int listCount();
+	int listCount(String category);
 
-	List<ProofDto> findAll(PageInfo page);
+	List<ProofDto> findAll(@Param(value="pi")PageInfo pi,@Param(value="category") String category);
 
 	ProofDto findByProofNo(Long proofNo);
 

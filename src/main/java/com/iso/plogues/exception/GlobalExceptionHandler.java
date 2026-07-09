@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
+import com.iso.plogues.exception.report.DuplicateReportException;
 import com.iso.plogues.exception.request.InValidJoinRequestException;
 import com.iso.plogues.exception.user.InvalidUserPwdException;
 
@@ -74,6 +75,11 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(FailedFindAllException.class)
 	public ResponseEntity<ApiResponse> handlerFailedFindAll(FailedFindAllException e){
 		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+	}
+
+	@ExceptionHandler(DuplicateReportException.class)
+	public ResponseEntity<ApiResponse> handlerDuplicateReport(DuplicateReportException e){
+		return ResponseEntity.badRequest().body(ApiResponse.conplict(e.getMessage(), null));
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)

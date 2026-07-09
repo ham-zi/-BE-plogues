@@ -57,7 +57,15 @@ public class RequestService {
 		requestMapper.requestDenied(requestNo);
 	}
 	
+	@Transactional
+	public void requestCanceled(CustomUserDetails user, Long requestNo) {
+		validateCanceledRequest(user.getUsername(), requestNo);
+		requestMapper.requestCanceled(requestNo);
+	}
+	
 	public BoardResponse<RequestDto> findAllMyJoins(String userId, int page, String status) { //???
+		log.info("넘어온 userId = " + userId);
+		log.info("넘어온 status = " + status);
 		PageInfo pi = PageInfo.of(requestMapper.countMyJoins(userId, status), page, 10, 5);
 		List<RequestDto> requests = requestMapper.findAllMyJoins(pi.getOffset(),pi.getBoardLimit(),userId, status);
 		BoardResponse<RequestDto> boardResponse = new BoardResponse<RequestDto>(pi, requests);
@@ -106,6 +114,14 @@ public class RequestService {
 		
 	}
 	
+	private void validateCanceledRequest(String userId, Long requestNo) {
+	    RequestDto request = requestMapper.findByRequestNo(requestNo);
+
+	    validateRequestNo(requestNo);
+	    checkCanceled(request.getStatus());
+	    validateUser(userId, request.getUserId());
+	}
+	
 	private void validateRequestNo(Long requestNo) {
 		if(requestMapper.findByRequestNo(requestNo) == null) {
 			throw new InValidJoinRequestException("존재하지 않는 요청입니다.");
@@ -123,11 +139,23 @@ public class RequestService {
 			throw new InValidJoinRequestException("이미 거절 처리된 요청입니다.");
 		}
 	}
+	
+	private void checkCanceled(String status) {
+	    if ("CANCELED".equals(status)) {
+	        throw new InValidJoinRequestException("이미 취소된 요청입니다.");
+	    }
+	}
 
 	private void validateHost(String userId, String host) {
 		if(!host.equals(userId)) {			
 			throw new InValidJoinRequestException("요청에 대한 승인 권한이 없습니다.");
 		}
+	}
+	
+	private void validateUser(String userId, String requestUserId) {
+	    if(!requestUserId.equals(userId)) {
+	        throw new InValidJoinRequestException("본인의 신청만 취소할 수 있습니다.");
+	    }
 	}
 
 

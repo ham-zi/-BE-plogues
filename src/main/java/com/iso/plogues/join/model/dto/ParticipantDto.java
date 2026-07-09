@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ParticipantDto {
+	private Long joinRequestNo;
 	private String userId;
 	private String profile;
 

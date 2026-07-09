@@ -46,5 +46,11 @@ public class RequestController {
 		return ResponseEntity.ok().body(ApiResponse.success("모임 신청 거절에 성공하셨습니다", null));
 	}
 	
+	@PatchMapping("/cancel/{requestNo}")
+	public ResponseEntity<ApiResponse<Void>> requestCanceled(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(value="requestNo")Long requestNo) {
+	    requestService.requestCanceled(user, requestNo);
+	    return ResponseEntity.ok().body(ApiResponse.success("모임 신청 취소에 성공하셨습니다", null));
+	}
+	
 	
 }

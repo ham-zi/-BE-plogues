@@ -59,6 +59,7 @@
   
   <sql id="join">
          , r.USER_ID AS REQ_USER_ID
+         , r.JOIN_REQUEST_NO AS REQ_NO
          , f.FILE_PATH || f.CHANGE_NAME AS PROFILE
       FROM 
            JOIN_BOARD b
@@ -89,7 +90,8 @@
     <result property="currentCount" column="CURRENT_COUNT" />
     
     <collection property="userProfiles" ofType="ParticipantDto">
-        <id property="userId" column="REQ_USER_ID" />
+    	<id property="joinRequestNo" column="REQ_NO"/>
+        <result property="userId" column="REQ_USER_ID" />
         <result property="profile" column="PROFILE" />
     </collection>
   </resultMap>

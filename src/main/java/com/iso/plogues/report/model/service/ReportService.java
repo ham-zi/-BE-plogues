@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.FailedInsertException;
+import com.iso.plogues.exception.report.DuplicateReportException;
 import com.iso.plogues.report.model.dao.ReportMapper;
 import com.iso.plogues.report.model.dto.ReportDto;
 import com.iso.plogues.report.model.dto.ReportRequestDto;
@@ -39,7 +40,7 @@ public class ReportService {
 									.build();
 		
 		if (reportMapper.existsReport(reportEntity) > 0) {
-		    throw new IllegalArgumentException("이미 신고한 게시글입니다.");
+		    throw new DuplicateReportException("이미 신고한 게시글입니다.");
 		}
 		
 		int result = reportMapper.saveReport(reportEntity);

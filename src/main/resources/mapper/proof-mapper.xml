@@ -73,17 +73,45 @@
 			   PROOF_BOARD
 		 WHERE
 			   DELETED = 'N'
-
+		<if test="category != 'ALL'">
+		   AND
+			   CATEGORY = #{category}
+		</if> 
 	</select>
 
 
 	<select id="findAll" resultType="ProofDto">
-
-		<include refid="proofColumns" /> 
-		ORDER 
-		   BY 
-		   	  PROOF_NO DESC 
-	   OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY 
+		SELECT
+		        P.PROOF_NO
+			  , P.USER_ID
+			  , P.JOIN_NO
+			  , P.TITLE
+			  , P.CATEGORY
+			  , P.QUANTITY
+			  , P.CONTENT
+			  , P.CREATE_DATE
+			  , UF.FILE_PATH || UF.CHANGE_NAME AS USER_PROFILE
+			  , PF.FILE_PATH || PF.CHANGE_NAME AS BOARD_PROFILE
+		   FROM
+			    PROOF_BOARD P
+		   LEFT
+	       JOIN
+	            USER_FILE UF ON UF.USER_ID = P.USER_ID
+	       LEFT
+	       JOIN 
+	            PROOF_FILE PF ON PF.PROOF_NO = P.PROOF_NO
+	        AND 
+	            PF.FILE_LEVEL = 1
+		  WHERE
+			    P.DELETED = 'N'
+		<if test="category != 'ALL'">
+		    AND	  
+			    P.CATEGORY = #{category}
+		</if> 
+		  ORDER 
+		     BY 
+		   	    P.PROOF_NO DESC 
+	   OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY 
 	</select>
 
 	<update id="deleteProof">

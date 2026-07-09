@@ -62,6 +62,10 @@ public class ApiResponse<T> {
 	public static <T> ApiResponse<T> notFound(String message, T data) {
 		return new ApiResponse<>(404, message, data);
 	}
+	// 409 실패 응답
+	public static <T> ApiResponse<T> conplict(String message, T data) {
+		return new ApiResponse<>(409, message, data);
+	}
 	
 	// 500 실패 응답
 	public static <T> ApiResponse<T> internalServerError(String message, T data) {
