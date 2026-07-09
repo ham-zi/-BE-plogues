@@ -40,7 +40,7 @@ public class RequestService {
 									   .joinNo(requestDto.getJoinNo())
 									   .userId(requestDto.getUserId())
 									   .aspiration(requestDto.getAspiration())
-									   .status("WAITING")
+									   .status(requestDto.getStatus())
 									   .build();
 		requestMapper.saveRequest(requestEntity);
 	}
