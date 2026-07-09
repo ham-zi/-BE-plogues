@@ -3,35 +3,49 @@
 
 <mapper namespace="com.iso.plogues.notice.model.dao.NoticeMapper">
 
-<select id="selectNoticeList"
-		resultType="NoticeDto">
+<select id="selectNoticeList" resultType="NoticeDto">
 
-		SELECT
-				NB.NOTICE_NO AS noticeNo,
-				NB.CATEGORY AS category,
-				NB.TITLE AS title,
-				PU.USER_NAME AS writer,
-				NB.CREATE_DATE AS createDate,
-				NB.VIEW_COUNT AS views
-		FROM
-				NOTICE_BOARD NB
-		JOIN
-				PLOGUES_USER PU
-		ON
-				NB.USER_ID = PU.USER_ID
-		WHERE
-				NB.DELETED = 'N'
-		AND
-				NB.CATEGORY = #{category}
-		ORDER 
-		BY
-				NB.NOTICE_NO DESC
+    	SELECT
+            	NB.NOTICE_NO AS noticeNo,
+            	NB.CATEGORY AS category,
+            	NB.TITLE AS title,
+            	PU.USER_NAME AS writer,
+            	NB.CREATE_DATE AS createDate,
+            	NB.VIEW_COUNT AS views,
+            	(
+    			SELECT 
+    					NF.FILE_PATH || NF.CHANGE_NAME
+    			FROM 
+    					NOTICE_FILE NF
+    			WHERE 
+    					NF.NOTICE_NO = NB.NOTICE_NO
+      			AND 
+      					NF.DELETED = 'N'
+    			ORDER 
+    			BY 		NF.FILE_NO ASC
+    			
+    			FETCH FIRST 1 ROWS ONLY
+				) 
+				AS thumbnailPath
+    	FROM
+            	NOTICE_BOARD NB
+    	JOIN
+            	PLOGUES_USER PU
+    	ON
+            	NB.USER_ID = PU.USER_ID
+    	WHERE
+            	NB.DELETED = 'N'
+    	AND
+            	NB.CATEGORY = #{category}
+    	ORDER
+    	BY
+            	NB.NOTICE_NO DESC
 
-		OFFSET #{pi.offset} ROWS
+    OFFSET #{pi.offset} ROWS
 
-		FETCH NEXT #{pi.boardLimit} ROWS ONLY
+    FETCH NEXT #{pi.boardLimit} ROWS ONLY
 
-	</select>
+</select>
 
 	<select id="countNoticeList"
 		resultType="int">

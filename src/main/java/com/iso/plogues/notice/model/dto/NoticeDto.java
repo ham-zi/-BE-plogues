@@ -27,6 +27,6 @@ public class NoticeDto {
 	    private int views;
 	    private String userId;
 	    private List<FileDto> fileList;
-	    
+	    private String thumbnailPath;
 	
 }
