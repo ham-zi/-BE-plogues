@@ -22,7 +22,9 @@ import com.iso.plogues.util.dto.BoardResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/report")
@@ -33,6 +35,8 @@ public class ReportController {
 	@PostMapping
 	public ResponseEntity<ApiResponse<Void>> saveReport(@AuthenticationPrincipal CustomUserDetails user,
 														@Valid @RequestBody ReportDto report) {
+		log.info("{}",report);
+		
 		reportService.saveReport(user, report);
 		
 		return ResponseEntity.status(200).body(ApiResponse.success("신고가 접수되었습니다.", null));

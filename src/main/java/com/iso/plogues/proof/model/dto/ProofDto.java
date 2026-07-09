@@ -35,6 +35,8 @@ public class ProofDto {
     private LocalDateTime createDate;
     private String deleted;
     private String updated;
+    private String userProfile;
+    private String boardProfile;
     private List<FileDto> files;
 
 }

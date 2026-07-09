@@ -49,19 +49,20 @@ public class ProofController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("게시글 작성 성공", null));
 	}
 
-	@GetMapping("/detail")
-	public ResponseEntity<ApiResponse<ProofDto>> findByProofNo(@RequestParam(name = "proofNo") Long proofNo) {
+	@GetMapping("/{proofNo}")
+	public ResponseEntity<ApiResponse<ProofDto>> findByProofNo(@PathVariable(name = "proofNo") Long proofNo) {
 
 		ProofDto proof = proofService.findByProofNo(proofNo);
 
 		return ResponseEntity.status(200).body(ApiResponse.success("인증 게시글 상세 조회 성공", proof));
 	}
 
-	@GetMapping("/{proofNo}")
+	@GetMapping
 	public ResponseEntity<ApiResponse<BoardResponse<ProofDto>>> findAll(
-			@RequestParam(name = "page", defaultValue = "1") int page) {
+			@RequestParam(name = "page", defaultValue = "1") int page,
+			@RequestParam(name = "category", defaultValue= "ALL") String category) {
 
-		BoardResponse<ProofDto> br = proofService.findAll(page);
+		BoardResponse<ProofDto> br = proofService.findAll(page, category);
 
 		return ResponseEntity.status(200).body(ApiResponse.success("인증 게시글 전체 조회 성공", br));
 	}

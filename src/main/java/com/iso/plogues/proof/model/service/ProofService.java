@@ -86,18 +86,26 @@ public class ProofService {
 
 	private PageInfo newPageInfo(int listCount, int page) {
 
-		return PageInfo.of(listCount, page, 10, 5);
+		return PageInfo.of(listCount, page, 8, 5);
 
 	}
 
-	@Transactional
-	public BoardResponse<ProofDto> findAll(int page) {
+	@Transactional(readOnly=true)
+	public BoardResponse<ProofDto> findAll(int page, String category) {
+		validCategory(category);
+		
+		PageInfo pageInfo = newPageInfo(proofMapper.listCount(category), page);
 
-		PageInfo pageInfo = newPageInfo(proofMapper.listCount(), page);
-
-		List<ProofDto> list = proofMapper.findAll(pageInfo);
+		List<ProofDto> list = proofMapper.findAll(pageInfo, category);
 
 		return new BoardResponse<>(pageInfo, list);
+	}
+	
+	private String validCategory(String category) {
+		if ("TREE".equals(category) || "PLOG".equals(category)) {
+		    return category;
+		}
+		return "ALL";
 	}
 
 	@Transactional
