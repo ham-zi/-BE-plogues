@@ -56,11 +56,8 @@ public class BoardFileService {
     }
 
     @Transactional
-    public void updateFile(MultipartFile file, Long refBno) {
-        if(!findByBno(refBno).isEmpty()) {
-            hardDeleteFile(refBno);
-        }
-        saveFile(file, refBno);
+    public void deleteFileByNo(Long fileNo) {
+        fileMapper.deleteFileByNo(fileNo);
     }
 
     private void hardDeleteFile(Long refBno) {

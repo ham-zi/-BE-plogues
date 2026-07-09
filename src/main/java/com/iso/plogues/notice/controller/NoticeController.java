@@ -50,8 +50,9 @@ public class NoticeController {
 	        @AuthenticationPrincipal CustomUserDetails userDetails,
 	        @PathVariable(name = "noticeNo") Long noticeNo,
 	        @Valid NoticeDto noticeDto,
-	        @RequestParam(name = "files", required = false) List<MultipartFile> files) {
-	    noticeService.updateNotice(userDetails, noticeNo, noticeDto, files);
+	        @RequestParam(name = "files", required = false) List<MultipartFile> files,
+	        @RequestParam(name = "deleteFileNos", required = false) List<Long> deleteFileNos) {
+	    noticeService.updateNotice(userDetails, noticeNo, noticeDto, files, deleteFileNos);
 	    return ResponseEntity.ok(ApiResponse.success("공지사항, 이벤트 수정 성공", null));
 	}
 

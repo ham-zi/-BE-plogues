@@ -54,12 +54,11 @@ public class NoticeFileService {
     }
 
     @Transactional
-    public void updateFile(MultipartFile file, Long refNoticeNo) {
-        if (!findByBno(refNoticeNo).isEmpty()) {
-            hardDeleteFile(refNoticeNo);
-        }
-        saveFile(file, refNoticeNo);
+    public void deleteFileByNo(Long fileNo) {
+        fileMapper.deleteFileByNo(fileNo);
     }
+
+   
 
     private void hardDeleteFile(Long refNoticeNo) {
         int result = fileMapper.hardDeleteFile(refNoticeNo);

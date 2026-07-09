@@ -17,6 +17,9 @@ public interface NoticeFileMapper {
 
     @Update("UPDATE NOTICE_FILE SET DELETED = 'Y' WHERE NOTICE_NO = #{noticeNo}")
     int deleteFile(Long noticeNo);
+    
+    @Update("UPDATE NOTICE_FILE SET DELETED = 'Y' WHERE FILE_NO = #{fileNo}")
+    int deleteFileByNo(Long fileNo);
 
     @Delete("DELETE FROM NOTICE_FILE WHERE NOTICE_NO = #{noticeNo}")
     int hardDeleteFile(Long noticeNo);

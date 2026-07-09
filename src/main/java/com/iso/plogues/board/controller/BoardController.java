@@ -60,8 +60,9 @@ public class BoardController {
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable(name = "boardNo") Long boardNo,
             @Valid BoardDto boardDto,
-            @RequestParam(name = "files", required = false) List<MultipartFile> files) {
-        boardService.updateBoard(userDetails, boardNo, boardDto, files);
+            @RequestParam(name = "files", required = false) List<MultipartFile> files,
+            @RequestParam(name = "deleteFileNos", required = false) List<Long> deleteFileNos) {
+        boardService.updateBoard(userDetails, boardNo, boardDto, files, deleteFileNos);
         return ResponseEntity.ok(ApiResponse.success("게시글 수정 성공", null));
     }
     
