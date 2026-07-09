@@ -170,6 +170,14 @@
   	       JOIN_REQUEST_NO = #{requestNo}    
   </update>
   
+  <update id="requestCanceled">
+    UPDATE
+           JOIN_REQUEST
+       SET
+           STATUS = 'CANCELED'
+     WHERE
+           JOIN_REQUEST_NO = #{requestNo}
+  </update>
 
   <select id="findByUserIdJoin" resultType="RequestDto">
   	SELECT 
