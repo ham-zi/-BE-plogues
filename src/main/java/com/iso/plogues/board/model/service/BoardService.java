@@ -29,10 +29,10 @@ public class BoardService {
     private final BoardFileService boardFileService;
     private final BoardCommentMapper commentMapper;
 
-    public BoardResponse<BoardDto> selectBoardList(int currentPage) {
-        int listCount = boardMapper.countBoardList();
+    public BoardResponse<BoardDto> selectBoardList(int currentPage, String keyword) {
+        int listCount = boardMapper.countBoardList(keyword);
         PageInfo page = PageInfo.of(listCount, currentPage, 10, 5);
-        List<BoardDto> boardList = boardMapper.selectBoardList(page);
+        List<BoardDto> boardList = boardMapper.selectBoardList(page, keyword);
         return new BoardResponse<>(page, boardList);
     }
 

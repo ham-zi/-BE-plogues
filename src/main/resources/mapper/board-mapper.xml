@@ -3,32 +3,33 @@
 
 <mapper namespace="com.iso.plogues.board.model.dao.BoardMapper">
 
-	<select id="selectBoardList"
-		resultType="BoardDto">
+<select id="selectBoardList" resultType="BoardDto">
 
-		SELECT
-		RB.BOARD_NO AS boardNo,
-		RB.TITLE AS title,
-		PU.USER_NAME AS writer,
-		RB.CREATE_DATE AS createDate,
-		RB.VIEW_COUNT AS views
-		FROM
-		REVIEW_BOARD RB
-		JOIN
-		PLOGUES_USER PU
-		ON
-		RB.USER_ID = PU.USER_ID
-		WHERE
-		RB.DELETED = 'N'
-		ORDER BY
-		RB.BOARD_NO DESC
+    SELECT
+    RB.BOARD_NO AS boardNo,
+    RB.TITLE AS title,
+    PU.USER_NAME AS writer,
+    RB.CREATE_DATE AS createDate,
+    RB.VIEW_COUNT AS views
+    FROM
+    REVIEW_BOARD RB
+    JOIN
+    PLOGUES_USER PU
+    ON
+    RB.USER_ID = PU.USER_ID
+    WHERE
+    RB.DELETED = 'N'
+    <if test="keyword != null and keyword != ''">
+        AND RB.TITLE LIKE '%' || #{keyword} || '%'
+    </if>
+    ORDER BY
+    RB.BOARD_NO DESC
 
-		OFFSET #{offset} ROWS
+    OFFSET #{page.offset} ROWS
 
-		FETCH NEXT #{boardLimit} ROWS ONLY
+    FETCH NEXT #{page.boardLimit} ROWS ONLY
 
-	</select>
-	
+</select>	
 	    <select id="selectMyBoardList"
             resultType="BoardDto">
 
@@ -60,14 +61,14 @@
     </select>
 
 
-	<select id="countBoardList"
-		resultType="int">
-
-		SELECT COUNT(*)
-		FROM REVIEW_BOARD
-		WHERE DELETED = 'N'
-
-	</select>
+	<select id="countBoardList" resultType="int">
+    SELECT COUNT(*)
+    FROM REVIEW_BOARD RB
+    WHERE RB.DELETED = 'N'
+    <if test="keyword != null and keyword != ''">
+        AND RB.TITLE LIKE '%' || #{keyword} || '%'
+    </if>
+</select>
 	
 	    <select id="countMyBoardList"
             resultType="int">

@@ -35,8 +35,9 @@ public class BoardController {
     @GetMapping
     public ResponseEntity<ApiResponse<BoardResponse<BoardDto>>> selectBoardList(
             @RequestParam(name = "category") String category,
-            @RequestParam(name = "page", defaultValue = "1") int page) {
-        return ResponseEntity.ok(ApiResponse.success("게시글 목록 조회 성공", boardService.selectBoardList(page)));
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "keyword", required = false) String keyword) {
+        return ResponseEntity.ok(ApiResponse.success("게시글 목록 조회 성공", boardService.selectBoardList(page, keyword)));
     }
 
     @GetMapping("/{boardNo}")

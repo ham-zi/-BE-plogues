@@ -13,10 +13,10 @@ import com.iso.plogues.util.page.PageInfo;
 @Mapper
 public interface BoardMapper {
 
-    int countBoardList();
+	int countBoardList(@Param("keyword") String keyword);
     int countMyBoardList(String userId);
     List<BoardDto> selectMyBoardList(@Param(value="userId")String userId, @Param(value="pi")PageInfo pi);
-    List<BoardDto> selectBoardList(PageInfo pi);
+    List<BoardDto> selectBoardList(@Param("page") PageInfo pi, @Param("keyword") String keyword);
     BoardDto selectBoardDetail(Long boardNo);
 	List<FileDto> selectFileList(Long boardNo);
 	void insertBoard(BoardDto boardDto);
