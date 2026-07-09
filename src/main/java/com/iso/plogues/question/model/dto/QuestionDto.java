@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.iso.plogues.question.comment.model.dto.AnswerDto;
+import com.iso.plogues.util.file.FileDto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -34,5 +35,6 @@ public class QuestionDto {
 	private String updated;
 	private String deleted;
 	private List<AnswerDto> answerList;
+	private List<FileDto> files;
 
 }

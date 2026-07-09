@@ -5,12 +5,17 @@
 <mapper namespace="com.iso.plogues.question.model.dao.QuestionMapper">
 
     <insert id="save">
+    	<selectKey keyProperty="boardNo"
+    	           resultType="long"
+    	           order="BEFORE">
+    		SELECT SEQ_PLG_QB.NEXTVAL FROM DUAL
+    	</selectKey>
         INSERT
           INTO
                QUESTION_BOARD
        	VALUES
                (
-               SEQ_PLG_QB.NEXTVAL
+               #{boardNo}
              , #{userId}
              , #{title}
              , #{category}

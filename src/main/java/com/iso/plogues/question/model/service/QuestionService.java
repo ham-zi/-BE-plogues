@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.FailedFindByNoException;
@@ -12,10 +13,12 @@ import com.iso.plogues.exception.FailedInsertException;
 import com.iso.plogues.exception.user.NotPermissionException;
 import com.iso.plogues.question.comment.model.dao.AnswerMapper;
 import com.iso.plogues.question.comment.model.dto.AnswerDto;
+import com.iso.plogues.question.file.service.QuestionFileService;
 import com.iso.plogues.question.model.dao.QuestionMapper;
 import com.iso.plogues.question.model.dto.QuestionDto;
 import com.iso.plogues.question.model.vo.Question;
 import com.iso.plogues.util.dto.BoardResponse;
+import com.iso.plogues.util.file.FileDto;
 import com.iso.plogues.util.page.PageInfo;
 
 import lombok.RequiredArgsConstructor;
@@ -26,14 +29,15 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class QuestionService {
 	private final QuestionMapper questionMapper;
+	private final QuestionFileService questionFileService;
 	private final AnswerMapper answerMapper;
 	
 	
 	@Transactional
-	public void save(QuestionDto question, CustomUserDetails user) {
+	public void save(QuestionDto question, List<MultipartFile>files) {
 		Question q = Question.builder()
 							 .boardNo(question.getBoardNo())
-							 .userId(user.getUsername())
+							 .userId(question.getUserId())
 							 .title(question.getTitle())
 							 .content(question.getContent())
 							 .category(changeCategory(question.getCategory()))
@@ -43,6 +47,13 @@ public class QuestionService {
 		if(result !=1 ) {
 			throw new FailedInsertException("게시글 작성에 실패하였습니다. 다시 작성해주세요.");
 		}
+        Long boardNo = q.getBoardNo();
+        if (files != null && !files.isEmpty()) {
+            for (MultipartFile upfile : files) {
+                questionFileService.saveFile(upfile, boardNo);
+            }
+        }
+		
 
 	}
 	
@@ -125,12 +136,13 @@ public class QuestionService {
 	        if (question == null) {
 	            throw new FailedFindByNoException("존재하지 않는 게시글입니다.");
 	        }
-	        
+	        List<FileDto> files = questionFileService.findByBno(boardNo);
 	        List<AnswerDto> answerList = answerMapper.selectAnswerList(boardNo);
 	        question.setAnswerList(answerList); 
-	        
+	        question.setFiles(files);
 	        return question;
 	    }
+	  
 	  	// 유저용 삭제
 	    @Transactional
 	    public void deleteByUser(Long boardNo, String username) {
