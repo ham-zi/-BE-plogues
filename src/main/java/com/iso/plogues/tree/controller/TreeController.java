@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.tree.model.dto.TreeDto;
+import com.iso.plogues.tree.model.dto.TreeResponse;
 import com.iso.plogues.tree.model.service.TreeService;
 import com.iso.plogues.tree.model.vo.CarbonReductionResponse;
 
@@ -36,7 +37,12 @@ public class TreeController {
 	public ResponseEntity<ApiResponse<List<TreeDto>>> getWeeklyData() {
 	    return ResponseEntity.ok().body(ApiResponse.success(treeService.findDataByWeek()));
 	}
-
+	
+	@GetMapping("/day")
+	public ResponseEntity<ApiResponse<List<TreeResponse>>> getDailyData() {
+	    return ResponseEntity.ok().body(ApiResponse.success(treeService.findDataByDay()));
+	}
+	
 	@GetMapping("/carbon-reduction")
 	public ResponseEntity<ApiResponse<List<CarbonReductionResponse>>> getCarbonReduction() {
 	    return ResponseEntity.ok().body(ApiResponse.success(treeService.getCarbonReductionData()));
