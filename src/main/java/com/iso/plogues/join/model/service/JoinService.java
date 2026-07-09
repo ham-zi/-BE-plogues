@@ -66,7 +66,7 @@ public class JoinService {
 	
 	@Transactional
 	public BoardResponse<JoinDto> findAllByHost(CustomUserDetails user, int page) {
-		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
+		PageInfo pageInfo = newPageInfo(joinMapper.hostListCount(user.getUsername()), page);
 		List<JoinDto> list = joinMapper.findAllByHost(user.getUsername(),pageInfo);
 		return new BoardResponse<JoinDto>(pageInfo, list);
 	}

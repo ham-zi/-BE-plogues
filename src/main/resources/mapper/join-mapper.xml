@@ -31,14 +31,25 @@
   </insert>
   
   <select id="listCount" resultType="_int">
-  	SELECT 
-  	       COUNT(*)
-  	  FROM 
-  	       JOIN_BOARD
-  	 WHERE 
-  	       DELETED = 'N'
+    SELECT
+           COUNT(*)
+     FROM
+          JOIN_BOARD
+    WHERE
+          DELETED = 'N'
   </select>
-  
+
+  <select id="hostListCount" resultType="_int">
+    SELECT
+           COUNT(*)
+      FROM
+           JOIN_BOARD
+     WHERE
+           DELETED = 'N'
+       AND
+           USER_ID = #{userId}
+  </select>
+	  
   <sql id="joinColumns">
   	SELECT 
            b.JOIN_NO

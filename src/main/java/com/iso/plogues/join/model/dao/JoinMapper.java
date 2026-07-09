@@ -14,6 +14,7 @@ import com.iso.plogues.util.page.PageInfo;
 public interface JoinMapper {
 	int saveJoin(Join join);
 	int listCount();
+	int hostListCount(@Param("userId") String userId);
 	int countMyJoins(@Param(value="userId")String userId, @Param(value="status")String status);
 	List<JoinDto> findAllPlant(PageInfo page);
 	List<JoinDto> findAllPlog(PageInfo page);
