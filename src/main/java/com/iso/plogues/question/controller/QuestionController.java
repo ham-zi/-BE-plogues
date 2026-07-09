@@ -23,6 +23,7 @@ import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.question.comment.model.dto.AnswerDto;
 import com.iso.plogues.question.comment.model.service.AnswerService;
 import com.iso.plogues.question.model.dto.QuestionDto;
+import com.iso.plogues.question.model.dto.QuestionRequest;
 import com.iso.plogues.question.model.service.QuestionService;
 import com.iso.plogues.util.dto.BoardResponse;
 
@@ -39,7 +40,7 @@ public class QuestionController {
 	private final AnswerService answerService;
 	
 	@PostMapping
-	public ResponseEntity<ApiResponse<Void>> save(@Valid @ModelAttribute QuestionDto question, 
+	public ResponseEntity<ApiResponse<Void>> save(@Valid @ModelAttribute QuestionRequest question, 
 									 			  @AuthenticationPrincipal CustomUserDetails user,
 									 			  @RequestParam(name="files",required = false) List<MultipartFile>files){
 		question.setUserId(user.getUsername());

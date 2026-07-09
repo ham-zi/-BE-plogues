@@ -16,6 +16,7 @@ import com.iso.plogues.question.comment.model.dto.AnswerDto;
 import com.iso.plogues.question.file.service.QuestionFileService;
 import com.iso.plogues.question.model.dao.QuestionMapper;
 import com.iso.plogues.question.model.dto.QuestionDto;
+import com.iso.plogues.question.model.dto.QuestionRequest;
 import com.iso.plogues.question.model.vo.Question;
 import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.file.FileDto;
@@ -34,14 +35,14 @@ public class QuestionService {
 	
 	
 	@Transactional
-	public void save(QuestionDto question, List<MultipartFile>files) {
+	public void save(QuestionRequest question, List<MultipartFile>files) {
 		Question q = Question.builder()
-							 .boardNo(question.getBoardNo())
 							 .userId(question.getUserId())
 							 .title(question.getTitle())
 							 .content(question.getContent())
 							 .category(changeCategory(question.getCategory()))
 							 .build();
+		log.info("{}",q);
 		int result = questionMapper.save(q);
 		
 		if(result !=1 ) {
