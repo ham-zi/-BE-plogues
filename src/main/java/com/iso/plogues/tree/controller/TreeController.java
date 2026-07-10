@@ -33,11 +33,6 @@ public class TreeController {
 		return ResponseEntity.ok().body(ApiResponse.success("센서 데이터를 성공적으로 저장했습니다.", null));
 	}
 	
-	@GetMapping("/week")
-	public ResponseEntity<ApiResponse<List<TreeDto>>> getWeeklyData() {
-	    return ResponseEntity.ok().body(ApiResponse.success(treeService.findDataByWeek()));
-	}
-	
 	@GetMapping("/day")
 	public ResponseEntity<ApiResponse<List<TreeResponse>>> getDailyData() {
 	    return ResponseEntity.ok().body(ApiResponse.success(treeService.findDataByDay()));
