@@ -57,8 +57,6 @@ public class JoinService {
 	public BoardResponse<JoinDto> findAllPlant(int page, String keyword) {
 		PageInfo pageInfo = newPageInfo(joinMapper.listCount(keyword), page);
 		List<JoinDto> list = joinMapper.findAllPlant(pageInfo, keyword);
-		log.info("{}@@@@@",list);
-
 		return new BoardResponse<JoinDto>(pageInfo, list);
 	}
 	
@@ -66,7 +64,6 @@ public class JoinService {
 	public BoardResponse<JoinDto> findAllPlog(int page, String keyword) {
 		PageInfo pageInfo = newPageInfo(joinMapper.listCount(keyword), page);
 		List<JoinDto> list = joinMapper.findAllPlog(pageInfo, keyword);
-		log.info("{}@@@@@",list);
 		return new BoardResponse<JoinDto>(pageInfo, list);
 	}
 

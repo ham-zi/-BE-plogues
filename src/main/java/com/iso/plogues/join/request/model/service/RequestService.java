@@ -64,8 +64,6 @@ public class RequestService {
 	}
 	
 	public BoardResponse<RequestDto> findAllMyJoins(String userId, int page, String status) { //???
-		log.info("넘어온 userId = " + userId);
-		log.info("넘어온 status = " + status);
 		PageInfo pi = PageInfo.of(requestMapper.countMyJoins(userId, status), page, 10, 5);
 		List<RequestDto> requests = requestMapper.findAllMyJoins(pi.getOffset(),pi.getBoardLimit(),userId, status);
 		BoardResponse<RequestDto> boardResponse = new BoardResponse<RequestDto>(pi, requests);
