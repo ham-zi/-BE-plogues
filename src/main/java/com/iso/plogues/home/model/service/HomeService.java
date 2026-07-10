@@ -30,7 +30,7 @@ public class HomeService {
 				           .notices(notices.getBoard())
 				           .events(events.getBoard())
 				           .yearlyAbsorption(reductions)
-				           .environments(treeService.findDataByWeek())
+				           .environments(treeService.findDataByDay())
 				           .build();
 	}
 

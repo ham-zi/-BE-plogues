@@ -36,11 +36,6 @@ public class TreeService {
 				                            .build());
 	}
 	
-	//나무 환경 센서 일주일 데이터 조회
-	public List<TreeDto> findDataByWeek() {
-		return treeMapper.findDataByWeek();
-	}
-	
 	public List<TreeResponse> findDataByDay() {
 		return treeMapper.findDataByDay();
 	}

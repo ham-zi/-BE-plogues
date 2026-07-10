@@ -146,7 +146,14 @@
   	       (
 		   SEQ_PLG_JR.NEXTVAL
 		 , #{aspiration}
-		 , #{status}
+		 , <choose>
+		 	 <when test="status == null">
+                 'WAITING'
+             </when>
+             <otherwise>
+                 #{status}
+             </otherwise>
+          </choose>
 		 , #{joinNo}
 		 , #{userId}
 		   )
