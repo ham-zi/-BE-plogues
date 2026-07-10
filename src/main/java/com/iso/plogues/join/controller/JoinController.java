@@ -24,8 +24,9 @@ import com.iso.plogues.util.dto.BoardResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/api/joins")
 @RequiredArgsConstructor
@@ -41,13 +42,14 @@ public class JoinController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<ApiResponse<BoardResponse<JoinDto>>> findAll(@RequestParam(name="page", defaultValue = "1") int page, @RequestParam(name="category") String category) {
+	public ResponseEntity<ApiResponse<BoardResponse<JoinDto>>> findAll(@RequestParam(name="page", defaultValue = "1") int page, @RequestParam(name="category") String category, @RequestParam(name="keyword", required=false)String keyword) {
 		BoardResponse<JoinDto> br = null;
 		if("plant".equals(category)) {
-			br = joinService.findAllPlant(page);
+			br = joinService.findAllPlant(page, keyword);
 		} else if("plogging".equals(category)) {
-			br = joinService.findAllPlog(page);
+			br = joinService.findAllPlog(page, keyword);
 		}
+		log.info("{}@@@@@@@@@@",br);
 		return ResponseEntity.status(200).body(ApiResponse.success("게시글 전체 조회 성공", br));
 	}
 	

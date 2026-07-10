@@ -37,6 +37,10 @@
           JOIN_BOARD
     WHERE
           DELETED = 'N'
+    <if test="keyword != null and keyword != ''">
+      AND
+  	      REGION LIKE '%'||#{keyword}||'%'
+  	</if>
   </select>
 
   <select id="hostListCount" resultType="_int">
@@ -112,10 +116,14 @@
   	<include refid="join"/>
   	   AND 
   	       b.CATEGORY = 'PLANT'
+    <if test="keyword != null and keyword != ''">
+      AND
+  	      REGION LIKE '%'||#{keyword}||'%'
+  	</if>
   	 ORDER 
   	    BY 
   	       b.JOIN_NO DESC
-  	OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY
+  	OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
   </select>
   
   <select id="findAllPlog" resultMap="joinDtoMap">
@@ -123,10 +131,14 @@
   	<include refid="join"/>
   	   AND 
   	       b.CATEGORY = 'PLOG'
+    <if test="keyword != null and keyword != ''">
+       AND
+  	       REGION LIKE '%'||#{keyword}||'%'
+  	</if>
   	 ORDER 
   	    BY 
   	       b.JOIN_NO DESC
-  	OFFSET #{offset} ROWS FETCH NEXT #{boardLimit} ROWS ONLY
+  	OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
   </select>
   
   <select id="findAllByHost" resultMap="joinDtoMap">

@@ -21,9 +21,12 @@ import com.iso.plogues.util.file.FileDto;
 import com.iso.plogues.util.page.PageInfo;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly=true)
 public class JoinService {
 	private final JoinMapper joinMapper;
 	private final JoinFileService fileService;
@@ -51,19 +54,22 @@ public class JoinService {
 	}
 
 	@Transactional
-	public BoardResponse<JoinDto> findAllPlant(int page) {
-		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
-		List<JoinDto> list = joinMapper.findAllPlant(pageInfo);
+	public BoardResponse<JoinDto> findAllPlant(int page, String keyword) {
+		PageInfo pageInfo = newPageInfo(joinMapper.listCount(keyword), page);
+		List<JoinDto> list = joinMapper.findAllPlant(pageInfo, keyword);
+		log.info("{}@@@@@",list);
+
 		return new BoardResponse<JoinDto>(pageInfo, list);
 	}
 	
 	@Transactional
-	public BoardResponse<JoinDto> findAllPlog(int page) {
-		PageInfo pageInfo = newPageInfo(joinMapper.listCount(), page);
-		List<JoinDto> list = joinMapper.findAllPlog(pageInfo);
+	public BoardResponse<JoinDto> findAllPlog(int page, String keyword) {
+		PageInfo pageInfo = newPageInfo(joinMapper.listCount(keyword), page);
+		List<JoinDto> list = joinMapper.findAllPlog(pageInfo, keyword);
+		log.info("{}@@@@@",list);
 		return new BoardResponse<JoinDto>(pageInfo, list);
 	}
-	
+
 	@Transactional
 	public BoardResponse<JoinDto> findAllByHost(CustomUserDetails user, int page) {
 		PageInfo pageInfo = newPageInfo(joinMapper.hostListCount(user.getUsername()), page);
