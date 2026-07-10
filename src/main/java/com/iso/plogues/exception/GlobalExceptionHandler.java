@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(InValidJoinRequestException.class)
 	public ResponseEntity<ApiResponse> handlerInValidJoinRequest(InValidJoinRequestException e){
-		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+		return ResponseEntity.badRequest().body(ApiResponse.conplict(e.getMessage(), null));
 	}
 	
 	@ExceptionHandler(FailedInsertException.class)
