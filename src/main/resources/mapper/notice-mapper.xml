@@ -101,17 +101,18 @@
 	</select>
 	
 	<update id="updateNotice">
-    	UPDATE 
-    			NOTICE_BOARD
+    	UPDATE
+            	NOTICE_BOARD
     	SET
-        		TITLE = #{notice.title},
-        		CONTENT = #{notice.content},
-        		UPDATED = 'Y'
+            	TITLE = #{notice.title},
+            	CONTENT = #{notice.content},
+            	CATEGORY = #{notice.category},
+            	UPDATED = 'Y'
     	WHERE
-        		NOTICE_NO = #{notice.noticeNo}
-        AND 
-        		DELETED = 'N'
-	</update>
+            	NOTICE_NO = #{notice.noticeNo}
+        AND
+            	DELETED = 'N'
+</update>
 	
 	<update id="increaseViewCount">
     	UPDATE 
