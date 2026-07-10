@@ -1,4 +1,5 @@
 package com.iso.plogues.proof.file.model.dao;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -27,15 +28,18 @@ public interface ProofFileMapper {
 			    VALUES
 			    (
 			        SEQ_PLG_PROOF_FILE.NEXTVAL,
-			        #{refBoardNo},
-			        #{originName},
-			        #{changeName},
-			        #{filePath},
-			        1,
+			        #{file.refBoardNo},
+			        #{file.originName},
+			        #{file.changeName},
+			        #{file.filePath},
+			        #{fileLevel},
 			        'N'
 			    )
 			""")
-	int saveFile(File file);
+	int saveFile(
+		    @Param("file") File file,
+		    @Param("fileLevel") int fileLevel
+		    );
 
 	@Select("""
 			    SELECT

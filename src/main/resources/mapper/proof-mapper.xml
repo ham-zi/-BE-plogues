@@ -99,9 +99,20 @@
 	            USER_FILE UF ON UF.USER_ID = P.USER_ID
 	       LEFT
 	       JOIN 
-	            PROOF_FILE PF ON PF.PROOF_NO = P.PROOF_NO
-	        AND 
-	            PF.FILE_LEVEL = 1
+	            PROOF_FILE PF
+	         ON 
+	         	PF.FILE_NO = ( 
+	     SELECT 
+	     		MAX(FILE_NO)
+	       FROM 
+	      		PROOF_FILE
+	      WHERE 
+	      		PROOF_NO = P.PROOF_NO
+	      	AND 
+	      		FILE_LEVEL = 1	
+	      	AND 
+	      		DELETED = 'N'
+	     	  )	
 		  WHERE
 			    P.DELETED = 'N'
 		<if test="category != 'ALL'">

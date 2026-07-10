@@ -102,7 +102,7 @@ public class ProofService {
 	}
 	
 	private String validCategory(String category) {
-		if ("TREE".equals(category) || "PLOG".equals(category)) {
+		if ("PLANT".equals(category) || "PLOG".equals(category)) {
 		    return category;
 		}
 		return "ALL";
