@@ -43,7 +43,7 @@ public class AuthService {
 			auth = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(lrd.getUserId(), lrd.getUserPwd()));
 		} catch(AuthenticationException e) {
-			throw new CustomAuthenticationException("아이디 또는 비밀번호가 이상합니다");
+			throw new CustomAuthenticationException("아이디 또는 비밀번호가 올바르지 않습니다.");
 		}
 		 return (CustomUserDetails)auth.getPrincipal();
 	}

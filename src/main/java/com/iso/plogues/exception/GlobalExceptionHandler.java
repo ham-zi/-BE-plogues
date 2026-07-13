@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
+import com.iso.plogues.exception.join.InvalidDateException;
 import com.iso.plogues.exception.report.DuplicateReportException;
 import com.iso.plogues.exception.request.InValidJoinRequestException;
+import com.iso.plogues.exception.token.NotFoundTokenException;
 import com.iso.plogues.exception.user.InvalidUserPwdException;
+import com.iso.plogues.exception.user.NotPermissionException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +31,7 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(CustomAuthenticationException.class)
 	public ResponseEntity<ApiResponse> handlerAuthenticationError(CustomAuthenticationException e){
-		return ResponseEntity.badRequest().body(new ApiResponse(400, e.getMessage(), null));
+		return ResponseEntity.badRequest().body(new ApiResponse(401, e.getMessage(), null));
 	}
 	
 	
@@ -81,6 +84,16 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiResponse> handlerDuplicateReport(DuplicateReportException e){
 		return ResponseEntity.badRequest().body(ApiResponse.conplict(e.getMessage(), null));
 	}
+	
+	@ExceptionHandler(NotFoundTokenException.class)
+	public ResponseEntity<ApiResponse> handlerNotFoundToken(NotFoundTokenException e){
+		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+	}
+	
+	@ExceptionHandler(NotPermissionException.class)
+	public ResponseEntity<ApiResponse> handlerNotPermission(NotPermissionException e){
+		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ApiResponse> handlerMethodArgumentNotValid(MethodArgumentNotValidException e){
@@ -92,7 +105,12 @@ public class GlobalExceptionHandler {
 
 	    return ResponseEntity
 	            .badRequest()
-	            .body(ApiResponse.badRequest("입력값 검증에 실패했습니다.", messages));
+	            .body(ApiResponse.badRequest("올바른 형식이 아닙니다.", messages));
+	}
+	
+	@ExceptionHandler(InvalidDateException.class)
+	public ResponseEntity<ApiResponse> hanlderInvalidDate(InvalidDateException e){
+		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
 	}
 
 }

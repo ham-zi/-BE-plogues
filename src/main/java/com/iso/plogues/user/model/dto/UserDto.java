@@ -1,5 +1,6 @@
 package com.iso.plogues.user.model.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -27,14 +28,16 @@ public class UserDto {
 	@Size(min = 2, max = 20, message="이름은 2글자 이상 20글자 이하만 사용할 수 있습니다.")
 	@NotBlank(message="이름은 비어있을 수 없습니다.")
 	private String userName;
+	@Email(message="올바른 이메일 형식이 아닙니다.")
 	@Size(max = 20, message="이메일은 20글자 이하만 사용할 수 있습니다.")
-	@NotBlank(message="이름은 비어있을 수 없습니다.")
+	@NotBlank(message="이메일은 비어있을 수 없습니다.")
 	private String email;
-	@Size(max = 11, message="전화번호는 11개의 숫자 이하만 사용할 수 있습니다.")
+	@Pattern(regexp = "^[0-9]*$", message="전화번호는 숫자만 입력 가능합니다.")
+	@Size(max = 11, message="전화번호는 11자리 이하로 입력하세요.")
 	@NotBlank(message="전화번호는 비어있을 수 없습니다.")
 	private String phone;
 	@Size(max = 100, message="주소는 100자 이하만 사용할 수 있습니다.")
-	@NotBlank(message="주소값 비어있을 수 없습니다.")
+	@NotBlank(message="주소값은 비어있을 수 없습니다.")
 	private String address;
 	private String info;
 	private String role;

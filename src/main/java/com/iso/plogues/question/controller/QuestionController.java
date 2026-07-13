@@ -63,7 +63,7 @@ public class QuestionController {
     @GetMapping("/{boardNo}")
     public ResponseEntity<ApiResponse<QuestionDto>> selectQuestionDetail(@PathVariable(name="boardNo")Long boardNo,
     																	 @AuthenticationPrincipal CustomUserDetails user) {
-        return ResponseEntity.ok(ApiResponse.success("게시글 상세 조회 성공", questionService.selectQuestionDetail(boardNo)));
+        return ResponseEntity.ok(ApiResponse.success("게시글 상세 조회 성공", questionService.selectQuestionDetail(boardNo, user)));
     }
 	
 	@DeleteMapping("/{boardNo}/user")

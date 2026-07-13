@@ -9,6 +9,7 @@ import com.iso.plogues.exception.request.InValidJoinRequestException;
 import com.iso.plogues.util.file.FileDto;
 
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public class DetailJoinDto {
 	private String userId;
 	@NotBlank
 	private String category;
+	@Min(1)
 	@Max(20)
 	private int participants;
 	@NotBlank

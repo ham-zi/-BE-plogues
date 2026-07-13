@@ -132,10 +132,14 @@ public class QuestionService {
 
 
 	  @Transactional
-	    public QuestionDto selectQuestionDetail(Long boardNo) {
+	    public QuestionDto selectQuestionDetail(Long boardNo, CustomUserDetails user) {
 	        QuestionDto question = questionMapper.findByOne(boardNo);
+	        log.info("{}",user.getAuthorities());
 	        if (question == null) {
 	            throw new FailedFindByNoException("존재하지 않는 게시글입니다.");
+	        }
+	        if(!(question.getUserId().equals(user.getUsername())||"[ROLE_ADMIN]".equals(user.getAuthorities().toString()))) {
+	        	throw new NotPermissionException("권한이 없는 게시글입니다.");
 	        }
 	        List<FileDto> files = questionFileService.findByBno(boardNo);
 	        List<AnswerDto> answerList = answerMapper.selectAnswerList(boardNo);
