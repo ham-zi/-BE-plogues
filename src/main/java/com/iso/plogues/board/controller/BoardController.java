@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.http.ResponseEntity;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
@@ -22,12 +23,16 @@ import com.iso.plogues.board.model.dto.BoardDto;
 import com.iso.plogues.board.model.service.BoardService;
 import com.iso.plogues.util.dto.BoardResponse;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/boards")
+@Validated
 public class BoardController {
 
     private final BoardService boardService;
@@ -35,11 +40,23 @@ public class BoardController {
     @GetMapping
     public ResponseEntity<ApiResponse<BoardResponse<BoardDto>>> selectBoardList(
             @RequestParam(name = "category") String category,
-            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "page", defaultValue = "1") @Positive(message = "페이지 번호는 1 이상이어야 합니다.") int page,
             @RequestParam(name = "keyword", required = false) String keyword) {
         return ResponseEntity.ok(ApiResponse.success("게시글 목록 조회 성공", boardService.selectBoardList(page, keyword)));
     }
+    
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiResponse> handleConstraintViolation(ConstraintViolationException e) {
+        List<String> messages = e.getConstraintViolations()
+                .stream()
+                .map(ConstraintViolation::getMessage)
+                .toList();
 
+        return ResponseEntity
+                .badRequest()
+                .body(ApiResponse.badRequest("입력값 검증에 실패했습니다.", messages));
+    }
+    
     @GetMapping("/{boardNo}")
     public ResponseEntity<ApiResponse<BoardDto>> selectBoardDetail(
             @PathVariable("boardNo") Long boardNo) {

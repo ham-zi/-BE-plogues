@@ -6,7 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.board.comment.model.dao.BoardCommentMapper;
 import com.iso.plogues.board.comment.model.dto.BoardCommentDto;
+import com.iso.plogues.board.model.dao.BoardMapper;
+import com.iso.plogues.board.model.dto.BoardDto;
 import com.iso.plogues.exception.FailedDeleteException;
+import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedInsertException;
 import com.iso.plogues.exception.FailedUpdateException;
 
@@ -16,10 +19,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BoardCommentService {
 	
+		private final BoardMapper boardMapper;
 	    private final BoardCommentMapper commentMapper;
 
 	    @Transactional
 	    public void insertComment(CustomUserDetails user, Long boardNo, BoardCommentDto commentDto) {
+
+	        BoardDto board = boardMapper.selectBoardDetail(boardNo);
+	        if (board == null) {
+	            throw new FailedFindByNoException("존재하지 않거나 삭제된 게시글입니다.");
+	        }
+
 	        commentDto.setBoardNo(boardNo);
 	        commentDto.setUserId(user.getUsername());
 	        int result = commentMapper.insertComment(commentDto);

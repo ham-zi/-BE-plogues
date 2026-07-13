@@ -8,12 +8,15 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.exception.report.DuplicateReportException;
 import com.iso.plogues.exception.request.InValidJoinRequestException;
 import com.iso.plogues.exception.user.InvalidUserPwdException;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -82,17 +85,23 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(ApiResponse.conplict(e.getMessage(), null));
 	}
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ApiResponse> handlerMethodArgumentNotValid(MethodArgumentNotValidException e){
-		List<String> messages = e.getBindingResult()
-	            .getFieldErrors()
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<ApiResponse> handleConstraintViolation(ConstraintViolationException e) {
+	    List<String> messages = e.getConstraintViolations()
 	            .stream()
-	            .map(FieldError::getDefaultMessage)
+	            .map(ConstraintViolation::getMessage)
 	            .toList();
 
 	    return ResponseEntity
 	            .badRequest()
 	            .body(ApiResponse.badRequest("입력값 검증에 실패했습니다.", messages));
+	}
+	
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	public ResponseEntity<ApiResponse<Void>> handleMaxUploadSize(MaxUploadSizeExceededException e) {
+	    return ResponseEntity
+	            .badRequest()
+	            .body(ApiResponse.badRequest("사진 용량은 100MB 이하만 가능합니다.", null));
 	}
 
 }
