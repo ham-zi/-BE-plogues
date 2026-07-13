@@ -22,6 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.iso.plogues.configuration.filter.JwtFilter;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -36,6 +37,14 @@ public class SecurityConfig {
 		return http.formLogin(AbstractHttpConfigurer::disable)
 				   .csrf(AbstractHttpConfigurer::disable)
 				   .cors(Customizer.withDefaults())
+				   .exceptionHandling(exception -> exception
+			               .authenticationEntryPoint((request, response, authException) -> {
+			                   response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+			               })
+			               .accessDeniedHandler((request, response, accessDeniedException) -> {
+			                   response.sendError(HttpServletResponse.SC_FORBIDDEN);
+			               })
+			           )
 				   .authorizeHttpRequests(requests -> { 
 					   requests.requestMatchers(HttpMethod.GET, "/api/notices/**", "/api/joins/**", "/api/home", "/api/boards/**", "/api/tree/**").permitAll();
 					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "/api/tree", "/api/auth/refresh").permitAll();
