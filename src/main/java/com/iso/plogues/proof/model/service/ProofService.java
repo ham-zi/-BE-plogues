@@ -37,9 +37,18 @@ public class ProofService {
 
 	@Transactional
 	public void save(ProofDto proof, List<MultipartFile> files, CustomUserDetails user) {
+		
+		if (!"PLANT".equals(proof.getCategory()) 
+	            && !"PLOG".equals(proof.getCategory())) {
+	        throw new IllegalArgumentException("잘못된 카테고리입니다.");
+	    }
 
 		if (files == null || files.size() != 2) {
 			throw new FileUploadException("인증 사진은 2장을 등록해야 합니다.");
+		}
+		
+		if (proof.getQuantity() == null || proof.getQuantity() <= 0) {
+		    throw new IllegalArgumentException("수거량은 0보다 커야 합니다.");
 		}
 		
 		DetailJoinDto join = joinService.findByJoinNo(proof.getJoinNo());
@@ -140,11 +149,16 @@ public class ProofService {
 	public void updateProof(CustomUserDetails user, Long proofNo, ProofDto proof, List<MultipartFile> files) {
 
 		findByProofNo(proofNo);
+		
+		if (proof.getQuantity() == null || proof.getQuantity() <= 0) {
+		    throw new IllegalArgumentException("수거량은 0보다 커야 합니다.");
+		}
 
 		Proof proofEntity = Proof.builder()
 								 .proofNo(proofNo)
 								 .userId(user.getUsername())
 								 .title(proof.getTitle())
+
 								 .category(proof.getCategory())
 								 .content(proof.getContent())
 								 .quantity(proof.getQuantity())

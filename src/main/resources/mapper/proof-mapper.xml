@@ -147,6 +147,7 @@
 				PROOF_BOARD
 		   SET
 		 		TITLE = #{title}
+
 		 	  , CATEGORY = #{category}
 		 	  , QUANTITY = #{quantity}
 		 	  , CONTENT = #{content}
