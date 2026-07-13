@@ -107,6 +107,8 @@
                QUESTION_BOARD
         WHERE 
                BOARD_NO = #{boardNo}
+          AND
+               DELETED = 'N'
     </select>
 	
 	<select id="findBoardStatus" resultType="QuestionDto">

@@ -44,7 +44,7 @@ public class SecurityConfig {
 					   requests.requestMatchers(HttpMethod.GET, "/api/users/**", "/api/chats", "/api/proof/**", "api/report").authenticated();
 					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins/**", "/api/question", "/api/request/**", "/api/chats" , "/api/boards", "api/notices", "/api/report", "/api/boards/*/comments", "/api/proof/**").authenticated();
 					   requests.requestMatchers(HttpMethod.PATCH, "/api/users/**", "/api/request/**","/api/joins/**", "/api/chats/**","/api/boards/**", "/api/boards/*/comments/**", "/api/proof/**", "/api/report/**").authenticated();					   
-					   requests.requestMatchers(HttpMethod.DELETE, "/api/users/**", "/api/joins/**", "/api/request/**", "/api/chats/**","/api/boards/**", "/api/boards/*/comments/**").authenticated();
+					   requests.requestMatchers(HttpMethod.DELETE, "/api/users/**", "/api/joins/**", "/api/request/**", "/api/chats/**","/api/boards/**", "/api/boards/*/comments/**", "/api/question").authenticated();
 					   requests.requestMatchers(HttpMethod.GET, "/api/report").hasRole("ADMIN");
 					   requests.requestMatchers(HttpMethod.POST, "/api/notices").hasRole("ADMIN");
 					   requests.requestMatchers(HttpMethod.PATCH, "/api/notices/**").hasRole("ADMIN");

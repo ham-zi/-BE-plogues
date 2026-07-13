@@ -7,11 +7,14 @@ import org.springframework.stereotype.Service;
 
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.CustomAuthenticationException;
+import com.iso.plogues.exception.token.NotFoundTokenException;
 import com.iso.plogues.token.model.dao.TokenMapper;
 import com.iso.plogues.token.model.vo.RefreshToken;
 import com.iso.plogues.token.util.JwtUtil;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,7 +48,14 @@ public class TokenService {
 	
 	public Map<String, String> tokenRotation(String refreshToken){
 		RefreshToken token = tokenMapper.findByToken(refreshToken);
-		Claims claims = tokenUtil.parseJwt(token.getToken());
+		Claims claims = null;
+		try {
+			claims = tokenUtil.parseJwt(token.getToken());
+		} catch (ExpiredJwtException e) {
+			throw new NotFoundTokenException("토큰만료");
+		} catch (JwtException | IllegalArgumentException e) {
+			throw new NotFoundTokenException("유효하지 않은 토큰입니다.");
+		}
 		String userId = claims.getSubject();
 		String memberName = (String)claims.get("memberName");
 		CustomUserDetails user = CustomUserDetails.builder().memberName(memberName).username(userId).build();
