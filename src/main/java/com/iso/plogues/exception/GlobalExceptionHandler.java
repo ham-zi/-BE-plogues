@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
+import com.iso.plogues.exception.join.InvalidDateException;
 import com.iso.plogues.exception.report.DuplicateReportException;
 import com.iso.plogues.exception.request.InValidJoinRequestException;
 import com.iso.plogues.exception.token.NotFoundTokenException;
@@ -105,6 +106,11 @@ public class GlobalExceptionHandler {
 	    return ResponseEntity
 	            .badRequest()
 	            .body(ApiResponse.badRequest("입력값 검증에 실패했습니다.", messages));
+	}
+	
+	@ExceptionHandler(InvalidDateException.class)
+	public ResponseEntity<ApiResponse> hanlderInvalidDate(InvalidDateException e){
+		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
 	}
 
 }

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,7 +57,6 @@ public class JoinController {
 		} else if("plogging".equals(category)) {
 			br = joinService.findAllPlog(page, keyword);
 		}
-		log.info("{}@@@@@@@@@@",br);
 		return ResponseEntity.status(200).body(ApiResponse.success("게시글 전체 조회 성공", br));
 	}
 	
@@ -73,7 +73,7 @@ public class JoinController {
 	}
 	
 	@PatchMapping("/{joinNo}")
-	public ResponseEntity<ApiResponse<Void>> updateJoin(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(name="joinNo") Long joinNo, @Valid JoinDto join, @RequestParam(name="file", required=false) MultipartFile file) {
+	public ResponseEntity<ApiResponse<Void>> updateJoin(@AuthenticationPrincipal CustomUserDetails user, @PathVariable(name="joinNo") Long joinNo,@Valid @ModelAttribute JoinDto join, @RequestParam(name="file", required=false) MultipartFile file) {
 		joinService.updateJoin(user, joinNo, join, file);
 		return ResponseEntity.status(200).body(ApiResponse.success("게시글 수정 성공", null));
 	}

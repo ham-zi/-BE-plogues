@@ -1,5 +1,6 @@
 package com.iso.plogues.join.model.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedInsertException;
 import com.iso.plogues.exception.FailedUpdateException;
+import com.iso.plogues.exception.join.InvalidDateException;
 import com.iso.plogues.join.file.model.service.JoinFileService;
 import com.iso.plogues.join.model.dao.JoinMapper;
 import com.iso.plogues.join.model.dto.DetailJoinDto;
@@ -33,6 +35,7 @@ public class JoinService {
 	
 	@Transactional
 	public Long saveJoin(CustomUserDetails user, JoinDto join, MultipartFile file) {
+		validateActivityDate(join.getStartDate(), join.getEndDate());
 		Join joinEntity = Join.builder()
 							  .userId(user.getUsername())
 							  .category(join.getCategory())
@@ -94,6 +97,7 @@ public class JoinService {
 	@Transactional
 	public void updateJoin(CustomUserDetails user, Long joinNo, JoinDto join, MultipartFile file) {
 		findByJoinNo(join.getJoinNo());
+		validateActivityDate(join.getStartDate(), join.getEndDate());
 		Join joinEntity = Join.builder()
 				.joinNo(joinNo)
 				.userId(user.getUsername())
@@ -106,7 +110,9 @@ public class JoinService {
 				.build();
 		int result = joinMapper.updateJoin(joinEntity);
 		throwUpdateException(result);
-		fileService.updateFile(file, join.getJoinNo(), "join");
+		if(file != null && !file.isEmpty()) {
+			fileService.updateFile(file, join.getJoinNo(), "join");
+		}
 	}
 	
 	private void throwFailedInsertException(int result) {
@@ -136,6 +142,22 @@ public class JoinService {
 			throw new FailedUpdateException("게시글 수정에 실패했습니다.");
 		}
 	}
-
+	
+	private void validateStartDate(LocalDateTime startDate) {
+		if(startDate.isBefore(LocalDateTime.now())) {
+			throw new InvalidDateException("오늘보다 이전일 수 없습니다.");
+		}
+	}
+	
+	private void validateEndDate(LocalDateTime startDate, LocalDateTime endDate) {
+		if(!endDate.isAfter(startDate)) {
+			throw new InvalidDateException("시작날짜보다 이전일 수 없습니다.");
+		}
+	}
+	
+	private void validateActivityDate(LocalDateTime startDate, LocalDateTime endDate) {
+		validateStartDate(startDate);
+		validateEndDate(startDate, endDate);
+	}
 
 }
