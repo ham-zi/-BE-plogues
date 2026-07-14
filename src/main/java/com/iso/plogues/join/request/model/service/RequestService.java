@@ -74,16 +74,16 @@ public class RequestService {
 		requestMapper.requestCanceled(requestNo);
 	}
 	
-	public BoardResponse<RequestDto> findAllMyJoins(String userId, int page, String status) { //???
-		PageInfo pi = PageInfo.of(requestMapper.countMyJoins(userId, status), page, 10, 5);
-		List<RequestDto> requests = requestMapper.findAllMyJoins(pi.getOffset(),pi.getBoardLimit(),userId, status);
+	public BoardResponse<RequestDto> findAllMyJoins(String userId, int page, String status, String category) { //???
+		PageInfo pi = PageInfo.of(requestMapper.countMyJoins(userId, status, category), page, 10, 5);
+		List<RequestDto> requests = requestMapper.findAllMyJoins(pi.getOffset(),pi.getBoardLimit(),userId, status, category);
 		BoardResponse<RequestDto> boardResponse = new BoardResponse<RequestDto>(pi, requests);
 		return boardResponse;
 	}
 
-	public BoardResponse<RequestDto> findAllRequest(CustomUserDetails user, int page, String status) {
-		PageInfo pi = PageInfo.of(requestMapper.countByHostStatus(user.getUsername(), status), page, 10, 5);
-		List<RequestDto> requests = requestMapper.findAllRequest(pi.getOffset(),pi.getBoardLimit(),user.getUsername(), status);
+	public BoardResponse<RequestDto> findAllRequest(CustomUserDetails user, int page, String status, String category) {
+		PageInfo pi = PageInfo.of(requestMapper.countByHostStatus(user.getUsername(), status, category), page, 10, 5);
+		List<RequestDto> requests = requestMapper.findAllRequest(pi.getOffset(),pi.getBoardLimit(),user.getUsername(), status, category);
 		BoardResponse<RequestDto> boardResponse = new BoardResponse<RequestDto>(pi, requests);
 		return boardResponse;
 	}

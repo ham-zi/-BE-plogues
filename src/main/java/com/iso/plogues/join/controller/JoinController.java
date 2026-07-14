@@ -42,8 +42,8 @@ public class JoinController {
 	}
 	
 	@GetMapping("/my")
-	public ResponseEntity<ApiResponse<BoardResponse<JoinDto>>> findMyJoins(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(defaultValue = "1") int page) {
-	    BoardResponse<JoinDto> br = joinService.findAllByHost(user, page);
+	public ResponseEntity<ApiResponse<BoardResponse<JoinDto>>> findMyJoins(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(defaultValue = "1") int page,  @RequestParam(defaultValue = "ALL") String category) {
+	    BoardResponse<JoinDto> br = joinService.findAllByHost(user, page, category);
 	    return ResponseEntity.status(200)
 	            .body(ApiResponse.success("내 모집 활동 조회 성공", br));
 	}

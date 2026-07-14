@@ -79,8 +79,8 @@ public class UserService {
 		}
 	}
 	
-	public MyPageResponse<RequestDto> findAllRequest(CustomUserDetails user, int page, String status) { // 조회된 요청들
-		BoardResponse<RequestDto> boardResponse = requestService.findAllRequest(user, page, status);
+	public MyPageResponse<RequestDto> findAllRequest(CustomUserDetails user, int page, String status, String category) { // 조회된 요청들
+		BoardResponse<RequestDto> boardResponse = requestService.findAllRequest(user, page, status, category);
 		return MyPageResponse.<RequestDto>builder().pageInfo(boardResponse.getPage())
 				.list(boardResponse.getBoard())
 				.myInfo(userMapper.selectMyInfo(user))
@@ -96,16 +96,16 @@ public class UserService {
 	}
 
 	
-	public MyPageResponse<JoinDto> findAllMyGroups(CustomUserDetails user, int page) { // 내가 모집한 모임
-		BoardResponse<JoinDto> boardResponse = joinService.findAllByHost(user, page);
+	public MyPageResponse<JoinDto> findAllMyGroups(CustomUserDetails user, int page, String category) { // 내가 모집한 모임
+		BoardResponse<JoinDto> boardResponse = joinService.findAllByHost(user, page, category);
 		return MyPageResponse.<JoinDto>builder().pageInfo(boardResponse.getPage())
 				.list(boardResponse.getBoard())
 				.myInfo(userMapper.selectMyInfo(user))
 				.build();
 	}
 	
-	public MyPageResponse<RequestDto> findAllMyJoins(CustomUserDetails user, int page, String status) { //내가 참여한 모임 (내가 요청 보냄)
-		BoardResponse<RequestDto> boardResponse = requestService.findAllMyJoins(user.getUsername(), page, status);
+	public MyPageResponse<RequestDto> findAllMyJoins(CustomUserDetails user, int page, String status, String category) { //내가 참여한 모임 (내가 요청 보냄)
+		BoardResponse<RequestDto> boardResponse = requestService.findAllMyJoins(user.getUsername(), page, status, category);
 		return MyPageResponse.<RequestDto>builder().pageInfo(boardResponse.getPage())
 				.list(boardResponse.getBoard())
 				.myInfo(userMapper.selectMyInfo(user))

@@ -52,6 +52,9 @@
            DELETED = 'N'
        AND
            USER_ID = #{userId}
+    <if test="category != null and category != 'ALL'">
+       AND CATEGORY = #{category}
+    </if>
   </select>
 	  
   <sql id="joinColumns">
@@ -146,6 +149,9 @@
   	<include refid="join"/>
   	   AND 
   	       b.USER_ID = #{userId}
+  	  <if test="category != null and category != 'ALL'">
+        AND b.CATEGORY = #{category}
+      </if>
   	 ORDER 
   	    BY 
   	       b.JOIN_NO DESC

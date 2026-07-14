@@ -14,12 +14,12 @@ import com.iso.plogues.util.page.PageInfo;
 public interface JoinMapper {
 	int saveJoin(Join join);
 	int listCount(String keyword);
-	int hostListCount(@Param("userId") String userId);
+	int hostListCount(@Param("userId") String userId, @Param("category") String category);
 	int listCountByKeyword(String keyword);
 	int countMyJoins(@Param(value="userId")String userId, @Param(value="status")String status);
 	List<JoinDto> findAllPlant(@Param(value="pi")PageInfo pi,@Param(value="keyword")String keyword);
 	List<JoinDto> findAllPlog(@Param(value="pi")PageInfo pi,@Param(value="keyword")String keyword);
-	List<JoinDto> findAllByHost(@Param(value="userId")String userId,@Param(value="pi")PageInfo pi);
+	List<JoinDto> findAllByHost(@Param(value="userId")String userId,@Param(value="pi")PageInfo pi, @Param(value="category")String category);
 	DetailJoinDto findByJoinNo(Long joinNo);
 	int deleteJoin(@Param(value="userId") String userId, @Param(value="joinNo") Long joinNo);
 	int updateJoin(Join join);

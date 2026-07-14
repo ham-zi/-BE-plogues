@@ -45,8 +45,8 @@ public class UserController {
 	}
 	
 	@GetMapping("/requests")
-	public ResponseEntity<ApiResponse<MyPageResponse<RequestDto>>> findAllRequest(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page, @RequestParam(value="status", defaultValue="all")String status) {
-		return ResponseEntity.ok().body(ApiResponse.success("참여 요청 목록 조회 성공", userService.findAllRequest(user,page,status)));
+	public ResponseEntity<ApiResponse<MyPageResponse<RequestDto>>> findAllRequest(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page, @RequestParam(value="status", defaultValue="ALL")String status, @RequestParam(value="category", defaultValue="ALL") String category) {
+		return ResponseEntity.ok().body(ApiResponse.success("참여 요청 목록 조회 성공", userService.findAllRequest(user, page, status, category)));
 	}
 
 	@GetMapping("/boards")
@@ -55,13 +55,13 @@ public class UserController {
 	}
 
 	@GetMapping("/groups")
-	public ResponseEntity<ApiResponse<MyPageResponse<JoinDto>>> findAllMyGroups(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page) {
-		return ResponseEntity.ok().body(ApiResponse.success("내가 모집한 모임 게시판 목록 조회 성공", userService.findAllMyGroups(user,page)));
+	public ResponseEntity<ApiResponse<MyPageResponse<JoinDto>>> findAllMyGroups(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page, @RequestParam(value="category", defaultValue="ALL") String category) {
+		return ResponseEntity.ok().body(ApiResponse.success("내가 모집한 모임 게시판 목록 조회 성공", userService.findAllMyGroups(user, page, category)));
 	}
 
 	@GetMapping("/joins")
-	public ResponseEntity<ApiResponse<MyPageResponse<RequestDto>>> findAllMyJoins(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page, @RequestParam(value="status", defaultValue="all")String status) {
-		return ResponseEntity.ok().body(ApiResponse.success("참여 중인 목록 조회 성공", userService.findAllMyJoins(user,page, status)));
+	public ResponseEntity<ApiResponse<MyPageResponse<RequestDto>>> findAllMyJoins(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(value="page", defaultValue="1")int page, @RequestParam(value="status", defaultValue="all")String status, @RequestParam(value="category", defaultValue="ALL") String category) {
+		return ResponseEntity.ok().body(ApiResponse.success("참여 중인 목록 조회 성공", userService.findAllMyJoins(user,page, status, category)));
 	}
 	
 	@PostMapping
