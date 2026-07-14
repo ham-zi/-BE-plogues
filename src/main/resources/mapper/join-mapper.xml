@@ -31,32 +31,26 @@
   </insert>
   
   <select id="listCount" resultType="_int">
-    SELECT
-           COUNT(*)
-     FROM
-          JOIN_BOARD
-    WHERE
-          DELETED = 'N'
-    <if test="keyword != null and keyword != ''">
-      AND
-  	      REGION LIKE '%'||#{keyword}||'%'
-  	</if>
+	SELECT
+		   COUNT(*)
+	  FROM 
+		   JOIN_BOARD
+	 WHERE 
+	       DELETED = 'N'
+	<if test="userId != null and userId != ''">
+	   AND 
+	       USER_ID = #{userId}
+	</if>
+	<if test="category != null and category != ''">
+	   AND 
+	       CATEGORY = #{category}
+	</if>
+	<if test="keyword != null and keyword != ''">
+	   AND 
+	       REGION LIKE '%' || #{keyword} || '%'
+	</if>
   </select>
-
-  <select id="hostListCount" resultType="_int">
-    SELECT
-           COUNT(*)
-      FROM
-           JOIN_BOARD
-     WHERE
-           DELETED = 'N'
-       AND
-           USER_ID = #{userId}
-    <if test="category != null and category != 'ALL'">
-       AND CATEGORY = #{category}
-    </if>
-  </select>
-	  
+  
   <sql id="joinColumns">
   	SELECT 
            b.JOIN_NO
@@ -75,22 +69,13 @@
                AND sub_r.STATUS = 'ACCEPTED') AS CURRENT_COUNT
   </sql>
   
-  <sql id="join">
-         , r.USER_ID AS REQ_USER_ID
-         , r.JOIN_REQUEST_NO AS REQ_NO
-         , f.FILE_PATH || f.CHANGE_NAME AS PROFILE
-      FROM 
-           JOIN_BOARD b
-      JOIN 
+  <sql id="joinTable">
+      LEFT JOIN 
            JOIN_REQUEST r ON b.JOIN_NO = r.JOIN_NO
-      JOIN 
-           PLOGUES_USER u ON r.USER_ID = u.USER_ID
+	  LEFT JOIN 
+	  	   PLOGUES_USER u ON r.USER_ID = u.USER_ID
       LEFT JOIN 
            USER_FILE f ON u.USER_ID = f.USER_ID
-     WHERE 
-           b.DELETED = 'N'
-       AND 
-           r.STATUS = 'ACCEPTED'
   </sql>
   
   <resultMap id="joinDtoMap" type="JoinDto">
@@ -114,26 +99,46 @@
     </collection>
   </resultMap>
   
-  <select id="findAllPlant" resultMap="joinDtoMap">
+  <select id="findAllJoins" resultMap="joinDtoMap">
   	<include refid="joinColumns"/>
-  	<include refid="join"/>
+         , r.USER_ID AS REQ_USER_ID
+         , r.JOIN_REQUEST_NO AS REQ_NO
+         , f.FILE_PATH || f.CHANGE_NAME AS PROFILE  		 
+  	  FROM (
+		   SELECT 
+		          JOIN_NO
+	            , USER_ID
+	            , CATEGORY
+	            , PARTICIPANTS
+	            , REGION
+	            , START_DATE
+	            , END_DATE
+	            , TITLE
+	            , CONTENT
+	            , DELETED
+	            , CREATE_DATE
+		     FROM 
+		          JOIN_BOARD
+		    WHERE 
+		          DELETED = 'N'
+		    ORDER 
+		       BY 
+		          JOIN_NO DESC
+		   OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
+		   ) b
+  	<include refid="joinTable"/>
+  	 WHERE 
+           b.DELETED = 'N'
+       AND 
+           r.STATUS = 'ACCEPTED'
+  	<if test="userId != null and userId !=''">
   	   AND 
-  	       b.CATEGORY = 'PLANT'
-    <if test="keyword != null and keyword != ''">
-      AND
-  	      REGION LIKE '%'||#{keyword}||'%'
+  	       b.USER_ID = #{userId}
   	</if>
-  	 ORDER 
-  	    BY 
-  	       b.JOIN_NO DESC
-  	OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
-  </select>
-  
-  <select id="findAllPlog" resultMap="joinDtoMap">
-  	<include refid="joinColumns"/>
-  	<include refid="join"/>
+  	<if test="category != null and category != ''">
   	   AND 
-  	       b.CATEGORY = 'PLOG'
+  	       b.CATEGORY = #{category}
+  	</if>
     <if test="keyword != null and keyword != ''">
        AND
   	       REGION LIKE '%'||#{keyword}||'%'
@@ -141,21 +146,6 @@
   	 ORDER 
   	    BY 
   	       b.JOIN_NO DESC
-  	OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
-  </select>
-  
-  <select id="findAllByHost" resultMap="joinDtoMap">
-  	<include refid="joinColumns"/>
-  	<include refid="join"/>
-  	   AND 
-  	       b.USER_ID = #{userId}
-  	  <if test="category != null and category != 'ALL'">
-        AND b.CATEGORY = #{category}
-      </if>
-  	 ORDER 
-  	    BY 
-  	       b.JOIN_NO DESC
-  	OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
   </select>
   
   <select id="findByJoinNo" resultType="DetailJoinDto">

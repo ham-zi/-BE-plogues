@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ParticipantDto {
 	private Long joinRequestNo;
+	private Long joinNo;
 	private String userId;
 	private String profile;
 
