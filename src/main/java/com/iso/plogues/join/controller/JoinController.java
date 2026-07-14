@@ -19,8 +19,6 @@ import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.join.model.dto.DetailJoinDto;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.service.JoinService;
-import com.iso.plogues.join.request.model.dto.RequestDto;
-import com.iso.plogues.join.request.model.service.RequestService;
 import com.iso.plogues.util.dto.BoardResponse;
 
 import jakarta.validation.Valid;
@@ -33,7 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JoinController {
 	private final JoinService joinService;
-	private final RequestService requestService;
 	
 	@PostMapping
 	public ResponseEntity<ApiResponse<Void>> saveJoin(@AuthenticationPrincipal CustomUserDetails user, @Valid JoinDto join, @RequestParam(name="file", required=false) MultipartFile file) {
@@ -42,20 +39,15 @@ public class JoinController {
 	}
 	
 	@GetMapping("/my")
-	public ResponseEntity<ApiResponse<BoardResponse<JoinDto>>> findMyJoins(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(defaultValue = "1") int page,  @RequestParam(defaultValue = "ALL") String category) {
-	    BoardResponse<JoinDto> br = joinService.findAllByHost(user, page, category);
+	public ResponseEntity<ApiResponse<BoardResponse<JoinDto>>> findMyJoins(@AuthenticationPrincipal CustomUserDetails user, @RequestParam(defaultValue = "1") int page) {
+	    BoardResponse<JoinDto> br = joinService.findAllJoins(page, user, null, null);
 	    return ResponseEntity.status(200)
 	            .body(ApiResponse.success("내 모집 활동 조회 성공", br));
 	}
 	
 	@GetMapping
 	public ResponseEntity<ApiResponse<BoardResponse<JoinDto>>> findAll(@RequestParam(name="page", defaultValue = "1") int page, @RequestParam(name="category") String category, @RequestParam(name="keyword", required=false)String keyword) {
-		BoardResponse<JoinDto> br = null;
-		if("plant".equals(category)) {
-			br = joinService.findAllPlant(page, keyword);
-		} else if("plogging".equals(category)) {
-			br = joinService.findAllPlog(page, keyword);
-		}
+		BoardResponse<JoinDto> br = joinService.findAllJoins(page, null, category, keyword);
 		return ResponseEntity.status(200).body(ApiResponse.success("게시글 전체 조회 성공", br));
 	}
 	
@@ -82,6 +74,5 @@ public class JoinController {
 		joinService.saveJoin(user, join, file);
 		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("게시글 작성 성공", null));
 	}
-	
 
 }
