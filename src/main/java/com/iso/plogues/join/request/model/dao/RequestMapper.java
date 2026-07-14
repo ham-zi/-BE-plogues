@@ -18,15 +18,17 @@ public interface RequestMapper {
 	void requestAccept(Long requestNo);
 	void requestDenied(Long requestNo);
 	void requestCanceled(Long requestNo);
-	int countByHostStatus(@Param(value="userId")String userId, @Param(value="status")String status); 
-	int countMyJoins(@Param(value="userId")String userId, @Param(value="status")String status);  
+	int countByHostStatus(@Param(value="userId")String userId, @Param(value="status")String status, @Param(value="category")String category); 
+	int countMyJoins(@Param(value="userId")String userId, @Param(value="status")String status, @Param(value="category")String category);  
 	RequestDto findByUserIdJoin(@Param(value = "userId") String userId, @Param(value = "joinNo") Long joinNo);
 	List<RequestDto> findAllMyJoins(@Param(value="offset")int offset,
 			                 @Param(value="boardLimit")int boardLimit,
 			                 @Param(value="userId")String userId,
-			                 @Param(value="status")String status);
+			                 @Param(value="status")String status,
+			                 @Param(value="category")String category);
 	List<RequestDto> findAllRequest(@Param(value="offset")int offset,
 			                 @Param(value="boardLimit")int boardLimit,
 			                 @Param(value="userId")String userId,
-			                 @Param(value="status")String status);
+			                 @Param(value="status")String status,
+			                 @Param(value="category")String category);
 }

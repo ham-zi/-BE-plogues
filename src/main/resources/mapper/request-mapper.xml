@@ -51,10 +51,16 @@
   	       JOIN_BOARD JB ON(JB.JOIN_NO = JR.JOIN_NO)
   	 WHERE
   	       JB.USER_ID = #{userId}
+  	   AND
+	       JR.USER_ID != JB.USER_ID
   	<if test="status != null and status != 'ALL'">
   	   AND
   	       JR.STATUS = #{status}
   	</if>
+  	<if test="category != null and category != 'ALL'">
+       AND
+           JB.CATEGORY = #{category}
+    </if>
   </select>
   
   <select id="findAllRequest" resultType="RequestDto">
@@ -74,10 +80,16 @@
   	       JOIN_BOARD JB ON(JB.JOIN_NO = JR.JOIN_NO)
   	 WHERE
   	       JB.USER_ID = #{userId}
+  	   AND
+           JR.USER_ID != JB.USER_ID
   	<if test="status != null and status != 'ALL'">
   	   AND
   	       JR.STATUS = #{status}
   	</if>
+  	<if test="category != null and category != 'ALL'">
+	   AND
+	       JB.CATEGORY = #{category}
+	</if>
   	 ORDER
   	    BY
   	       JOIN_REQUEST_NO DESC
@@ -102,6 +114,10 @@
   	   AND
   	       JR.STATUS = #{status}
   	</if>
+  	 <if test="category != null and category != 'ALL'">
+       AND
+           JB.CATEGORY = #{category}
+    </if>
   </select>
   
   <select id="findAllMyJoins" resultType="RequestDto">
@@ -125,6 +141,10 @@
   	   AND
   	       JR.STATUS = #{status}
   	</if>
+  	 <if test="category != null and category != 'ALL'">
+       AND
+           JB.CATEGORY = #{category}
+    </if>
   	 ORDER
   	    BY
   	       JOIN_REQUEST_NO DESC

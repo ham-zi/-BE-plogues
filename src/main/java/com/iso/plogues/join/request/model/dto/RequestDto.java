@@ -28,12 +28,4 @@ public class RequestDto {
 	private String title;
 	private Date createDate;
 	
-	public static RequestDto hostRequestDto(String userId, Long joinNo) {
-		RequestDto request = new RequestDto();
-		request.setUserId(userId);
-		request.setJoinNo(joinNo);
-		request.setAspiration("host");
-		request.setStatus("ACCEPTED");
-		return request;
-	}
 }
