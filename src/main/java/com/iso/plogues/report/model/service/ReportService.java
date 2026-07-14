@@ -31,6 +31,11 @@ public class ReportService {
 	
 	@Transactional
 	public void saveReport(CustomUserDetails user, ReportDto report) {
+		
+		if (reportMapper.checkTarget(report.getTargetNo()) == 0) {
+	        throw new FailedInsertException("존재하지 않는 게시글입니다.");
+	    }
+		
 		Report reportEntity = Report.builder()
 									.userId(user.getUsername())
 									.reportCategory(report.getReportCategory())

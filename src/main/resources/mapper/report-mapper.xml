@@ -68,6 +68,7 @@
 	       O.TARGET_NO = C.TARGET_NO
 	 <where>
 	 	<if test="report.updated != 'ALL'">
+	   AND
 	       O.UPDATED = #{report.updated}
 	    </if>
 	   <if test="report.reportCategory != 'ALL'">
@@ -112,6 +113,37 @@
 		       UPDATED = 'N'
 	</update>
 
+	  <select id="checkTarget" resultType="_int">
+	    SELECT
+	           COUNT(*)
+	      FROM (
+	           SELECT
+	                  PROOF_NO AS TARGET_NO
+	             FROM
+	                  PROOF_BOARD
+	            WHERE
+	                  DELETED = 'N'
+	             
+	         UNION ALL
+	             
+	            SELECT
+	                   JOIN_NO AS TARGET_NO
+	              FROM
+	                   JOIN_BOARD
+	             WHERE
+	                   DELETED = 'N'
+	             
+	         UNION ALL
+	             
+	            SELECT
+	                   BOARD_NO AS TARGET_NO
+	              FROM
+	                   REVIEW_BOARD
+	             WHERE
+	                   DELETED = 'N'
+	           )
+	       WHERE TARGET_NO = #{targetNo}
+  </select>
 
 
 
