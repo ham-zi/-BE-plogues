@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.exception.join.InvalidDateException;
@@ -17,6 +18,8 @@ import com.iso.plogues.exception.token.NotFoundTokenException;
 import com.iso.plogues.exception.user.InvalidUserPwdException;
 import com.iso.plogues.exception.user.NotPermissionException;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -95,12 +98,11 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
 	}
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ApiResponse> handlerMethodArgumentNotValid(MethodArgumentNotValidException e){
-		List<String> messages = e.getBindingResult()
-	            .getFieldErrors()
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<ApiResponse> handleConstraintViolation(ConstraintViolationException e) {
+	    List<String> messages = e.getConstraintViolations()
 	            .stream()
-	            .map(FieldError::getDefaultMessage)
+	            .map(ConstraintViolation::getMessage)
 	            .toList();
 
 	    return ResponseEntity
@@ -111,6 +113,13 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(InvalidDateException.class)
 	public ResponseEntity<ApiResponse> hanlderInvalidDate(InvalidDateException e){
 		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
+	}
+	
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	public ResponseEntity<ApiResponse<Void>> handleMaxUploadSize(MaxUploadSizeExceededException e) {
+	    return ResponseEntity
+	            .badRequest()
+	            .body(ApiResponse.badRequest("사진 용량은 100MB 이하만 가능합니다.", null));
 	}
 
 }

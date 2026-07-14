@@ -40,13 +40,12 @@ public class BoardFileService {
         return fileMapper.findByBno(refBno);
     }
 
-    @Transactional (readOnly = true)
+    @Transactional 
     public void deleteFile(Long refBno) {
         if(findByBno(refBno).isEmpty()) {
             return;
         }
-        int result = fileMapper.deleteFile(refBno);
-        throwFailedDeleteException(result);
+        fileMapper.deleteFile(refBno);
     }
 
     private void throwFailedDeleteException(int result) {
