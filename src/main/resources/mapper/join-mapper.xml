@@ -70,12 +70,17 @@
   </sql>
   
   <sql id="joinTable">
-      LEFT JOIN 
-           JOIN_REQUEST r ON b.JOIN_NO = r.JOIN_NO
-	  LEFT JOIN 
-	  	   PLOGUES_USER u ON r.USER_ID = u.USER_ID
-      LEFT JOIN 
-           USER_FILE f ON u.USER_ID = f.USER_ID
+      LEFT JOIN (
+		        SELECT
+		               r.JOIN_NO,
+		               r.JOIN_REQUEST_NO AS REQ_NO,
+		               r.USER_ID AS REQ_USER_ID,
+		               f.FILE_PATH || f.CHANGE_NAME AS PROFILE
+		          FROM JOIN_REQUEST r
+		          LEFT JOIN USER_FILE f ON r.USER_ID = f.USER_ID
+		         WHERE r.STATUS = 'ACCEPTED'
+		    	) r
+		   ON b.JOIN_NO = r.JOIN_NO
   </sql>
   
   <resultMap id="joinDtoMap" type="JoinDto">
@@ -93,7 +98,7 @@
     <result property="currentCount" column="CURRENT_COUNT" />
     
     <collection property="userProfiles" ofType="ParticipantDto">
-    	<id property="joinRequestNo" column="REQ_NO"/>
+    	<result property="joinRequestNo" column="REQ_NO"/>
         <result property="userId" column="REQ_USER_ID" />
         <result property="profile" column="PROFILE" />
     </collection>
@@ -101,9 +106,9 @@
   
   <select id="findAllJoins" resultMap="joinDtoMap">
   	<include refid="joinColumns"/>
-         , r.USER_ID AS REQ_USER_ID
-         , r.JOIN_REQUEST_NO AS REQ_NO
-         , f.FILE_PATH || f.CHANGE_NAME AS PROFILE  		 
+         , r.REQ_USER_ID
+         , r.REQ_NO
+         , r.PROFILE  		 
   	  FROM (
 		   SELECT 
 		          JOIN_NO
@@ -121,6 +126,10 @@
 		          JOIN_BOARD
 		    WHERE 
 		          DELETED = 'N'
+	  	<if test="category != null and category != ''">
+	  	      AND 
+	  	          CATEGORY = #{category}
+	  	</if>
 		    ORDER 
 		       BY 
 		          JOIN_NO DESC
@@ -128,24 +137,15 @@
 		   ) b
   	<include refid="joinTable"/>
   	 WHERE 
-           b.DELETED = 'N'
-       AND 
-           r.STATUS = 'ACCEPTED'
+           1 = 1
   	<if test="userId != null and userId !=''">
   	   AND 
   	       b.USER_ID = #{userId}
-  	</if>
-  	<if test="category != null and category != ''">
-  	   AND 
-  	       b.CATEGORY = #{category}
   	</if>
     <if test="keyword != null and keyword != ''">
        AND
   	       REGION LIKE '%'||#{keyword}||'%'
   	</if>
-  	 ORDER 
-  	    BY 
-  	       b.JOIN_NO DESC
   </select>
   
   <select id="findByJoinNo" resultType="DetailJoinDto">
