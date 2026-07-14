@@ -18,6 +18,7 @@ import com.iso.plogues.join.model.dao.JoinMapper;
 import com.iso.plogues.join.model.dto.DetailJoinDto;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.vo.Join;
+import com.iso.plogues.join.request.model.service.RequestService;
 import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.file.FileDto;
 import com.iso.plogues.util.page.PageInfo;
@@ -32,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JoinService {
 	private final JoinMapper joinMapper;
 	private final JoinFileService fileService;
+	private final RequestService requestService;
 	
 	@Transactional
 	public Long saveJoin(CustomUserDetails user, JoinDto join, MultipartFile file) {
@@ -48,6 +50,7 @@ public class JoinService {
 							  .build();
 		int result = joinMapper.saveJoin(joinEntity);
 		throwFailedInsertException(result);
+		requestService.saveRequestByHost(user.getUsername(), joinEntity.getJoinNo());
 		
 		if(file != null && !file.isEmpty()) {
 			fileService.saveFile(file, joinEntity.getJoinNo(), "join");

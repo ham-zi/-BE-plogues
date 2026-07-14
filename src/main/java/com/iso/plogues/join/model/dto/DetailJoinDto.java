@@ -47,10 +47,5 @@ public class DetailJoinDto {
 	private String userName;
 	private List<FileDto> files;
 	
-	public void validateParticipants() {
-		if(this.participants > 0 && this.currentCount > 0 && this.participants <= this.currentCount) {			
-			throw new InValidJoinRequestException("모집이 완료된 모임입니다.");
-		}
-	}
 
 }

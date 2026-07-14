@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.request.InValidJoinRequestException;
+import com.iso.plogues.join.common.JoinBoardValidate;
 import com.iso.plogues.join.model.dto.DetailJoinDto;
 import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.service.JoinService;
@@ -27,15 +28,12 @@ import lombok.extern.slf4j.Slf4j;
 public class RequestService {
 
 	private final RequestMapper requestMapper;
-	private final JoinService joinService;
+	private final JoinBoardValidate joinBoardValidate;
 	
 	@Transactional
 	public void saveRequest(RequestDto requestDto) {
-		if(!"ACCEPTED".equals(requestDto.getStatus())) {
-			DetailJoinDto join = joinService.findByJoinNo(requestDto.getJoinNo());
-			join.validateParticipants();
-			isDuplicateRequest(requestDto);
-		}
+		isDuplicateRequest(requestDto);
+		joinBoardValidate.ValidateJoinBoard(requestDto.getJoinNo());
 		Request requestEntity = Request.builder()
 									   .joinNo(requestDto.getJoinNo())
 									   .userId(requestDto.getUserId())
@@ -43,7 +41,20 @@ public class RequestService {
 									   .status(requestDto.getStatus())
 									   .build();
 		requestMapper.saveRequest(requestEntity);
+		
 	}
+	
+	@Transactional
+	public void saveRequestByHost(String userId,Long joinNo) {
+			Request requestEntity = Request.builder()
+										   .joinNo(joinNo)
+										   .userId(userId)
+										   .aspiration("host")
+										   .status("ACCEPTED")
+										   .build();
+			requestMapper.saveRequest(requestEntity);
+	}
+	
 	
 	@Transactional
 	public void requestAccept(CustomUserDetails user, Long requestNo) {
@@ -82,6 +93,7 @@ public class RequestService {
 		RequestDto request = requestMapper.findByUserIdJoin(userId, joinNo);
 		validateRequest(request);
 	}
+	//
 	
 	private void validateRequest(RequestDto request) {
 		if(request == null) {
@@ -99,24 +111,20 @@ public class RequestService {
 		RequestDto request = requestMapper.findByRequestNo(requestNo);
 		validateRequestNo(requestNo);
 		checkAccepted(request.getStatus());
-		DetailJoinDto join = joinService.findByJoinNo(request.getJoinNo());
-		join.validateParticipants();
+		joinBoardValidate.ValidateJoinBoard(request.getJoinNo());
 		validateHost(userId, request.getHost());
 		
 	}
 	private void validateDeniedRequest(String userId, Long requestNo) {
 		RequestDto request = requestMapper.findByRequestNo(requestNo);
 		validateRequestNo(requestNo);
-		checkDenied(request.getStatus());
 		validateHost(userId, request.getHost());
 		
 	}
 	
 	private void validateCanceledRequest(String userId, Long requestNo) {
 	    RequestDto request = requestMapper.findByRequestNo(requestNo);
-
 	    validateRequestNo(requestNo);
-	    checkCanceled(request.getStatus());
 	    validateUser(userId, request.getUserId());
 	}
 	
@@ -130,18 +138,6 @@ public class RequestService {
 		if("ACCEPTED".equals(status)) {			
 			throw new InValidJoinRequestException("이미 승인 처리된 요청입니다.");
 		}
-	}
-	
-	private void checkDenied(String status) {
-		if("DENIED".equals(status)) {			
-			throw new InValidJoinRequestException("이미 거절 처리된 요청입니다.");
-		}
-	}
-	
-	private void checkCanceled(String status) {
-	    if ("CANCELED".equals(status)) {
-	        throw new InValidJoinRequestException("이미 취소된 요청입니다.");
-	    }
 	}
 
 	private void validateHost(String userId, String host) {
