@@ -12,6 +12,7 @@ import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedInsertException;
 import com.iso.plogues.exception.FailedUpdateException;
+import com.iso.plogues.exception.join.InvalidCategoryException;
 import com.iso.plogues.exception.join.InvalidDateException;
 import com.iso.plogues.join.file.model.service.JoinFileService;
 import com.iso.plogues.join.model.dao.JoinMapper;
@@ -58,25 +59,16 @@ public class JoinService {
 		
 		return joinEntity.getJoinNo();
 	}
-
-	@Transactional
-	public BoardResponse<JoinDto> findAllPlant(int page, String keyword) {
-		PageInfo pageInfo = newPageInfo(joinMapper.listCount(keyword), page);
-		List<JoinDto> list = joinMapper.findAllPlant(pageInfo, keyword);
-		return new BoardResponse<JoinDto>(pageInfo, list);
-	}
 	
 	@Transactional
-	public BoardResponse<JoinDto> findAllPlog(int page, String keyword) {
-		PageInfo pageInfo = newPageInfo(joinMapper.listCount(keyword), page);
-		List<JoinDto> list = joinMapper.findAllPlog(pageInfo, keyword);
-		return new BoardResponse<JoinDto>(pageInfo, list);
-	}
-
-	@Transactional
-	public BoardResponse<JoinDto> findAllByHost(CustomUserDetails user, int page, String category) {
-		PageInfo pageInfo = newPageInfo(joinMapper.hostListCount(user.getUsername(), category), page);
-		List<JoinDto> list = joinMapper.findAllByHost(user.getUsername(), pageInfo, category);
+	public BoardResponse<JoinDto> findAllJoins(int page, CustomUserDetails user, String category, String keyword) {
+		String currentCategory = validateCategory(category);
+		String userId = "";
+		if(user != null) {
+			userId = user.getUsername();
+		}
+		PageInfo pageInfo = newPageInfo(joinMapper.listCount(userId, currentCategory, keyword), page);
+		List<JoinDto> list = joinMapper.findAllJoins(pageInfo, userId, currentCategory, keyword);
 		return new BoardResponse<JoinDto>(pageInfo, list);
 	}
 	
@@ -125,7 +117,7 @@ public class JoinService {
 	}
 	
 	private PageInfo newPageInfo(int listCount, int page) {
-		return PageInfo.of(listCount, page, 10, 5);
+		return PageInfo.of(listCount, page, 8, 5);
 	}
 	
 	private void throwFindByException(DetailJoinDto join) {
@@ -161,6 +153,17 @@ public class JoinService {
 	private void validateActivityDate(LocalDateTime startDate, LocalDateTime endDate) {
 		validateStartDate(startDate);
 		validateEndDate(startDate, endDate);
+	}
+	
+	private String validateCategory(String category) {		
+		if("plant".equals(category)) {
+			category = "PLANT";
+		} else if("plogging".equals(category)) {
+			category = "PLOG";
+		} else {
+			throw new InvalidCategoryException("일치하는 카테고리가 없습니다.");
+		}
+		return category;
 	}
 
 }

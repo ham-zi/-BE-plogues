@@ -94,10 +94,9 @@ public class UserService {
 				.myInfo(userMapper.selectMyInfo(user))
 				.build();
 	}
-
 	
 	public MyPageResponse<JoinDto> findAllMyGroups(CustomUserDetails user, int page, String category) { // 내가 모집한 모임
-		BoardResponse<JoinDto> boardResponse = joinService.findAllByHost(user, page, category);
+		BoardResponse<JoinDto> boardResponse = joinService.findAllJoins(page, user, category, null);
 		return MyPageResponse.<JoinDto>builder().pageInfo(boardResponse.getPage())
 				.list(boardResponse.getBoard())
 				.myInfo(userMapper.selectMyInfo(user))

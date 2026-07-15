@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
+import com.iso.plogues.exception.join.InvalidCategoryException;
 import com.iso.plogues.exception.join.InvalidDateException;
 import com.iso.plogues.exception.report.DuplicateReportException;
 import com.iso.plogues.exception.request.InValidJoinRequestException;
@@ -111,7 +112,7 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler(InvalidDateException.class)
-	public ResponseEntity<ApiResponse> hanlderInvalidDate(InvalidDateException e){
+	public ResponseEntity<ApiResponse> handlerInvalidDate(InvalidDateException e){
 		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
 	}
 	
@@ -120,6 +121,11 @@ public class GlobalExceptionHandler {
 	    return ResponseEntity
 	            .badRequest()
 	            .body(ApiResponse.badRequest("사진 용량은 100MB 이하만 가능합니다.", null));
+	}
+	
+	@ExceptionHandler(InvalidCategoryException.class)
+	public ResponseEntity<ApiResponse> handlerInvalidCategory(InvalidCategoryException e) {
+		return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage(), null));
 	}
 
 }
