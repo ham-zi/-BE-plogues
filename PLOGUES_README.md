@@ -249,7 +249,7 @@ PPT에서 제작한 시퀀스 다이어그램은 아래 경로에 저장하면 R
 ### 사전 준비
 
 - Java 21
-- Maven
+- Gradle
 - Node.js와 npm
 - Oracle Database
 - 프로젝트에서 사용하는 테이블 · 시퀀스 · 초기 데이터 SQL
