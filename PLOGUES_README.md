@@ -89,22 +89,9 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 ## 4. 시스템 아키텍처
 
-```mermaid
-flowchart TB
-    U[사용자 브라우저] --> R[React 19 / Vite 8]
-    R -->|Axios · JSON · FormData| S[Spring Boot REST API]
-
-    subgraph Backend
-        S --> SEC[Spring Security · JWT Filter]
-        SEC --> C[Controller]
-        C --> SV[Service]
-        SV --> M[MyBatis Mapper]
-    end
-
-    M --> DB[(Oracle Database)]
-    SV --> FS[(Upload Directory)]
-    FS -. 파일 메타데이터 .-> DB
-```
+<p align="center">
+    <img src="./docs/images/architecture.png" width="900" alt="아키텍처">
+</p>
 
 ### 구조 설계 원칙
 
@@ -142,7 +129,7 @@ flowchart TB
 | :--- | :--- |
 | **남지호** | 후기 게시판, 공지 · 이벤트 CRUD, 파일 · 댓글 · 신고 연동 및 관련 화면 |
 | **신순주** | 모집 게시판 수정 · 삭제, 참여 승인 이후 대화 작성 흐름과 기능 연동 |
-| **이다산** | **팀장 · 기획**, 참여 신청과 승인 · 거절, 마이페이지 참여 · 모집 목록, 관련 프론트 · 백엔드 |
+| **이다산** | 참여 신청과 승인 · 거절, 마이페이지 참여 · 모집 목록, 관련 프론트 · 백엔드 |
 | **이승현** | 인증 게시판 CRUD, 이미지 제약 처리, 신고 게시판 연계 |
 | **정주미** | 문의 게시판 백엔드와 답변 · 상태 관리, 로그인 · 회원가입과 인증 흐름 |
 
@@ -158,13 +145,13 @@ PPT에서 제작한 시퀀스 다이어그램은 아래 경로에 저장하면 R
 
 | 참여자 | 모집장 |
 | :---: | :---: |
-| <img src="docs/images/flow-participant.png" width="420" alt="참여자 핵심 기능 흐름"/> | <img src="docs/images/flow-host.png" width="420" alt="모집장 핵심 기능 흐름"/> |
+| <img src="docs/images/sequence2.png" width="420" alt="참여자 핵심 기능 흐름"/> | <img src="docs/images/sequence3.png" width="420" alt="모집장 핵심 기능 흐름"/> |
 | 모집 검색 → 신청 → 상태 확인 → 대화 → 후기 | 모집 작성 → 요청 관리 → 참여자 대화 → 활동 인증 |
 
-| 관리자 | 인증 · 권한 |
+| 관리자 | 비회원 |
 | :---: | :---: |
-| <img src="docs/images/flow-admin.png" width="420" alt="관리자 핵심 기능 흐름"/> | <img src="docs/images/flow-auth.png" width="420" alt="인증 및 권한 흐름"/> |
-| 공지 · 문의 · 신고 관리 | 로그인 → 토큰 검증 → 재발급 → 역할별 접근 제어 |
+| <img src="docs/images/sequence4.png" width="420" alt="관리자 핵심 기능 흐름"/> | <img src="docs/images/sequence1.png" width="420" alt="비회원 게시글 목록 조회"/> |
+| 게시글  | 로그인 → 토큰 검증 → 재발급 → 역할별 접근 제어 |
 
 </div>
 
@@ -368,7 +355,7 @@ npm run dev
 
 ---
 
-## 14. 프로젝트 결과와 향후 개선
+## 14. 프로젝트 결과
 
 ### 구현 결과
 
@@ -378,18 +365,6 @@ npm run dev
 - 공통 페이징, 응답, 알림, 파일 모듈을 적용하여 반복 코드를 줄이고 확장 가능한 구조를 구성했습니다.
 - 정상 · 실패 · 권한 · 경계 상황을 포함한 173개 테스트 케이스로 주요 기능을 점검했습니다.
 
-### 알려진 한계와 개선 방향
-
-| 영역 | 현재 한계 | 개선 방향 |
-| :--- | :--- | :--- |
-| **배포** | 교육 과정 내 로컬 개발과 통합을 완료했으며 별도 배포 · 실서비스 운영은 진행하지 않음 | 클라우드 배포, HTTPS, 환경 변수와 파일 스토리지 구성 |
-| **테스트** | 수동 · 시나리오 테스트 중심 | JUnit, MockMvc, React Testing Library 기반 자동화 |
-| **대화 · 알림** | 요청 시점의 조회 · 작성 방식 | WebSocket 기반 실시간 대화와 참여 승인 알림 |
-| **지역 탐색** | 텍스트 기반 지역 검색 | 지도, 거리 계산, 주변 모집 탐색 기능 |
-| **통계 · 보상** | 환경 데이터와 활동 기록을 개별 제공 | 개인 · 팀 활동량, 배지, 랭킹, 탄소 절감 통계 |
-| **UI** | 데스크톱 중심 화면 | 모바일 반응형과 접근성 개선 |
-
----
 
 <div align="center">
 
