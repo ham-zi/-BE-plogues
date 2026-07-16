@@ -16,6 +16,10 @@
 ![Oracle](https://img.shields.io/badge/Oracle-XE-F80000?style=flat-square&logo=oracle&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=222222)
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)
+![styled-components](https://img.shields.io/badge/styled--components-6-DB7093?style=flat-square&logo=styledcomponents&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-1.7-5A29E4?style=flat-square&logo=axios&logoColor=white)
+![Recharts](https://img.shields.io/badge/Recharts-2-8884D8?style=flat-square)
+![SweetAlert2](https://img.shields.io/badge/SweetAlert2-11-FF6B6B?style=flat-square)
 
 <br>
 
