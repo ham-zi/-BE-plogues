@@ -1,6 +1,6 @@
 <div align="center">
 <style>
-  table { width: 100% !important; border-collapse: collapse; margin-bottom: 20px; }
+  table { width: 900px !important; border-collapse: collapse; margin-bottom: 20px; }
   th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
   th { background-color: #f8f9fa; }
 </style>
