@@ -1,6 +1,6 @@
 <div align="center">
 <style>
-  table { width: 100% !important; border-collapse: collapse; margin-bottom: 20px; }
+  table { width: 900px !important; border-collapse: collapse; margin-bottom: 20px; }
   th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
   th { background-color: #f8f9fa; }
 </style>
@@ -125,7 +125,7 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 ## 🛠 기술 스택
 
 | 구분 | 기술 스택 | 활용 내용 |
-| :--- | :--- | :--- |
+| :------------------ | :------------------------------------- | :------------------------------------------------------------------------------------------------------------- |
 | **Backend** | Java **21**, Spring Boot **3.5.16**, Spring Web, Spring Validation | REST API 개발, 계층형 아키텍처(Controller-Service-Mapper), 비즈니스 로직 처리 및 입력값 검증 |
 | **Security** | Spring Security, JWT **0.12.3** | Access Token·Refresh Token 기반 인증 및 인가, 역할(Role) 검증, JWT 인증 필터 처리 |
 | **Persistence** | MyBatis Spring Boot Starter **3.0.5**, JDBC | SQL Mapper 기반 데이터 접근, 동적 SQL, 페이징 및 트랜잭션 처리 |
@@ -148,12 +148,12 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 - **방식:** 프론트엔드 · 백엔드 저장소 분리, 기능별 브랜치와 Pull Request 기반 협업
 
 | 팀원 | 주요 담당 | GitHub |
-| :---: | :--- | :---: |
-| **남지호** | 후기 게시판 및 공지·이벤트 CRUD, 파일·댓글·신고 기능 연동 | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/jiho0828) |
-| **신순주** | 모집 게시판 수정·삭제, 참여 승인 이후 대화 기능 연동 | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/grape-fruit-apricot) |
-| **이다산** | 참여 신청·승인·거절, 마이페이지 참여·모집 목록 구현 | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/ham-zi) |
-| **이승현** | 인증 게시판 CRUD, 이미지 제약 처리 및 신고 기능 연계 | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/rlaehqkf) |
-| **정주미** | 문의 게시판·답변·상태 관리, 로그인·회원가입 및 인증 흐름 구현 | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/peony639-lab) |
+| :---------------- | :-------------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
+| **남지호** | 후기 게시판, 공지 · 이벤트 CRUD, 파일 · 댓글 · 신고 연동 및 관련 화면 | https://github.com/jiho0828 |
+| **신순주** | 모집 게시판 수정 · 삭제, 참여 승인 이후 대화 작성 흐름과 기능 연동 | https://github.com/grape-fruit-apricot |
+| **이다산** | 참여 신청과 승인 · 거절, 마이페이지 참여 · 모집 목록, 관련 프론트 · 백엔드 | https://github.com/ham-zi |
+| **이승현** | 인증 게시판 CRUD, 이미지 제약 처리, 신고 게시판 연계 |  https://github.com/rlaehqkf |
+| **정주미** | 문의 게시판 백엔드와 답변 · 상태 관리, 로그인 · 회원가입과 인증 흐름 |  https://github.com/peony639-lab |
 
 <!-- 팀원 GitHub 또는 이메일을 공개할 경우 위 표에 링크 열을 추가합니다. -->
 
