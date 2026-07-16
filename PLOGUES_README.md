@@ -125,11 +125,11 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 | 팀원 | 주요 담당 |
 | :--- | :--- |
-| **남지호 https://github.com/jiho0828** | 후기 게시판, 공지 · 이벤트 CRUD, 파일 · 댓글 · 신고 연동 및 관련 화면 |
-| **신순주 https://github.com/grape-fruit-apricot** | 모집 게시판 수정 · 삭제, 참여 승인 이후 대화 작성 흐름과 기능 연동 |
-| **이다산 https://github.com/ham-zi** | 참여 신청과 승인 · 거절, 마이페이지 참여 · 모집 목록, 관련 프론트 · 백엔드 |
-| **이승현 https://github.com/rlaehqkf** | 인증 게시판 CRUD, 이미지 제약 처리, 신고 게시판 연계 |
-| **정주미 https://github.com/peony639-lab** | 문의 게시판 백엔드와 답변 · 상태 관리, 로그인 · 회원가입과 인증 흐름 |
+| **남지호** | 후기 게시판, 공지 · 이벤트 CRUD, 파일 · 댓글 · 신고 연동 및 관련 화면 | https://github.com/jiho0828 |
+| **신순주** | 모집 게시판 수정 · 삭제, 참여 승인 이후 대화 작성 흐름과 기능 연동 | https://github.com/grape-fruit-apricot |
+| **이다산** | 참여 신청과 승인 · 거절, 마이페이지 참여 · 모집 목록, 관련 프론트 · 백엔드 | https://github.com/ham-zi |
+| **이승현** | 인증 게시판 CRUD, 이미지 제약 처리, 신고 게시판 연계 |  https://github.com/rlaehqkf |
+| **정주미** | 문의 게시판 백엔드와 답변 · 상태 관리, 로그인 · 회원가입과 인증 흐름 |  https://github.com/peony639-lab |
 
 <!-- 팀원 GitHub 또는 이메일을 공개할 경우 위 표에 링크 열을 추가합니다. -->
 
