@@ -191,7 +191,7 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 <div align="center">
 
-<img src="docs/images/entity.png" width="850" alt="PLOGUES ERD"/>
+<img src="docs/images/screen-entity.png" width="850" alt="PLOGUES ERD"/>
 
 </div>
 
