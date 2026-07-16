@@ -42,7 +42,6 @@ public class QuestionService {
 							 .content(question.getContent())
 							 .category(changeCategory(question.getCategory()))
 							 .build();
-		log.info("{}",q);
 		int result = questionMapper.save(q);
 		
 		if(result !=1 ) {
@@ -66,39 +65,24 @@ public class QuestionService {
 	    public BoardResponse<QuestionDto> findByAll(int page, String category, CustomUserDetails user, String updated) {
 		  	String changeUpdated = changeUpdated(updated);
 		  	String changeCategory = changeCategory(category);
-		  	log.info("{}",changeUpdated);
 		    boolean isAdmin = user.getAuthorities().stream()
 		            .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
-		    
-		    
-
-		    // count
 		    int totalCount = isAdmin
 		            ? questionMapper.listCount(changeCategory, changeUpdated)
 		            : questionMapper.listCountByUser(changeCategory, user.getUsername());
-
-		    // pageInfo
 		    PageInfo pageInfo = newPageInfo(totalCount, page);
-		    
 		    int limit = 10;
 		    int offset = (page - 1) * limit; 
 		    RowBounds rowBounds = new RowBounds(offset, limit);
-
-		    // list
 		    List<QuestionDto> list = isAdmin
 		            ? questionMapper.findByAll(rowBounds, changeCategory, changeUpdated)
 		            : questionMapper.findByUser(rowBounds, changeCategory, user.getUsername());
-
-		    log.info("{}",list);
-		    
-		    // response
 		    BoardResponse<QuestionDto> br = new BoardResponse<>();
 		    br.setPage(pageInfo);
 		    br.setBoard(list);
-		    //br.setMessage(list.isEmpty() ? "작성한 게시글이 존재하지 않습니다." : null);
-
 		    return br;
 	}
+	  
 	  private String changeUpdated(String updated) {
 		  if("답변대기".equals(updated)) {
 			  updated = "WAITING";
