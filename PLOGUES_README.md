@@ -1,4 +1,9 @@
 <div align="center">
+<style>
+  table { width: 100% !important; border-collapse: collapse; margin-bottom: 20px; }
+  th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+  th { background-color: #f8f9fa; }
+</style>
 
 # PLOGUES
 
@@ -39,80 +44,27 @@
 
 PLOGUES는 이러한 불편을 해결하기 위해 **환경 활동의 모집부터 활동 이후의 인증과 후기까지 연결된 커뮤니티**를 목표로 개발했습니다.
 
-<table style="width: 100%;">
+<table>
   <thead>
-    <tr>
-      <th style="width: 25%;">기존 불편</th>
-      <th style="width: 40%;">PLOGUES의 접근</th>
-      <th style="width: 35%;">기대 효과</th>
-    </tr>
+    <tr><th>기존 불편</th><th>PLOGUES의 접근</th><th>기대 효과</th></tr>
   </thead>
   <tbody>
-    <tr>
-      <td>함께 활동할 사람을 찾기 어려움</td>
-      <td>지역 · 일정 · 모집 인원 기반 모집글</td>
-      <td>오프라인 환경 활동의 접근성 향상</td>
-    </tr>
-    <tr>
-      <td>신청과 참여자 관리가 분리됨</td>
-      <td>참여 요청과 승인 · 거절 상태 관리</td>
-      <td>모집장과 참여자가 동일한 상태를 공유</td>
-    </tr>
-    <tr>
-      <td>활동 이후 기록이 남지 않음</td>
-      <td>사진과 활동량을 포함한 인증 · 후기</td>
-      <td>실천 결과를 축적하고 참여 동기 제공</td>
-    </tr>
-  </tbody>
-</table>
-
-<br>
-
-<table style="width: 100%;">
-  <thead>
-    <tr>
-      <th style="width: 20%;">사용자</th>
-      <th style="width: 80%;">주요 목적</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><b>참여자</b></td>
-      <td>주변의 플로깅 · 식목 모임을 찾고 참여 신청, 대화, 후기 작성</td>
-    </tr>
-    <tr>
-      <td><b>모집장</b></td>
-      <td>모임 생성, 참여 요청 승인 · 거절, 참여자 관리, 활동 인증</td>
-    </tr>
-    <tr>
-      <td><b>관리자</b></td>
-      <td>공지 · 이벤트 작성, 문의 답변, 신고 내용 확인 및 처리</td>
-    </tr>
+    <tr><td>함께 활동할 사람을 찾기 어려움</td><td>지역 · 일정 · 모집 인원 기반 모집글</td><td>오프라인 환경 활동의 접근성 향상</td></tr>
+    <tr><td>신청과 참여자 관리가 분리됨</td><td>참여 요청과 승인 · 거절 상태 관리</td><td>모집장과 참여자가 동일한 상태를 공유</td></tr>
+    <tr><td>활동 이후 기록이 남지 않음</td><td>사진과 활동량을 포함한 인증 · 후기</td><td>실천 결과를 축적하고 참여 동기 제공</td></tr>
   </tbody>
 </table>
 
 ### 1.2 주요 사용자
 
-<table style="width: 100%;">
+<table>
   <thead>
-    <tr>
-      <th style="width: 20%;">사용자</th>
-      <th style="width: 80%;">주요 목적</th>
-    </tr>
+    <tr><th>사용자</th><th>주요 목적</th></tr>
   </thead>
   <tbody>
-    <tr>
-      <td><b>참여자</b></td>
-      <td>주변의 플로깅 · 식목 모임을 찾고 참여 신청, 대화, 후기 작성</td>
-    </tr>
-    <tr>
-      <td><b>모집장</b></td>
-      <td>모임 생성, 참여 요청 승인 · 거절, 참여자 관리, 활동 인증</td>
-    </tr>
-    <tr>
-      <td><b>관리자</b></td>
-      <td>공지 · 이벤트 작성, 문의 답변, 신고 내용 확인 및 처리</td>
-    </tr>
+    <tr><td><b>참여자</b></td><td>주변의 플로깅 · 식목 모임을 찾고 참여 신청, 대화, 후기 작성</td></tr>
+    <tr><td><b>모집장</b></td><td>모임 생성, 참여 요청 승인 · 거절, 참여자 관리, 활동 인증</td></tr>
+    <tr><td><b>관리자</b></td><td>공지 · 이벤트 작성, 문의 답변, 신고 내용 확인 및 처리</td></tr>
   </tbody>
 </table>
 
@@ -138,12 +90,9 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 ## 3. 주요 기능
 
-<table style="width: 100%;">
+<table>
   <thead>
-    <tr>
-      <th style="width: 25%;">기능 영역</th>
-      <th style="width: 75%;">주요 기능</th>
-    </tr>
+    <tr><th>기능 영역</th><th>주요 기능</th></tr>
   </thead>
   <tbody>
     <tr><td>회원 · 인증</td><td>회원가입, 로그인, Access Token 갱신, 역할 기반 접근 제어</td></tr>
@@ -175,22 +124,19 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 ## 🛠 기술 스택
 
-| 영역 | 기술 | 적용 내용 |
-| :--- | :--- | :--- |
-| **Backend** | Java **21**, Spring Boot **3.5.16**, Spring Web, Spring Validation | REST API 개발, 계층형 아키텍처(Controller-Service-Mapper), 비즈니스 로직 및 입력값 검증 |
-| **Security** | Spring Security **6.x**, JWT **0.12.3** | Access·Refresh Token 기반 인증, 인가, 역할(Role) 검증, 인증 필터 처리 |
-| **Persistence** | MyBatis **3.0.5**, JDBC | SQL Mapper 기반 데이터 접근, 동적 SQL, 페이징, 트랜잭션 처리 |
-| **Database** | Oracle Database Express Edition (XE) | 관계형 데이터 저장, JOIN, 시퀀스, 제약조건, 게시판·회원·참여·문의·신고 데이터 관리 |
-| **Frontend** | React **19.x**, Vite **7.x**, JavaScript (ES6+) | SPA 개발, 컴포넌트 기반 UI, 사용자 인터페이스 구현 |
-| **State Management** | React Context API, React Hooks | 로그인 정보 및 전역 상태 관리, 컴포넌트 상태 관리 |
-| **Routing · HTTP** | React Router DOM **7.x**, Axios **1.x** | SPA 라우팅, REST API 통신, JWT 재발급 후 자동 재요청(Interceptor) |
-| **UI / UX** | styled-components **6.x**, SweetAlert2 **11.x**, react-icons **5.x** | CSS-in-JS 스타일링, 공통 알림 모달, 아이콘 컴포넌트 |
-| **File Handling** | Multipart/Form-Data | 이미지 업로드, 첨부파일 저장 및 메타데이터 관리 |
-| **Visualization** | Recharts **3.x** | 온도·습도·토양 수분 센서 데이터 시각화 |
-| **Build Tool** | Maven **3.x** | 프로젝트 빌드 및 의존성 관리 |
-| **Development Tools** | IntelliJ IDEA, VS Code, SQL Developer | 백엔드·프론트엔드 개발 및 데이터베이스 관리 |
-| **Collaboration** | Git, GitHub, Postman, DBeaver | 형상 관리, Pull Request 기반 협업, REST API 테스트, DB 관리 |
-
+<table>
+  <thead>
+    <tr><th>영역</th><th>기술 스택</th><th>적용 내용</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Backend</td><td>Java 21, Spring Boot 3.5.16</td><td>REST API, 비즈니스 로직, 검증</td></tr>
+    <tr><td>Security</td><td>Spring Security, JWT 0.12.3</td><td>인증 · 인가, 역할 검증</td></tr>
+    <tr><td>Persistence</td><td>MyBatis 3.0.5, JDBC</td><td>SQL Mapper, 동적 SQL, 페이징</td></tr>
+    <tr><td>Database</td><td>Oracle XE</td><td>관계형 데이터 저장</td></tr>
+    <tr><td>Frontend</td><td>React 19, Vite 8, JS</td><td>SPA, 컴포넌트 구성</td></tr>
+    <tr><td>Routing/UI</td><td>Axios, Styled-components</td><td>API 통신, 스타일 모듈화</td></tr>
+  </tbody>
+</table>
 ---
 
 ## 6. 개발 기간 및 팀 구성
