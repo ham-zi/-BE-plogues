@@ -62,17 +62,9 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 ## 2. 핵심 사용자 흐름
 
-```mermaid
-flowchart LR
-    A[모집글 작성] --> B[참여 요청]
-    B --> C{모집장 확인}
-    C -->|수락| D[참여 확정]
-    C -->|거절| E[참여 거절]
-    D --> F[참여자 대화]
-    F --> G[오프라인 활동]
-    G --> H[활동 인증]
-    H --> I[후기 공유]
-```
+<p align="center">
+    <img src="./docs/images/userFlow.png" width="900" alt="PLOGUES User Flow">
+</p>
 
 참여 요청의 상태는 `WAITING`, `ACCEPTED`, `DENIED`로 관리하며, 승인된 사용자만 해당 활동의 대화 흐름에 참여할 수 있도록 구성했습니다.
 
