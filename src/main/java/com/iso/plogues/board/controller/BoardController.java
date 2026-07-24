@@ -2,7 +2,7 @@ package com.iso.plogues.board.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -85,6 +85,9 @@ public class BoardController {
     public ResponseEntity<ApiResponse<BoardDto>> selectBoardDetail(
             @PathVariable("boardNo") Long boardNo) {
     		viewCounter.increment();
+    		Timer.Sample sample = Timer.start(registry);
+    		boardService.selectBoardDetail(boardNo);
+       	 sample.stop(registry.timer("board_detail_duration"));
         return ResponseEntity.ok(ApiResponse.success("게시글 상세 조회 성공", boardService.selectBoardDetail(boardNo)));
     }
 

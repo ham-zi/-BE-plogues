@@ -15,9 +15,12 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-  kafka:
-    consumer:
-      group-id: 
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: gemma3:4b
+
 
 server:
   port: 7777
@@ -32,9 +35,9 @@ management:
 
 
 
-tomcat:
-  max-http-form-post-size: 100MB
-  max-swallow-size: -1
+  tomcat:
+    max-http-form-post-size: 100MB
+    max-swallow-size: -1
 
 mybatis:
   configuration:

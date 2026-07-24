@@ -1,13 +1,14 @@
 package com.iso.plogues.board.model.service;
 
-import com.iso.plogues.board.comment.controller.BoardCommentController;
 import java.util.List;
 
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.iso.plogues.auth.model.vo.CustomUserDetails;
+import com.iso.plogues.board.comment.controller.BoardCommentController;
 import com.iso.plogues.board.comment.model.dao.BoardCommentMapper;
 import com.iso.plogues.board.comment.model.dto.BoardCommentDto;
 import com.iso.plogues.board.file.model.service.BoardFileService;
@@ -22,9 +23,10 @@ import com.iso.plogues.util.page.PageInfo;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class BoardService {
 
     private final BoardCommentController boardCommentController;
@@ -33,8 +35,10 @@ public class BoardService {
     private final BoardCommentMapper commentMapper;
     private final MeterRegistry registry;
     private final Counter errorCounter;
+    private final ChatClient chatClient;
     
-    public BoardService(BoardCommentMapper commentMapper ,BoardMapper boardMapper, BoardFileService boardFileService, BoardCommentMapper boardCommentMapper,MeterRegistry registry, BoardCommentController boardCommentController) {
+    public BoardService(BoardCommentMapper commentMapper ,BoardMapper boardMapper, BoardFileService boardFileService, BoardCommentMapper boardCommentMapper,MeterRegistry registry, BoardCommentController boardCommentController, ChatClient chatClient) {
+    	this.chatClient = chatClient;
     	this.boardMapper = boardMapper;
     	this.boardFileService = boardFileService;
     	this.boardCommentController = boardCommentController;
@@ -78,6 +82,30 @@ public class BoardService {
         
         List<BoardCommentDto> comments = commentMapper.selectCommentList(boardNo);
         board.setCommentList(comments);
+        
+        String chat = chatClient.prompt()
+  			  .system("""
+  			  			You are a Korean literature professor with 5 years of teaching experience.
+  			  			
+  			  			Always respond in Korean.
+
+						Format your response using numbered Markdown headings in the following style:
+						
+						1.
+						2.
+						3.
+						
+						Continue the numbering as needed.
+						
+						Never use profanity, vulgar language, or offensive expressions under any circumstances.
+  			  		""").user(u -> u.text("""
+  			  				Summarize the content below in exactly three concise lines.
+  			  				---
+  			  				{board}
+  			  				---
+  			  				""").param("board", board.getContent())).call().content() + "\n\n"+ board.getContent();
+        board.setContent(chat);
+        
         
         return board;
     }
