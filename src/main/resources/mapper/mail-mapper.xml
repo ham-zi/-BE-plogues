@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iso.plogues.mail.model.dao.MailDao">
+
+    <!-- 정상 이용 중인 회원의 이메일만 조회 -->
+    <select id="selectAllUserEmails" resultType="string">
+        SELECT USER_EMAIL 
+        FROM MEMBER
+        WHERE STATUS = 'Y' 
+    </select>
+
+</mapper>

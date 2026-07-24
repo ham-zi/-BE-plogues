@@ -15,12 +15,26 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  kafka:
+    consumer:
+      group-id: 
 
 server:
-  port: 80
-  tomcat:
-    max-http-form-post-size: 100MB
-    max-swallow-size: -1
+  port: 7777
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - prometheus
+
+
+
+tomcat:
+  max-http-form-post-size: 100MB
+  max-swallow-size: -1
 
 mybatis:
   configuration:
