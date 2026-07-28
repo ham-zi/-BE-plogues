@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import lombok.Getter;
 import lombok.ToString;
 
@@ -17,37 +19,38 @@ public class File {
 	private String changeName;
 	private String filePath;
 	private String deleted;
-	private String boardType;
 	private List<String>extensions = List.of(".jpg", ".png", ".jpeg", ".svg", ".heif", ".heic", ".gif");
+	@Value("${cloud.region.satatic}")
+	private String region;
+	@Value("${cloud.s3.bucket}")
+	private String bucketName;
 	
-	public static File of(Long refBoardNo, String originName, String boardType) {
-		return new File(refBoardNo,originName, boardType);
+	public static File of(Long refBoardNo, String originName) {
+		return new File(refBoardNo,originName);
 	}
 	
-	public static File of(String refUserId, String originName, String boardType) {
-		return new File(refUserId,originName, boardType);
+	public static File of(String refUserId, String originName) {
+		return new File(refUserId,originName);
 	}
 	
-	private File(Long refBoardNo, String originName, String boardType) {
+	private File(Long refBoardNo, String originName) {
 		validOriginName(originName);
 		validRefBoardNo(refBoardNo);
 		validExtension(originName);
 		this.refBoardNo = refBoardNo;
 		this.originName = originName;
 		this.changeName = getChangeName(originName);
-		this.boardType = boardType;
-		this.filePath = "http://localhost/uploads/"+ boardType + "/";
+		this.filePath = "https://"+ region + ".s3." + bucketName + ".amazonaws.com/";
 		this.deleted = "N";
 	}
 	
-	private File(String refUserId, String originName, String boardType) {
+	private File(String refUserId, String originName) {
 		validOriginName(originName);
 		validExtension(originName);
 		this.refUserId = refUserId;
 		this.originName = originName;
 		this.changeName = getChangeName(originName);
-		this.boardType = boardType;
-		this.filePath = "http://localhost/uploads/"+ boardType + "/";
+		this.filePath = "https://"+ region + ".s3." + bucketName + ".amazonaws.com/";
 		this.deleted = "N";
 	}
 	

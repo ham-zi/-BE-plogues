@@ -15,9 +15,12 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  profiles:
+    include:
+    - aws
 
 server:
-  port: 80
+  port: 8008
   tomcat:
     max-http-form-post-size: 100MB
     max-swallow-size: -1
@@ -32,3 +35,12 @@ mybatis:
 
 jwt:
   secret: D9uLKVc4FE0IEheN3pLLEb8GKhHRsG8cdOxazHnEkRm3CGAeB+xVbt8Dbob1QhRB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - prometheus

@@ -23,10 +23,10 @@ public class BoardFileService {
 
     @Transactional
     public void saveFile(MultipartFile file, Long refBno) {
-        File fileEntity = File.of(refBno, file.getOriginalFilename(), "board");
+        File fileEntity = File.of(refBno, file.getOriginalFilename());
         int result = fileMapper.saveFile(fileEntity);
         throwFileInsertException(result);
-        fileService.fileTransferTo(file, fileEntity.getChangeName(), "board");
+        fileService.fileSave(file, fileEntity.getChangeName());
     }
 
     private void throwFileInsertException(int result) {
@@ -42,10 +42,11 @@ public class BoardFileService {
 
     @Transactional 
     public void deleteFile(Long refBno) {
-        if(findByBno(refBno).isEmpty()) {
-            return;
-        }
-        fileMapper.deleteFile(refBno);
+		if(findByBno(refBno).isEmpty()) {
+			return;
+		}
+		int result = fileMapper.deleteFile(refBno);
+		throwFailedDeleteException(result);
     }
 
     private void throwFailedDeleteException(int result) {
@@ -59,9 +60,13 @@ public class BoardFileService {
         fileMapper.deleteFileByNo(fileNo);
     }
 
-    private void hardDeleteFile(Long refBno) {
-        int result = fileMapper.hardDeleteFile(refBno);
+    public void hardDeleteFile(Long fileNo) {
+        int result = fileMapper.hardDeleteFile(fileNo);
         throwFailedDeleteException(result);
+    }
+    
+    public FileDto findByFileNo(Long fileNo) {
+    	return fileMapper.findByFileNo(fileNo);
     }
 
 	

@@ -20,12 +20,15 @@ public interface BoardFileMapper {
     @Select("SELECT FILE_NO AS fileNo, BOARD_NO AS refBoardNo, ORIGIN_NAME AS originName, CHANGE_NAME AS changeName, FILE_PATH AS filePath FROM REVIEW_FILE WHERE DELETED = 'N' AND BOARD_NO = #{boardNo}")
     List<FileDto> findByBno(Long boardNo);
     
+    @Select("SELECT FILE_NO, NOTICE_NO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH FROM REVIEW_FILE WHERE DELETED = 'N' AND FILE_NO = #{fileNo}")
+    FileDto findByFileNo(Long fileNo);
+    
     @Update("UPDATE REVIEW_FILE SET DELETED = 'Y' WHERE BOARD_NO = #{boardNo}")
     int deleteFile(Long boardNo);
     
     @Update("UPDATE REVIEW_FILE SET DELETED = 'Y' WHERE FILE_NO = #{fileNo}")
     int deleteFileByNo(Long fileNo);
     
-    @Delete("DELETE FROM REVIEW_FILE WHERE BOARD_NO = #{boardNo}")
-    int hardDeleteFile(Long boardNo);
+    @Delete("DELETE FROM REVIEW_FILE WHERE FILE_NO = #{fileNo}")
+    int hardDeleteFile(Long fileNo);
 }

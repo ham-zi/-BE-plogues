@@ -17,6 +17,7 @@ import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedUpdateException;
 import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.file.FileDto;
+import com.iso.plogues.util.file.FileService;
 import com.iso.plogues.util.page.PageInfo;
 
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class BoardService {
     private final BoardMapper boardMapper;
     private final BoardFileService boardFileService;
     private final BoardCommentMapper commentMapper;
+    private final FileService fileService;
 
     public BoardResponse<BoardDto> selectBoardList(int currentPage, String keyword) {
         int listCount = boardMapper.countBoardList(keyword);
@@ -88,9 +90,12 @@ public class BoardService {
         }
 
         // 사용자가 화면에서 지운 기존 파일만 삭제
+        FileDto f = null;
         if(deleteFileNos != null && !deleteFileNos.isEmpty()) {
             for(Long fileNo : deleteFileNos) {
-                boardFileService.deleteFileByNo(fileNo);
+                boardFileService.hardDeleteFile(fileNo);
+                f = boardFileService.findByFileNo(fileNo);
+                fileService.deleteFile(f.getChangeName());
             }
         }
 
@@ -98,6 +103,7 @@ public class BoardService {
         if(files != null && !files.isEmpty()) {
             for(MultipartFile file : files) {
                 boardFileService.saveFile(file, boardNo);
+                fileService.fileSave(file, f.getChangeName());
             }
         }
     }
