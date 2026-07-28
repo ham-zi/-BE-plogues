@@ -15,9 +15,26 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: gemma3:4b
+
 
 server:
-  port: 80
+  port: 7777
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - prometheus
+
+
+
   tomcat:
     max-http-form-post-size: 100MB
     max-swallow-size: -1

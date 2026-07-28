@@ -2,6 +2,7 @@ package com.iso.plogues.board.controller;
 
 import java.util.List;
 
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,26 +24,49 @@ import com.iso.plogues.board.model.dto.BoardDto;
 import com.iso.plogues.board.model.service.BoardService;
 import com.iso.plogues.util.dto.BoardResponse;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import lombok.RequiredArgsConstructor;
+
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/boards")
 @Validated
 public class BoardController {
 
     private final BoardService boardService;
+    private final Counter viewCounter;
+    private final Gauge boardCounter;
+    private final MeterRegistry registry;
+    private String kw;
+    
+    public BoardController(MeterRegistry registry, BoardService boardService) {
+    	this.kw= "";
+    	this.boardService = boardService;
+    	Timer.Sample sample = Timer.start(registry);
+        this.viewCounter = Counter.builder("board_view_total")
+                .description("게시글 조회 횟수")
+                .register(registry);
+        sample.stop(registry.timer("board_view_duration"));
+        this.boardCounter = Gauge.builder("board_count_current", boardService, service -> service.countAll(kw)).description("현재 게시글 수").register(registry);
+        this.registry= registry;
+    }
 
     @GetMapping
     public ResponseEntity<ApiResponse<BoardResponse<BoardDto>>> selectBoardList(
             @RequestParam(name = "category") String category,
             @RequestParam(name = "page", defaultValue = "1") @Positive(message = "페이지 번호는 1 이상이어야 합니다.") int page,
             @RequestParam(name = "keyword", required = false) String keyword) {
-        return ResponseEntity.ok(ApiResponse.success("게시글 목록 조회 성공", boardService.selectBoardList(page, keyword)));
+    	kw = keyword;
+    	Timer.Sample sample = Timer.start(registry);
+    	 BoardResponse br = boardService.selectBoardList(page, keyword);
+    	 sample.stop(registry.timer("board_list_duration"));
+        return ResponseEntity.ok(ApiResponse.success("게시글 목록 조회 성공",br));
     }
     
     @ExceptionHandler(ConstraintViolationException.class)
@@ -60,6 +84,10 @@ public class BoardController {
     @GetMapping("/{boardNo}")
     public ResponseEntity<ApiResponse<BoardDto>> selectBoardDetail(
             @PathVariable("boardNo") Long boardNo) {
+    		viewCounter.increment();
+    		Timer.Sample sample = Timer.start(registry);
+    		boardService.selectBoardDetail(boardNo);
+       	 sample.stop(registry.timer("board_detail_duration"));
         return ResponseEntity.ok(ApiResponse.success("게시글 상세 조회 성공", boardService.selectBoardDetail(boardNo)));
     }
 
@@ -91,4 +119,5 @@ public class BoardController {
         boardService.deleteBoard(user, boardNo);
         return ResponseEntity.ok(ApiResponse.success("게시글 삭제 성공", null));
     }
+   
 }

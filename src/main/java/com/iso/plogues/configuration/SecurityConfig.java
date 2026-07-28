@@ -37,12 +37,13 @@ public class SecurityConfig {
 				   .csrf(AbstractHttpConfigurer::disable)
 				   .cors(Customizer.withDefaults())
 				   .authorizeHttpRequests(requests -> { 
-					   requests.requestMatchers(HttpMethod.GET, "/api/notices/**", "/api/joins/**", "/api/home", "/api/boards/**", "/api/tree/**").permitAll();
+					   requests.requestMatchers("/actuator/prometheus", "/actuator/health", "/api/ai/**").permitAll();
+					   requests.requestMatchers(HttpMethod.GET, "/api/notices/**", "/api/joins/**", "/api/home", "/api/boards/**", "/api/tree/**", "/api/health/**").permitAll();
 					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "/api/tree", "/api/auth/refresh").permitAll();
 					   requests.requestMatchers(HttpMethod.GET, "/api/notices/**", "/api/joins/**", "/api/home", "/api/boards/**","/api/proof/**").permitAll();
-					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "api/tree", "/api/auth/refresh").permitAll();
-					   requests.requestMatchers(HttpMethod.GET, "/api/users/**", "/api/chats", "/api/proof/**", "api/report").authenticated();
-					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins/**", "/api/question", "/api/request/**", "/api/chats" , "/api/boards", "api/notices", "/api/report", "/api/boards/*/comments", "/api/proof/**").authenticated();
+					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "/api/tree", "/api/auth/refresh").permitAll();
+					   requests.requestMatchers(HttpMethod.GET, "/api/users/**", "/api/chats", "/api/proof/**", "/api/report").authenticated();
+					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins/**", "/api/question", "/api/request/**", "/api/chats" , "/api/boards", "/api/notices", "/api/report", "/api/boards/*/comments", "/api/proof/**").authenticated();
 					   requests.requestMatchers(HttpMethod.PATCH, "/api/users/**", "/api/request/**","/api/joins/**", "/api/chats/**","/api/boards/**", "/api/boards/*/comments/**", "/api/proof/**", "/api/report/**").authenticated();					   
 					   requests.requestMatchers(HttpMethod.DELETE, "/api/users/**", "/api/joins/**", "/api/request/**", "/api/chats/**","/api/boards/**", "/api/boards/*/comments/**", "/api/question").authenticated();
 					   requests.requestMatchers(HttpMethod.GET, "/api/report").hasRole("ADMIN");
