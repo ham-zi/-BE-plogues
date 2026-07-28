@@ -2,6 +2,7 @@ package com.iso.plogues.notice.controller;
 
 import java.util.List;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,15 +22,22 @@ import com.iso.plogues.notice.model.dto.NoticeDto;
 import com.iso.plogues.notice.model.service.NoticeService;
 import com.iso.plogues.util.dto.BoardResponse;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/notices")
 public class NoticeController {
 	
 	private final NoticeService noticeService;
+	private final Counter viewCounter;
+	
+	public NoticeController(MeterRegistry registry, NoticeService noticeService) {
+		this.noticeService = noticeService;
+		this.viewCounter = Counter.builder("notice_view_total").tag("category", "EVENT").tag("category", "NOTICE").register(registry);
+	}
 
 	@GetMapping
 	public ResponseEntity<ApiResponse<BoardResponse<NoticeDto>>> selectNoticeList(
@@ -41,6 +49,7 @@ public class NoticeController {
 	@GetMapping("/{noticeNo}")
 	public ResponseEntity<ApiResponse<NoticeDto>> selectNoticeDetail(
 	        @PathVariable("noticeNo") Long noticeNo) {
+			viewCounter.increment();
 	    return ResponseEntity.ok(ApiResponse.success("공지사항, 이벤트 상세 조회 성공", noticeService.selectNoticeDetail(noticeNo)));
 	}
 	

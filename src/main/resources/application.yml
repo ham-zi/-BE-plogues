@@ -15,16 +15,36 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+<<<<<<< HEAD
   profiles:
     include:
     - aws
 
 server:
   port: 8008
+=======
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: gemma3:4b
+
+
+server:
+  port: 8889
+
+>>>>>>> ae32427f03f2bf5cc41719f7f0ea7a09a81466bb
   tomcat:
     max-http-form-post-size: 100MB
     max-swallow-size: -1
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - health
+        - info
+        - prometheus
 mybatis:
   configuration:
     jdbc-type-for-null: VARCHAR
