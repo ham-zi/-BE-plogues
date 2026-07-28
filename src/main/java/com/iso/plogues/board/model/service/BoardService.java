@@ -2,7 +2,6 @@ package com.iso.plogues.board.model.service;
 
 import java.util.List;
 
-import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,10 +34,8 @@ public class BoardService {
     private final BoardCommentMapper commentMapper;
     private final MeterRegistry registry;
     private final Counter errorCounter;
-    private final ChatClient chatClient;
     
-    public BoardService(BoardCommentMapper commentMapper ,BoardMapper boardMapper, BoardFileService boardFileService, BoardCommentMapper boardCommentMapper,MeterRegistry registry, BoardCommentController boardCommentController, ChatClient chatClient) {
-    	this.chatClient = chatClient;
+    public BoardService(BoardCommentMapper commentMapper ,BoardMapper boardMapper, BoardFileService boardFileService, BoardCommentMapper boardCommentMapper,MeterRegistry registry, BoardCommentController boardCommentController) {
     	this.boardMapper = boardMapper;
     	this.boardFileService = boardFileService;
     	this.boardCommentController = boardCommentController;
@@ -82,29 +79,6 @@ public class BoardService {
         
         List<BoardCommentDto> comments = commentMapper.selectCommentList(boardNo);
         board.setCommentList(comments);
-        
-        String chat = chatClient.prompt()
-  			  .system("""
-  			  			You are a Korean literature professor with 5 years of teaching experience.
-  			  			
-  			  			Always respond in Korean.
-
-						Format your response using numbered Markdown headings in the following style:
-						
-						1.
-						2.
-						3.
-						
-						Continue the numbering as needed.
-						
-						Never use profanity, vulgar language, or offensive expressions under any circumstances.
-  			  		""").user(u -> u.text("""
-  			  				Summarize the content below in exactly three concise lines.
-  			  				---
-  			  				{board}
-  			  				---
-  			  				""").param("board", board.getContent())).call().content() + "\n\n"+ board.getContent();
-        board.setContent(chat);
         
         
         return board;

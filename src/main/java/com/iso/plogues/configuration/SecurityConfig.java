@@ -46,7 +46,7 @@ public class SecurityConfig {
 					   requests.requestMatchers(HttpMethod.POST, "/api/auth/logout", "/api/joins/**", "/api/question", "/api/request/**", "/api/chats" , "/api/boards", "/api/notices", "/api/report", "/api/boards/*/comments", "/api/proof/**").authenticated();
 					   requests.requestMatchers(HttpMethod.PATCH, "/api/users/**", "/api/request/**","/api/joins/**", "/api/chats/**","/api/boards/**", "/api/boards/*/comments/**", "/api/proof/**", "/api/report/**").authenticated();					   
 					   requests.requestMatchers(HttpMethod.DELETE, "/api/users/**", "/api/joins/**", "/api/request/**", "/api/chats/**","/api/boards/**", "/api/boards/*/comments/**", "/api/question").authenticated();
-					   requests.requestMatchers(HttpMethod.GET, "/api/report").hasRole("ADMIN");
+					   requests.requestMatchers(HttpMethod.GET, "/api/report","api/users/admin").hasRole("ADMIN");
 					   requests.requestMatchers(HttpMethod.POST, "/api/notices").hasRole("ADMIN");
 					   requests.requestMatchers(HttpMethod.PATCH, "/api/notices/**").hasRole("ADMIN");
 					   requests.requestMatchers(HttpMethod.DELETE, "/api/notices/**").hasRole("ADMIN");
@@ -76,7 +76,8 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:5174"));
+		configuration.setAllowedOrigins(Arrays.asList(        "http://localhost",
+		        "http://localhost:5173"));
 		configuration.setAllowedMethods(Arrays.asList("POST", "PATCH", "DELETE", "GET", "PUT", "OPTIONS"));
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
 		configuration.setAllowCredentials(true);
