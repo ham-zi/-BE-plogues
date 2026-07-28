@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.iso.plogues.auth.model.vo.CustomUserDetails;
+import com.iso.plogues.board.comment.controller.BoardCommentController;
 import com.iso.plogues.board.comment.model.dao.BoardCommentMapper;
 import com.iso.plogues.board.comment.model.dto.BoardCommentDto;
 import com.iso.plogues.board.file.model.service.BoardFileService;
@@ -19,15 +20,31 @@ import com.iso.plogues.util.dto.BoardResponse;
 import com.iso.plogues.util.file.FileDto;
 import com.iso.plogues.util.page.PageInfo;
 
-import lombok.RequiredArgsConstructor;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
-@RequiredArgsConstructor
+@Slf4j
 public class BoardService {
 
-    private final BoardMapper boardMapper;
+    private final BoardCommentController boardCommentController;
+	private final BoardMapper boardMapper;
     private final BoardFileService boardFileService;
     private final BoardCommentMapper commentMapper;
+    private final MeterRegistry registry;
+    private final Counter errorCounter;
+    
+    public BoardService(BoardCommentMapper commentMapper ,BoardMapper boardMapper, BoardFileService boardFileService, BoardCommentMapper boardCommentMapper,MeterRegistry registry, BoardCommentController boardCommentController) {
+    	this.boardMapper = boardMapper;
+    	this.boardFileService = boardFileService;
+    	this.boardCommentController = boardCommentController;
+    	this.commentMapper = commentMapper;
+    	this.registry = registry;
+        this.errorCounter = Counter.builder("board_error_total")
+                .description("게시글 에러 횟수")
+                .register(registry);
+    }
 
     public BoardResponse<BoardDto> selectBoardList(int currentPage, String keyword) {
         int listCount = boardMapper.countBoardList(keyword);
@@ -63,6 +80,7 @@ public class BoardService {
         List<BoardCommentDto> comments = commentMapper.selectCommentList(boardNo);
         board.setCommentList(comments);
         
+        
         return board;
     }
     
@@ -84,6 +102,7 @@ public class BoardService {
         boardDto.setBoardNo(boardNo);
         int result = boardMapper.updateBoard(boardDto);
         if(result != 1) {
+        	errorCounter.increment();
             throw new FailedUpdateException("게시글 수정에 실패했습니다.");
         }
 
@@ -107,8 +126,13 @@ public class BoardService {
         selectBoardDetail(boardNo);
         int result = boardMapper.deleteBoard(user.getUsername(), boardNo);
         if(result != 1) {
+        	errorCounter.increment();
             throw new FailedDeleteException("게시글 삭제에 실패했습니다.");
         }
         boardFileService.deleteFile(boardNo);
+    }
+    
+    public double countAll(String keyword) {
+    	return boardMapper.countBoardList(keyword);
     }
 }
