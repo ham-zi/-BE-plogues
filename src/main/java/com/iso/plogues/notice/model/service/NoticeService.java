@@ -15,6 +15,7 @@ import com.iso.plogues.notice.file.model.service.NoticeFileService;
 import com.iso.plogues.notice.model.dao.NoticeMapper;
 import com.iso.plogues.notice.model.dto.NoticeDto;
 import com.iso.plogues.util.dto.BoardResponse;
+import com.iso.plogues.util.file.File;
 import com.iso.plogues.util.file.FileDto;
 import com.iso.plogues.util.file.FileService;
 import com.iso.plogues.util.page.PageInfo;
@@ -62,6 +63,8 @@ public class NoticeService {
 	    if (files != null && !files.isEmpty()) {
 	        for (MultipartFile file : files) {
 	            noticeFileService.saveFile(file, noticeDto.getNoticeNo());
+	            File f = File.of(noticeDto.getNoticeNo(), file.getOriginalFilename());
+	            fileService.fileSave(file, f.getChangeName());
 	        }
 	    }
 	}

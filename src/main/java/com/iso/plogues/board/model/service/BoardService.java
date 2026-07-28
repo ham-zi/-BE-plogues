@@ -17,6 +17,7 @@ import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedUpdateException;
 import com.iso.plogues.util.dto.BoardResponse;
+import com.iso.plogues.util.file.File;
 import com.iso.plogues.util.file.FileDto;
 import com.iso.plogues.util.file.FileService;
 import com.iso.plogues.util.page.PageInfo;
@@ -94,6 +95,8 @@ public class BoardService {
         if (files != null && !files.isEmpty()) {
             for (MultipartFile upfile : files) {
                 boardFileService.saveFile(upfile, boardNo);
+                File file = File.of(boardNo, upfile.getOriginalFilename());
+                fileService.fileSave(upfile, file.getChangeName());
             }
         }
     }
