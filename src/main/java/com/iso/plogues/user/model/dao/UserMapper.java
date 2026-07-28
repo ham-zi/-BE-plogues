@@ -1,4 +1,6 @@
 package com.iso.plogues.user.model.dao;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -47,6 +49,9 @@ public interface UserMapper {
 
 	@Update("UPDATE PLOGUES_USER SET EMAIL = #{email}, INFO = #{info} WHERE USER_ID = #{userId} AND DELETED = 'N'")
 	int patchMyInfo(UserDto userInfo);
+
+	@Select("SELECT USER_ID, EMAIL FROM PLOGUES_USER WHERE DELETED = 'N'")
+	List<UserDto> findUsers();
 
 
 }

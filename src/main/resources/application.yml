@@ -17,11 +17,18 @@ spring:
       max-request-size: 100MB
 
 server:
-  port: 80
+  port: 10101
   tomcat:
     max-http-form-post-size: 100MB
     max-swallow-size: -1
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - health
+        - info
+        - prometheus
 mybatis:
   configuration:
     jdbc-type-for-null: VARCHAR

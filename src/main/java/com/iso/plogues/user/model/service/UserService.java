@@ -2,6 +2,7 @@ package com.iso.plogues.user.model.service;
 
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -141,6 +142,10 @@ public class UserService {
 		if(!passwordEncoder.matches(userPwd, user.getPassword())) {
 			throw new InvalidUserPwdException("비밀번호가 틀렸습니다.");
 		}
+	}
+
+	public List<UserDto> findUsers() {
+		return userMapper.findUsers();
 	}
 
 
