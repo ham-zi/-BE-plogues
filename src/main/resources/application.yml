@@ -2,10 +2,10 @@ spring:
   application:
     name: plogues
   datasource:
-    url: jdbc:oracle:thin:@192.168.51.34:1521:XE
-    username: C##KH_ISO
+    url: jdbc:oracle:thin:@115.90.212.18:10000:XE
+    username: C##ISO_KH
     password: 1234
-    driver-class-name: oracle.jdbc.driver.OracleDriver
+    driver-class-name: oracle.jdbc.OracleDriver
   web:
     resources:
       static-locations: file:uploads/
