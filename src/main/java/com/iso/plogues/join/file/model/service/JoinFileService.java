@@ -22,11 +22,11 @@ public class JoinFileService {
 	private final FileService fileService;
 	
 	@Transactional
-	public void saveFile(MultipartFile file, Long refBno, String boardType) {
-		File fileEntity = File.of(refBno, file.getOriginalFilename(), boardType);
+	public void saveFile(MultipartFile file, Long refBno) {
+		File fileEntity = File.of(refBno, file.getOriginalFilename());
 		int result = fileMapper.saveFile(fileEntity);
 		throwFileInsertException(result);
-		fileService.fileTransferTo(file, fileEntity.getChangeName(), boardType);
+		fileService.fileSave(file, fileEntity.getChangeName());
 	}
 	
 	@Transactional
@@ -44,11 +44,15 @@ public class JoinFileService {
 	}
 	
 	@Transactional
-	public void updateFile(MultipartFile file, Long refBno, String boardType) {
+	public void updateFile(MultipartFile file, Long refBno) {
+		List<FileDto> files = findByBno(refBno);
 		if(!findByBno(refBno).isEmpty()) {
 			hardDeleteFile(refBno);
+			for(FileDto f : files) {			
+				fileService.deleteFile(f.getChangeName());
+			}
 		}
-		saveFile(file, refBno, boardType);
+		saveFile(file, refBno);
 	}
 	
 	private void throwFileInsertException(int result) {

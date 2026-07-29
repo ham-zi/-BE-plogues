@@ -15,7 +15,9 @@ import com.iso.plogues.notice.file.model.service.NoticeFileService;
 import com.iso.plogues.notice.model.dao.NoticeMapper;
 import com.iso.plogues.notice.model.dto.NoticeDto;
 import com.iso.plogues.util.dto.BoardResponse;
+import com.iso.plogues.util.file.File;
 import com.iso.plogues.util.file.FileDto;
+import com.iso.plogues.util.file.FileService;
 import com.iso.plogues.util.page.PageInfo;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class NoticeService {
 
 	private final NoticeMapper noticeMapper;
 	private final NoticeFileService noticeFileService;
+	private final FileService fileService;
 	
 	@Transactional(readOnly = true)
 	public BoardResponse<NoticeDto> selectNoticeList(String category, int currentPage) {
@@ -60,6 +63,8 @@ public class NoticeService {
 	    if (files != null && !files.isEmpty()) {
 	        for (MultipartFile file : files) {
 	            noticeFileService.saveFile(file, noticeDto.getNoticeNo());
+	            File f = File.of(noticeDto.getNoticeNo(), file.getOriginalFilename());
+	            fileService.fileSave(file, f.getChangeName());
 	        }
 	    }
 	}
@@ -74,16 +79,20 @@ public class NoticeService {
 	    }
 
 	    // 사용자가 화면에서 지운 기존 파일만 삭제
+	    FileDto file = null;
 	    if (deleteFileNos != null && !deleteFileNos.isEmpty()) {
 	        for (Long fileNo : deleteFileNos) {
-	            noticeFileService.deleteFileByNo(fileNo);
+	            noticeFileService.hardDeleteFile(fileNo);
+	            file = noticeFileService.findByFileNo(fileNo);
+	            fileService.deleteFile(file.getChangeName());
 	        }
 	    }
 
 	    // 새로 추가된 파일만 저장
 	    if (files != null && !files.isEmpty()) {
-	        for (MultipartFile file : files) {
-	            noticeFileService.saveFile(file, noticeNo);
+	        for (MultipartFile f : files) {
+	            noticeFileService.saveFile(f, noticeNo);
+	            fileService.fileSave(f, file.getChangeName());
 	        }
 	    }
 	}
