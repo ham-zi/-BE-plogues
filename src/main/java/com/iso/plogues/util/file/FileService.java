@@ -40,14 +40,11 @@ public class FileService {
 		}
 	}
 		
-	public void deleteFile(String filePath) {
+	public void deleteFile(String changeName) {
 		try {
-			URL url = new URL(filePath);
-			String path = url.getPath();
-			String key = path.substring(1);
 			DeleteObjectRequest request = DeleteObjectRequest.builder()
 														 .bucket(bucketName)
-														 .key(key)
+														 .key(changeName)
 														 .build();
 			s3Client.deleteObject(request);
 		} catch (Exception e) {
