@@ -35,10 +35,7 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'io.micrometer:micrometer-registry-prometheus'
-<<<<<<< HEAD
 	implementation 'software.amazon.awssdk:s3:2.20.56'
-=======
->>>>>>> ae32427f03f2bf5cc41719f7f0ea7a09a81466bb
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
