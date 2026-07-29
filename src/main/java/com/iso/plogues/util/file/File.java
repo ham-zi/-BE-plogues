@@ -20,10 +20,8 @@ public class File {
 	private String filePath;
 	private String deleted;
 	private List<String>extensions = List.of(".jpg", ".png", ".jpeg", ".svg", ".heif", ".heic", ".gif");
-	@Value("${cloud.region.satatic}")
-	private String region;
-	@Value("${cloud.s3.bucket}")
-	private String bucketName;
+	private String region = "ap-northeast-2";
+	private String bucketName = "iso-260728";
 	
 	public static File of(Long refBoardNo, String originName) {
 		return new File(refBoardNo,originName);
