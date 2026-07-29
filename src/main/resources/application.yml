@@ -5,40 +5,34 @@ spring:
     url: jdbc:oracle:thin:@115.90.212.18:10000:XE
     username: C##ISO_KH
     password: 1234
-    driver-class-name: oracle.jdbc.OracleDriver
-  web:
-    resources:
-      static-locations: file:uploads/
-  mvc:
-    static-path-pattern: /uploads/**
+    driver-class-name: oracle.jdbc.driver.OracleDriver
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  profiles:
+    include:
+    - aws
+
+server:
+  port: 8008
   ai:
     ollama:
       base-url: http://localhost:11434
       chat:
         model: gemma3:4b
 
-
-server:
-  port: 7777
+  tomcat:
+    max-http-form-post-size: 100MB
+    max-swallow-size: -1
 management:
   endpoints:
     web:
       exposure:
         include:
-          - health
-          - info
-          - prometheus
-
-
-
-  tomcat:
-    max-http-form-post-size: 100MB
-    max-swallow-size: -1
-
+        - health
+        - info
+        - prometheus
 mybatis:
   configuration:
     jdbc-type-for-null: VARCHAR

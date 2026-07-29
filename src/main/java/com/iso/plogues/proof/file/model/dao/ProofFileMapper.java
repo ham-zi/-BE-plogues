@@ -1,10 +1,10 @@
 package com.iso.plogues.proof.file.model.dao;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -66,7 +66,12 @@ public interface ProofFileMapper {
 		int deleteFile(Long proofNo);
 	
 	
-	
+	@Delete("""
+			DELETE FROM
+				   PROOF_FILE
+			 WHERE PROOF_NO=#{proofNo}
+			""")
+	int hardDeleteFile(Long proofNo);
 	
 
 }

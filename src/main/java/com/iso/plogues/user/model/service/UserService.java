@@ -2,6 +2,7 @@ package com.iso.plogues.user.model.service;
 
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -112,16 +113,12 @@ public class UserService {
 	}
 	
 	private void changeUserFile(CustomUserDetails user, MultipartFile file) {
-		File userFile = File.of(user.getUsername(), file.getOriginalFilename(), "user");
+		File userFile = File.of(user.getUsername(), file.getOriginalFilename());
 		fileMapper.deleteFile(user.getUsername());
 		int saveResult = fileMapper.saveFile(user.getUsername(),userFile);
 		invalidSaveFile(saveResult);
-		try {
-			fileService.deleteFile(userFile);
-		} catch (IOException e) {
-			throw new FileUploadException("파일 업로드에 실패했습니다.");
-		}
-		fileService.fileTransferTo(file, userFile.getChangeName(), userFile.getBoardType());
+		fileService.deleteFile(userFile.getChangeName());
+		fileService.fileSave(file, userFile.getChangeName());
 	}
 	
 	private void invalidSaveFile(int result) {
@@ -141,6 +138,10 @@ public class UserService {
 		if(!passwordEncoder.matches(userPwd, user.getPassword())) {
 			throw new InvalidUserPwdException("비밀번호가 틀렸습니다.");
 		}
+	}
+
+	public List<UserDto> findUsers() {
+		return userMapper.findUsers();
 	}
 
 

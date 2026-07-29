@@ -1,10 +1,12 @@
 package com.iso.plogues.user.controller;
 
+import java.util.List;
 import java.util.Map;
 
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +40,12 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 	
 	private final UserService userService;
+	
+	@GetMapping("/admin")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<ApiResponse<List<UserDto>>> findUsers() {
+		return ResponseEntity.ok().body(ApiResponse.success("회원정보 조회 성공", userService.findUsers()));
+	}
 	
 	@GetMapping
 	public ResponseEntity<ApiResponse<MyInfoDto>> selectMyInfo(@AuthenticationPrincipal CustomUserDetails user) {

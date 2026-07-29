@@ -1,35 +1,58 @@
 package com.iso.plogues.util.file;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URL;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FileUploadException;
 
+import lombok.RequiredArgsConstructor;
+import software.amazon.awssdk.awscore.exception.AwsServiceException;
+import software.amazon.awssdk.core.exception.SdkClientException;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+
 @Service
+@RequiredArgsConstructor
 public class FileService {
-
-	private final Path fileLocation;
+	private final S3Client s3Client;
+	@Value("${cloud.region.static}")
+	private String region;
+	@Value("${cloud.s3.bucket}")
+	private String bucketName;
 	
-	public FileService() {
-		this.fileLocation = Paths.get("uploads").toAbsolutePath().normalize();
-	}
-
-	public String fileTransferTo(MultipartFile upfile, String changeName, String boardType) {
-		Path targetLocation = this.fileLocation.resolve(boardType).resolve(changeName);
+	public void fileSave(MultipartFile file, String changeName) {
+		
+		PutObjectRequest request = PutObjectRequest.builder()
+										   .bucket(bucketName)
+										   .key(changeName)
+										   .contentType(file.getContentType())
+										   .build();
 		try {
-			Files.copy(upfile.getInputStream(), targetLocation);
-			return "http://localhost/uploads/"+ boardType + "/"+ changeName;
-		} catch (IOException e) {
-			throw new FileUploadException("파일 업로드에 실패했습니다.");
+			s3Client.putObject(request, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+		} catch (AwsServiceException | SdkClientException | IOException e) {
+			throw new FileUploadException("파일 저장에 실패했습니다.");
 		}
 	}
-	
-	public void deleteFile(File file) throws IOException {
-		Path path = this.fileLocation.resolve(file.getBoardType()).resolve(file.getChangeName());
-		Files.deleteIfExists(path);
+		
+	public void deleteFile(String filePath) {
+		try {
+			URL url = new URL(filePath);
+			String path = url.getPath();
+			String key = path.substring(1);
+			DeleteObjectRequest request = DeleteObjectRequest.builder()
+														 .bucket(bucketName)
+														 .key(key)
+														 .build();
+			s3Client.deleteObject(request);
+		} catch (Exception e) {
+			throw new FailedDeleteException("파일 삭제에 실패했습니다.");
+		}
 	}
 
 }

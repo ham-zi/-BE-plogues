@@ -2,7 +2,6 @@ package com.iso.plogues.board.model.service;
 
 import java.util.List;
 
-import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +17,9 @@ import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedUpdateException;
 import com.iso.plogues.util.dto.BoardResponse;
+import com.iso.plogues.util.file.File;
 import com.iso.plogues.util.file.FileDto;
+import com.iso.plogues.util.file.FileService;
 import com.iso.plogues.util.page.PageInfo;
 
 import io.micrometer.core.instrument.Counter;
@@ -33,12 +34,11 @@ public class BoardService {
 	private final BoardMapper boardMapper;
     private final BoardFileService boardFileService;
     private final BoardCommentMapper commentMapper;
+    private final FileService fileService;
     private final MeterRegistry registry;
     private final Counter errorCounter;
-    private final ChatClient chatClient;
     
-    public BoardService(BoardCommentMapper commentMapper ,BoardMapper boardMapper, BoardFileService boardFileService, BoardCommentMapper boardCommentMapper,MeterRegistry registry, BoardCommentController boardCommentController, ChatClient chatClient) {
-    	this.chatClient = chatClient;
+    public BoardService(BoardCommentMapper commentMapper ,BoardMapper boardMapper, BoardFileService boardFileService, BoardCommentMapper boardCommentMapper,MeterRegistry registry, BoardCommentController boardCommentController, FileService fileSerivce) {
     	this.boardMapper = boardMapper;
     	this.boardFileService = boardFileService;
     	this.boardCommentController = boardCommentController;
@@ -47,6 +47,7 @@ public class BoardService {
         this.errorCounter = Counter.builder("board_error_total")
                 .description("게시글 에러 횟수")
                 .register(registry);
+        this.fileService = fileSerivce;
     }
 
     public BoardResponse<BoardDto> selectBoardList(int currentPage, String keyword) {
@@ -83,29 +84,6 @@ public class BoardService {
         List<BoardCommentDto> comments = commentMapper.selectCommentList(boardNo);
         board.setCommentList(comments);
         
-        String chat = chatClient.prompt()
-  			  .system("""
-  			  			You are a Korean literature professor with 5 years of teaching experience.
-  			  			
-  			  			Always respond in Korean.
-
-						Format your response using numbered Markdown headings in the following style:
-						
-						1.
-						2.
-						3.
-						
-						Continue the numbering as needed.
-						
-						Never use profanity, vulgar language, or offensive expressions under any circumstances.
-  			  		""").user(u -> u.text("""
-  			  				Summarize the content below in exactly three concise lines.
-  			  				---
-  			  				{board}
-  			  				---
-  			  				""").param("board", board.getContent())).call().content() + "\n\n"+ board.getContent();
-        board.setContent(chat);
-        
         
         return board;
     }
@@ -117,6 +95,8 @@ public class BoardService {
         if (files != null && !files.isEmpty()) {
             for (MultipartFile upfile : files) {
                 boardFileService.saveFile(upfile, boardNo);
+                File file = File.of(boardNo, upfile.getOriginalFilename());
+                fileService.fileSave(upfile, file.getChangeName());
             }
         }
     }
@@ -133,9 +113,12 @@ public class BoardService {
         }
 
         // 사용자가 화면에서 지운 기존 파일만 삭제
+        FileDto f = null;
         if(deleteFileNos != null && !deleteFileNos.isEmpty()) {
             for(Long fileNo : deleteFileNos) {
-                boardFileService.deleteFileByNo(fileNo);
+                boardFileService.hardDeleteFile(fileNo);
+                f = boardFileService.findByFileNo(fileNo);
+                fileService.deleteFile(f.getChangeName());
             }
         }
 
@@ -143,6 +126,7 @@ public class BoardService {
         if(files != null && !files.isEmpty()) {
             for(MultipartFile file : files) {
                 boardFileService.saveFile(file, boardNo);
+                fileService.fileSave(file, f.getChangeName());
             }
         }
     }
