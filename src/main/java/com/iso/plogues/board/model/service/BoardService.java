@@ -17,7 +17,9 @@ import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedFindByNoException;
 import com.iso.plogues.exception.FailedUpdateException;
 import com.iso.plogues.util.dto.BoardResponse;
+import com.iso.plogues.util.file.File;
 import com.iso.plogues.util.file.FileDto;
+import com.iso.plogues.util.file.FileService;
 import com.iso.plogues.util.page.PageInfo;
 
 import io.micrometer.core.instrument.Counter;
@@ -32,10 +34,11 @@ public class BoardService {
 	private final BoardMapper boardMapper;
     private final BoardFileService boardFileService;
     private final BoardCommentMapper commentMapper;
+    private final FileService fileService;
     private final MeterRegistry registry;
     private final Counter errorCounter;
     
-    public BoardService(BoardCommentMapper commentMapper ,BoardMapper boardMapper, BoardFileService boardFileService, BoardCommentMapper boardCommentMapper,MeterRegistry registry, BoardCommentController boardCommentController) {
+    public BoardService(BoardCommentMapper commentMapper ,BoardMapper boardMapper, BoardFileService boardFileService, BoardCommentMapper boardCommentMapper,MeterRegistry registry, BoardCommentController boardCommentController, FileService fileSerivce) {
     	this.boardMapper = boardMapper;
     	this.boardFileService = boardFileService;
     	this.boardCommentController = boardCommentController;
@@ -44,6 +47,7 @@ public class BoardService {
         this.errorCounter = Counter.builder("board_error_total")
                 .description("게시글 에러 횟수")
                 .register(registry);
+        this.fileService = fileSerivce;
     }
 
     public BoardResponse<BoardDto> selectBoardList(int currentPage, String keyword) {
@@ -91,6 +95,8 @@ public class BoardService {
         if (files != null && !files.isEmpty()) {
             for (MultipartFile upfile : files) {
                 boardFileService.saveFile(upfile, boardNo);
+                File file = File.of(boardNo, upfile.getOriginalFilename());
+                fileService.fileSave(upfile, file.getChangeName());
             }
         }
     }
@@ -107,9 +113,12 @@ public class BoardService {
         }
 
         // 사용자가 화면에서 지운 기존 파일만 삭제
+        FileDto f = null;
         if(deleteFileNos != null && !deleteFileNos.isEmpty()) {
             for(Long fileNo : deleteFileNos) {
-                boardFileService.deleteFileByNo(fileNo);
+                boardFileService.hardDeleteFile(fileNo);
+                f = boardFileService.findByFileNo(fileNo);
+                fileService.deleteFile(f.getChangeName());
             }
         }
 
@@ -117,6 +126,7 @@ public class BoardService {
         if(files != null && !files.isEmpty()) {
             for(MultipartFile file : files) {
                 boardFileService.saveFile(file, boardNo);
+                fileService.fileSave(file, f.getChangeName());
             }
         }
     }

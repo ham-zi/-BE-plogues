@@ -54,7 +54,7 @@ public class JoinService {
 		requestService.saveRequestByHost(user.getUsername(), joinEntity.getJoinNo());
 		
 		if(file != null && !file.isEmpty()) {
-			fileService.saveFile(file, joinEntity.getJoinNo(), "join");
+			fileService.saveFile(file, joinEntity.getJoinNo());
 		}
 		
 		return joinEntity.getJoinNo();
@@ -106,7 +106,7 @@ public class JoinService {
 		int result = joinMapper.updateJoin(joinEntity);
 		throwUpdateException(result);
 		if(file != null && !file.isEmpty()) {
-			fileService.updateFile(file, join.getJoinNo(), "join");
+			fileService.updateFile(file, join.getJoinNo());
 		}
 	}
 	

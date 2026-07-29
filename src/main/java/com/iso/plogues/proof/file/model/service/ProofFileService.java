@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedInsertException;
-import com.iso.plogues.exception.FileUploadException;
 import com.iso.plogues.proof.file.model.dao.ProofFileMapper;
 import com.iso.plogues.util.file.File;
 import com.iso.plogues.util.file.FileDto;
@@ -26,10 +25,9 @@ public class ProofFileService {
 	@Transactional
 	public void saveProofFiles(List<MultipartFile> files, Long proofNo) {
 
-	    String boardType = "proof";
 	    for(int i = 0; i < files.size(); i++) {
 	        MultipartFile file = files.get(i);
-	        File fileEntity = File.of(proofNo, file.getOriginalFilename(), boardType);
+	        File fileEntity = File.of(proofNo, file.getOriginalFilename());
 
 	        int result = proofFileMapper.saveFile(fileEntity, i + 1);
 
@@ -37,7 +35,7 @@ public class ProofFileService {
 	            throw new FailedInsertException("파일 저장 실패");
 	        }
 
-	        fileService.fileTransferTo(file, fileEntity.getChangeName(), boardType);
+	        fileService.fileSave(file, fileEntity.getChangeName());
 	    }
 	}
 
@@ -58,12 +56,22 @@ public class ProofFileService {
 	
 	@Transactional
 	public void updateFile(List<MultipartFile> files, Long proofNo, String boardType) {
-
+		List<FileDto> list = findByBno(proofNo);
 	    if(files == null || files.isEmpty()) {
 	        return;
 	    }
-	    deleteFile(proofNo);
+	    hardDeleteFile(proofNo);
+	    for(FileDto f : list) {			
+			fileService.deleteFile(f.getChangeName());
+		}
 	    saveProofFiles(files, proofNo);
+	}
+
+	private void hardDeleteFile(Long proofNo) {
+		int result = proofFileMapper.hardDeleteFile(proofNo);
+		if(result < 1) {
+			throw new FailedDeleteException("파일 삭제에 실패했습니다.");
+		}
 	}
 
 }

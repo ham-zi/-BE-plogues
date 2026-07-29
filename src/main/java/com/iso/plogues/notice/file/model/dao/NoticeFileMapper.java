@@ -14,6 +14,9 @@ public interface NoticeFileMapper {
 
     @Select("SELECT FILE_NO, NOTICE_NO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH FROM NOTICE_FILE WHERE DELETED = 'N' AND NOTICE_NO = #{noticeNo}")
     List<FileDto> findByBno(Long noticeNo);
+    
+    @Select("SELECT FILE_NO, NOTICE_NO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH FROM NOTICE_FILE WHERE DELETED = 'N' AND FILE_NO = #{fileNo}")
+    FileDto findByFileNo(Long fileNo);
 
     @Update("UPDATE NOTICE_FILE SET DELETED = 'Y' WHERE NOTICE_NO = #{noticeNo}")
     int deleteFile(Long noticeNo);
@@ -21,8 +24,8 @@ public interface NoticeFileMapper {
     @Update("UPDATE NOTICE_FILE SET DELETED = 'Y' WHERE FILE_NO = #{fileNo}")
     int deleteFileByNo(Long fileNo);
 
-    @Delete("DELETE FROM NOTICE_FILE WHERE NOTICE_NO = #{noticeNo}")
-    int hardDeleteFile(Long noticeNo);
+    @Delete("DELETE FROM NOTICE_FILE WHERE FILE_NO = #{fileNo}")
+    int hardDeleteFile(Long fileNo);
     
     @Insert("INSERT INTO NOTICE_FILE VALUES(SEQ_NOTICE_FILE.NEXTVAL, #{originName}, #{changeName}, #{filePath}, 'N', #{refBoardNo})")
     int saveFile(File file);

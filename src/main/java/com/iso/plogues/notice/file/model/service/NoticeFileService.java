@@ -21,10 +21,10 @@ public class NoticeFileService {
 
     @Transactional
     public void saveFile(MultipartFile file, Long refNoticeNo) {
-        File fileEntity = File.of(refNoticeNo, file.getOriginalFilename(), "notice");
+        File fileEntity = File.of(refNoticeNo, file.getOriginalFilename());
         int result = fileMapper.saveFile(fileEntity);
         throwFileInsertException(result);
-        fileService.fileTransferTo(file, fileEntity.getChangeName(), "notice");
+        fileService.fileSave(file, fileEntity.getChangeName());
     }
 
     private void throwFileInsertException(int result) {
@@ -58,10 +58,12 @@ public class NoticeFileService {
         fileMapper.deleteFileByNo(fileNo);
     }
 
-   
-
-    private void hardDeleteFile(Long refNoticeNo) {
-        int result = fileMapper.hardDeleteFile(refNoticeNo);
+    public void hardDeleteFile(Long fileNo) {
+        int result = fileMapper.hardDeleteFile(fileNo);
         throwFailedDeleteException(result);
+    }
+    
+    public FileDto findByFileNo(Long fileNo) {
+    	return fileMapper.findByFileNo(fileNo);
     }
 }

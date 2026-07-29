@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.iso.plogues.board.file.model.dao.BoardFileMapper;
 import com.iso.plogues.exception.FailedDeleteException;
 import com.iso.plogues.exception.FailedInsertException;
 import com.iso.plogues.question.file.dao.QuestionFileMapper;
@@ -24,10 +23,10 @@ public class QuestionFileService {
 
     @Transactional
     public void saveFile(MultipartFile file, Long refBno) {
-        File fileEntity = File.of(refBno, file.getOriginalFilename(), "board");
+        File fileEntity = File.of(refBno, file.getOriginalFilename());
         int result = fileMapper.saveFile(fileEntity);
         throwFileInsertException(result);
-        fileService.fileTransferTo(file, fileEntity.getChangeName(), "board");
+        fileService.fileSave(file, fileEntity.getChangeName());
     }
 
     private void throwFileInsertException(int result) {
@@ -58,10 +57,14 @@ public class QuestionFileService {
 
     @Transactional
     public void updateFile(MultipartFile file, Long refBno) {
-        if(!findByBno(refBno).isEmpty()) {
-            hardDeleteFile(refBno);
-        }
-        saveFile(file, refBno);
+    	List<FileDto> files = findByBno(refBno);
+		if(!findByBno(refBno).isEmpty()) {
+			hardDeleteFile(refBno);
+			for(FileDto f : files) {			
+				fileService.deleteFile(f.getFilePath());
+			}
+		}
+		saveFile(file, refBno);
     }
 
     private void hardDeleteFile(Long refBno) {
