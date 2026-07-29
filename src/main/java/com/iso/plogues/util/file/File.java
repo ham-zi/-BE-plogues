@@ -38,7 +38,7 @@ public class File {
 		this.refBoardNo = refBoardNo;
 		this.originName = originName;
 		this.changeName = getChangeName(originName);
-		this.filePath = "https://"+ region + ".s3." + bucketName + ".amazonaws.com/";
+		this.filePath = "https://"+ bucketName + ".s3." + region + ".amazonaws.com/";
 		this.deleted = "N";
 	}
 	
@@ -48,7 +48,7 @@ public class File {
 		this.refUserId = refUserId;
 		this.originName = originName;
 		this.changeName = getChangeName(originName);
-		this.filePath = "https://"+ region + ".s3." + bucketName + ".amazonaws.com/";
+		this.filePath = "https://"+ bucketName + ".s3." + region + ".amazonaws.com/";
 		this.deleted = "N";
 	}
 	
