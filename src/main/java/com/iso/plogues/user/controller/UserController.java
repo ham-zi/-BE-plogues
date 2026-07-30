@@ -29,6 +29,8 @@ import com.iso.plogues.user.model.dto.UserDto;
 import com.iso.plogues.user.model.service.UserService;
 import com.iso.plogues.user.model.vo.MyPageResponse;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +38,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/api/users")
-@RequiredArgsConstructor
 public class UserController {
 	
 	private final UserService userService;
+	private final Counter viewCounter;
+	
+	
+	public UserController(UserService userService, MeterRegistry registry) {
+		this.userService=userService;
+		viewCounter = Counter.builder("userInfo_view_total").description("유저정보 조회 횟수").register(registry);
+	}
 	
 	@GetMapping("/admin")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -49,6 +57,7 @@ public class UserController {
 	
 	@GetMapping
 	public ResponseEntity<ApiResponse<MyInfoDto>> selectMyInfo(@AuthenticationPrincipal CustomUserDetails user) {
+		viewCounter.increment();
 		return ResponseEntity.ok().body(ApiResponse.success("회원정보 조회 성공", userService.selectMyInfo(user)));
 	}
 	

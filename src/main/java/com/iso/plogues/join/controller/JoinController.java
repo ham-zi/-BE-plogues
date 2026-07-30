@@ -1,6 +1,7 @@
 package com.iso.plogues.join.controller;
 
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +22,9 @@ import com.iso.plogues.join.model.dto.JoinDto;
 import com.iso.plogues.join.model.service.JoinService;
 import com.iso.plogues.util.dto.BoardResponse;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +32,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/api/joins")
-@RequiredArgsConstructor
 public class JoinController {
 	private final JoinService joinService;
+	private final Counter viewCounter;
+	private final MeterRegistry registry;
+	
+	public JoinController (JoinService joinService, MeterRegistry registry) {
+		this.joinService = joinService;
+		viewCounter = Counter.builder("join_view_total").description("조인게시판 조회 횟수").register(registry);
+		this.registry = registry; 
+		
+	}
 	
 	@PostMapping
 	public ResponseEntity<ApiResponse<Void>> saveJoin(@AuthenticationPrincipal CustomUserDetails user, @Valid JoinDto join, @RequestParam(name="file", required=false) MultipartFile file) {
@@ -47,12 +59,15 @@ public class JoinController {
 	
 	@GetMapping
 	public ResponseEntity<ApiResponse<BoardResponse<JoinDto>>> findAll(@RequestParam(name="page", defaultValue = "1") int page, @RequestParam(name="category") String category, @RequestParam(name="keyword", required=false)String keyword) {
+		Timer.Sample sample = Timer.start(registry);
 		BoardResponse<JoinDto> br = joinService.findAllJoins(page, null, category, keyword);
+		sample.stop(registry.timer("join_list_duration"));		
 		return ResponseEntity.status(200).body(ApiResponse.success("게시글 전체 조회 성공", br));
 	}
 	
 	@GetMapping("/{joinNo}")
 	public ResponseEntity<ApiResponse<DetailJoinDto>> findByJoinNo(@PathVariable(name="joinNo") Long joinNo) {
+		viewCounter.increment();
 		DetailJoinDto join = joinService.findByJoinNo(joinNo);
 		return ResponseEntity.status(200).body(ApiResponse.success("게시글 조회 성공", join));
 	}

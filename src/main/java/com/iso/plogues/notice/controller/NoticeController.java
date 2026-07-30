@@ -24,6 +24,7 @@ import com.iso.plogues.util.dto.BoardResponse;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -33,17 +34,22 @@ public class NoticeController {
 	
 	private final NoticeService noticeService;
 	private final Counter viewCounter;
+	private final MeterRegistry registry;
 	
 	public NoticeController(MeterRegistry registry, NoticeService noticeService) {
 		this.noticeService = noticeService;
 		this.viewCounter = Counter.builder("notice_view_total").tag("category", "EVENT").tag("category", "NOTICE").register(registry);
+		this.registry=registry;
 	}
 
 	@GetMapping
 	public ResponseEntity<ApiResponse<BoardResponse<NoticeDto>>> selectNoticeList(
 	        @RequestParam(name = "category") String category,
 	        @RequestParam(name = "page", defaultValue = "1") int page) {
-	    return ResponseEntity.ok(ApiResponse.success("공지사항, 이벤트 목록 조회 성공", noticeService.selectNoticeList(category, page)));
+		Timer.Sample sample = Timer.start(registry);
+		BoardResponse<NoticeDto> notices = noticeService.selectNoticeList(category, page);
+		sample.stop(registry.timer("notice_list_duration"));
+	    return ResponseEntity.ok(ApiResponse.success("공지사항, 이벤트 목록 조회 성공", notices));
 	}
 
 	@GetMapping("/{noticeNo}")
