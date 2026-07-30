@@ -63,7 +63,6 @@ public class ProofController {
 			@RequestParam(name = "category", defaultValue= "ALL") String category) {
 		
 		BoardResponse<ProofDto> br = proofService.findAll(page, category);
-		log.info("br@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",br);
 		return ResponseEntity.status(200).body(ApiResponse.success("인증 게시글 전체 조회 성공", br));
 	}
 
