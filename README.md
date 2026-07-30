@@ -123,38 +123,6 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 ---
 
-## 5. 운영 및 배포
-
-| 구분        | 적용 기술                     | 적용 내용                                                                    |
-| :---------- | :---------------------------- | :--------------------------------------------------------------------------- |
-| 서버 환경   | AWS EC2                       | 애플리케이션 실행을 위한 Linux 기반 서버 구성                                |
-| 컨테이너    | Docker, Docker Compose        | 프론트엔드, 백엔드, Prometheus, Grafana, cAdvisor를 컨테이너로 분리하여 실행 |
-| 웹 서버     | Nginx                         | React 정적 파일 제공 및 백엔드 API 요청 프록시                               |
-| 트래픽 처리 | AWS Application Load Balancer | 외부 요청을 EC2 대상 그룹으로 전달                                           |
-| 도메인      | 가비아 DNS 또는 Route 53      | 구매한 도메인을 Application Load Balancer와 연결                             |
-| HTTPS       | AWS Certificate Manager       | SSL/TLS 인증서를 발급하고 ALB의 HTTPS 리스너에 적용                          |
-| 파일 저장   | AWS S3, IAM                   | 게시글 이미지를 S3에 업로드하고 파일 URL 및 메타데이터 관리                  |
-| 모니터링    | Prometheus, Grafana, cAdvisor | 애플리케이션 지표와 컨테이너 리소스 지표를 수집·시각화할 수 있는 환경 구성   |
-
-| **Infrastructure** | AWS EC2, Application Load Balancer, ACM | 서버 배포, 트래픽 분산 환경 구성 및 HTTPS 인증서 적용 |
-| **Container** | Docker, Docker Compose, Nginx | 프론트엔드·백엔드·모니터링 서버 컨테이너화 및 서비스 간 통신 구성 |
-| **Cloud Storage** | AWS S3, IAM | 게시글 이미지 업로드 및 클라우드 파일 저장 |
-| **Monitoring** | Prometheus, Grafana, cAdvisor | 애플리케이션 지표 수집과 컨테이너 리소스 모니터링 환경 구성 |
-| **Observability** | Spring Boot Actuator, Micrometer | 요청 처리 시간, 예외 발생 횟수, 게시판 조회 횟수 지표 수집 |
-| **DNS · HTTPS** | 가비아 DNS 또는 Route 53, AWS ACM | 사용자 도메인 연결 및 HTTPS 접속 환경 구성 |
-
-## 배포 아키텍처
-
-<img src="./docs/images/deployment-architecture.png"
-     width="900"
-     alt="PLOGUES 배포 아키텍처">
-
-### 배포 결과
-
-- React와 Spring Boot 애플리케이션을 Docker 컨테이너로 분리하여 EC2에 배포했습니다.
-- Application Load Balancer와 ACM 인증서를 적용해 도메인을 통한 HTTPS 접속 환경을 구성했습니다.
-- 이미지 파일은 서버 로컬 경로가 아닌 AWS S3에 저장하도록 백엔드 파일 업로드 로직을 연동했습니다.
-
 ## 🛠 기술 스택
 
 | 구분                  | 기술 스택                                                                    | 활용 내용                                                                                    |
@@ -175,6 +143,44 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 ---
 
+## 운영·배포 기술 스택
+
+| 구분        | 적용 기술                     | 적용 내용                                                                    |
+| :---------- | :---------------------------- | :--------------------------------------------------------------------------- |
+| 서버 환경   | AWS EC2                       | 애플리케이션 실행을 위한 Linux 기반 서버 구성                                |
+| 컨테이너    | Docker, Docker Compose        | 프론트엔드, 백엔드, Prometheus, Grafana, cAdvisor를 컨테이너로 분리하여 실행 |
+| 웹 서버     | Nginx                         | React 정적 파일 제공 및 백엔드 API 요청 프록시                               |
+| 트래픽 처리 | AWS Application Load Balancer | 외부 요청을 EC2 대상 그룹으로 전달                                           |
+| 도메인      | 가비아 DNS 또는 Route 53      | 구매한 도메인을 Application Load Balancer와 연결                             |
+| HTTPS       | AWS Certificate Manager       | SSL/TLS 인증서를 발급하고 ALB의 HTTPS 리스너에 적용                          |
+| 파일 저장   | AWS S3, IAM                   | 게시글 이미지를 S3에 업로드하고 파일 URL 및 메타데이터 관리                  |
+| 모니터링    | Prometheus, Grafana, cAdvisor | 애플리케이션 지표와 컨테이너 리소스 지표를 수집·시각화할 수 있는 환경 구성   |
+
+### 운영·배포 기술 스택
+
+| 구분               | 적용 기술                               | 활용 내용                                                                   |
+| :----------------- | :-------------------------------------- | :-------------------------------------------------------------------------- |
+| **Infrastructure** | AWS EC2, Application Load Balancer, ACM | Linux 기반 서버 배포, 외부 트래픽 전달 및 HTTPS 인증서 적용                 |
+| **Container**      | Docker, Docker Compose, Nginx           | 프론트엔드·백엔드·모니터링 서비스를 컨테이너로 분리하고 서비스 간 통신 구성 |
+| **Cloud Storage**  | AWS S3, IAM                             | 게시글 이미지 업로드 및 파일 URL·메타데이터 관리                            |
+| **Monitoring**     | Prometheus, Grafana, cAdvisor           | 애플리케이션 지표와 컨테이너 리소스 지표 수집·시각화 환경 구성              |
+| **Observability**  | Spring Boot Actuator, Micrometer        | 요청 처리 시간, 예외 발생 횟수, 게시판 조회 횟수 지표 수집                  |
+| **DNS · HTTPS**    | Route 53, AWS ACM                       | 도메인을 ALB에 연결하고 HTTPS 접속 환경 구성                                |
+
+## 배포 아키텍처
+
+<img src="./docs/images/deployment-architecture.png"
+     width="900"
+     alt="PLOGUES 배포 아키텍처">
+
+### 배포 결과
+
+- React와 Spring Boot 애플리케이션을 Docker 컨테이너로 분리하여 EC2에 배포했습니다.
+- Application Load Balancer와 ACM 인증서를 적용해 도메인을 통한 HTTPS 접속 환경을 구성했습니다.
+- 이미지 파일은 서버 로컬 경로가 아닌 AWS S3에 저장하도록 백엔드 파일 업로드 로직을 연동했습니다.
+
+---
+
 ## 6. 개발 기간 및 팀 구성
 
 - **인원:** 5명
@@ -187,8 +193,6 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 | **이다산** | 참여 신청·승인·거절, 마이페이지 참여·모집 목록 구현           |              [![GitHub](https://img.shields.io/badge/GitHub-ham--zi-22C55E?style=flat-square&logo=github&logoColor=white)](https://github.com/ham-zi)               |
 | **이승현** | 인증 게시판 CRUD, 이미지 제약 처리 및 신고 기능 연계          |             [![GitHub](https://img.shields.io/badge/GitHub-rlaehqkf-3B82F6?style=flat-square&logo=github&logoColor=white)](https://github.com/rlaehqkf)             |
 | **정주미** | 문의 게시판·답변·상태 관리, 로그인·회원가입 및 인증 흐름 구현 |        [![GitHub](https://img.shields.io/badge/GitHub-peony639--lab-A855F7?style=flat-square&logo=github&logoColor=white)](https://github.com/peony639-lab)         |
-
-<!-- 팀원 GitHub 또는 이메일을 공개할 경우 위 표에 링크 열을 추가합니다. -->
 
 ---
 
@@ -207,8 +211,6 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 |                                     게시글                                     |                  로그인 → 토큰 검증 → 재발급 → 역할별 접근 제어                  |
 
 </div>
-
-<!-- 이미지가 준비되기 전에는 위 경로에 파일이 없어 빈 이미지로 표시될 수 있습니다. -->
 
 ---
 
