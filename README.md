@@ -145,6 +145,12 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 ## 5. 운영·배포 기술 스택
 
+
+<img src="./docs/images/deployment-architecture.png"
+     width="900"
+     alt="PLOGUES 배포 아키텍처">
+     
+
 | 구분        | 적용 기술                     | 적용 내용                                                                    |
 | :---------- | :---------------------------- | :--------------------------------------------------------------------------- |
 | 서버 환경   | AWS EC2                       | 애플리케이션 실행을 위한 Linux 기반 서버 구성                                |
@@ -166,10 +172,6 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 | **Observability**  | Spring Boot Actuator, Micrometer        | 요청 처리 시간, 예외 발생 횟수, 게시판 조회 횟수 지표 수집                  |
 | **DNS · HTTPS**    | Route 53, AWS ACM                       | 도메인을 ALB에 연결하고 HTTPS 접속 환경 구성                                |
 
-
-<img src="./docs/images/deployment-architecture.png"
-     width="900"
-     alt="PLOGUES 배포 아키텍처">
 
 ### 배포 결과
 
