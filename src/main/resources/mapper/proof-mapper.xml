@@ -97,21 +97,20 @@
 		   LEFT
 	       JOIN
 	            USER_FILE UF ON UF.USER_ID = P.USER_ID
-	       LEFT
 	       JOIN 
 	            PROOF_FILE PF
 	         ON 
 	         	PF.FILE_NO = ( 
 	     SELECT 
-	     		MAX(FILE_NO)
+	     		PF2.FILE_NO
 	       FROM 
-	      		PROOF_FILE
+	      		PROOF_FILE PF2
 	      WHERE 
-	      		PROOF_NO = P.PROOF_NO
+	      		PF2.PROOF_NO = P.PROOF_NO
 	      	AND 
-	      		FILE_LEVEL = 1	
+	      		PF2.FILE_LEVEL = 1	
 	      	AND 
-	      		DELETED = 'N'
+	      		PF2.DELETED = 'N'
 	     	  )	
 		  WHERE
 			    P.DELETED = 'N'

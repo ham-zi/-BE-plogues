@@ -61,9 +61,9 @@ public class ProofController {
 	public ResponseEntity<ApiResponse<BoardResponse<ProofDto>>> findAll(
 			@RequestParam(name = "page", defaultValue = "1") int page,
 			@RequestParam(name = "category", defaultValue= "ALL") String category) {
-
+		
 		BoardResponse<ProofDto> br = proofService.findAll(page, category);
-
+		log.info("br@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",br);
 		return ResponseEntity.status(200).body(ApiResponse.success("인증 게시글 전체 조회 성공", br));
 	}
 
