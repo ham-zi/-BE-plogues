@@ -19,12 +19,19 @@
 ![Axios](https://img.shields.io/badge/Axios-1.7-5A29E4?style=flat-square&logo=axios&logoColor=white)
 ![Recharts](https://img.shields.io/badge/Recharts-3.9.2-8884D8?style=flat-square)
 ![SweetAlert2](https://img.shields.io/badge/SweetAlert2-11.26.25-FF6B6B?style=flat-square)
-
+![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazonwebservices&logoColor=white)
+![Amazon EC2](https://img.shields.io/badge/Amazon%20EC2-FF9900?style=flat-square&logo=amazonec2&logoColor=white)
+![Amazon S3](https://img.shields.io/badge/Amazon%20S3-569A31?style=flat-square&logo=amazons3&logoColor=white)
+![Route 53](https://img.shields.io/badge/Amazon%20Route%2053-8C4FFF?style=flat-square&logo=amazonroute53&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+![Nginx](https://img.shields.io/badge/Nginx-009639?style=flat-square&logo=nginx&logoColor=white)
+![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=flat-square&logo=prometheus&logoColor=white)
+![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat-square&logo=grafana&logoColor=white)
 <br>
 
 **2026.06.17 - 2026.07.15 · 5인 팀 프로젝트**
 
-[프로젝트 개요](#1-프로젝트-개요) · [핵심 흐름](#2-핵심-사용자-흐름) · [아키텍처](#4-시스템-아키텍처) 
+[프로젝트 개요](#1-프로젝트-개요) · [핵심 흐름](#2-핵심-사용자-흐름) · [아키텍처](#4-시스템-아키텍처)
 
 </div>
 
@@ -116,23 +123,55 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 ---
 
+## 5. 운영 및 배포
+
+| 구분        | 적용 기술                     | 적용 내용                                                                    |
+| :---------- | :---------------------------- | :--------------------------------------------------------------------------- |
+| 서버 환경   | AWS EC2                       | 애플리케이션 실행을 위한 Linux 기반 서버 구성                                |
+| 컨테이너    | Docker, Docker Compose        | 프론트엔드, 백엔드, Prometheus, Grafana, cAdvisor를 컨테이너로 분리하여 실행 |
+| 웹 서버     | Nginx                         | React 정적 파일 제공 및 백엔드 API 요청 프록시                               |
+| 트래픽 처리 | AWS Application Load Balancer | 외부 요청을 EC2 대상 그룹으로 전달                                           |
+| 도메인      | 가비아 DNS 또는 Route 53      | 구매한 도메인을 Application Load Balancer와 연결                             |
+| HTTPS       | AWS Certificate Manager       | SSL/TLS 인증서를 발급하고 ALB의 HTTPS 리스너에 적용                          |
+| 파일 저장   | AWS S3, IAM                   | 게시글 이미지를 S3에 업로드하고 파일 URL 및 메타데이터 관리                  |
+| 모니터링    | Prometheus, Grafana, cAdvisor | 애플리케이션 지표와 컨테이너 리소스 지표를 수집·시각화할 수 있는 환경 구성   |
+
+| **Infrastructure** | AWS EC2, Application Load Balancer, ACM | 서버 배포, 트래픽 분산 환경 구성 및 HTTPS 인증서 적용 |
+| **Container** | Docker, Docker Compose, Nginx | 프론트엔드·백엔드·모니터링 서버 컨테이너화 및 서비스 간 통신 구성 |
+| **Cloud Storage** | AWS S3, IAM | 게시글 이미지 업로드 및 클라우드 파일 저장 |
+| **Monitoring** | Prometheus, Grafana, cAdvisor | 애플리케이션 지표 수집과 컨테이너 리소스 모니터링 환경 구성 |
+| **Observability** | Spring Boot Actuator, Micrometer | 요청 처리 시간, 예외 발생 횟수, 게시판 조회 횟수 지표 수집 |
+| **DNS · HTTPS** | 가비아 DNS 또는 Route 53, AWS ACM | 사용자 도메인 연결 및 HTTPS 접속 환경 구성 |
+
+## 배포 아키텍처
+
+<img src="./docs/images/deployment-architecture.png"
+     width="900"
+     alt="PLOGUES 배포 아키텍처">
+
+### 배포 결과
+
+- React와 Spring Boot 애플리케이션을 Docker 컨테이너로 분리하여 EC2에 배포했습니다.
+- Application Load Balancer와 ACM 인증서를 적용해 도메인을 통한 HTTPS 접속 환경을 구성했습니다.
+- 이미지 파일은 서버 로컬 경로가 아닌 AWS S3에 저장하도록 백엔드 파일 업로드 로직을 연동했습니다.
+
 ## 🛠 기술 스택
 
-| 구분 | 기술 스택 | 활용 내용 |
-| :------------------ | :------------------------------------- | :------------------------------------------------------------------------------------------------------------- |
-| **Backend** | Java **21**, Spring Boot **3.5.16**, Spring Web, Spring Validation | REST API 개발, 계층형 아키텍처(Controller-Service-Mapper), 비즈니스 로직 처리 및 입력값 검증 |
-| **Security** | Spring Security, JWT **0.12.3** | Access Token·Refresh Token 기반 인증 및 인가, 역할(Role) 검증, JWT 인증 필터 처리 |
-| **Persistence** | MyBatis Spring Boot Starter **3.0.5**, JDBC | SQL Mapper 기반 데이터 접근, 동적 SQL, 페이징 및 트랜잭션 처리 |
-| **Database** | Oracle Database **21c XE** | 관계형 데이터 저장, JOIN, 시퀀스, 제약조건 및 게시판·회원·참여·문의·신고 데이터 관리 |
-| **Frontend** | React **19.2.7**, Vite **8**, JavaScript | SPA 개발, 컴포넌트 기반 UI 구성 및 사용자 인터페이스 구현 |
-| **State Management** | React Context API, React Hooks | 로그인 사용자 정보와 전역 상태 관리, 컴포넌트별 상태 관리 |
-| **Routing · HTTP** | React Router DOM **7.18.0**, Axios **1.18.1** | SPA 라우팅, REST API 통신, JWT 재발급 및 실패 요청 자동 재요청 처리 |
-| **UI / UX** | styled-components **6.4.3**, SweetAlert2 **11.26.25**, react-icons **5.7.0** | CSS-in-JS 스타일링, 공통 알림·확인 모달 및 아이콘 컴포넌트 구현 |
-| **File Handling** | Multipart/Form-Data | 이미지 업로드, 첨부파일 저장, 수정·삭제 및 파일 메타데이터 관리 |
-| **Visualization** | Recharts **3.9.2** | 온도·습도·토양 수분 센서 데이터 시각화 |
-| **Build Tool** | Gradle **8.14.5** | 백엔드 프로젝트 빌드 및 의존성 관리 |
-| **Development Tools** | Spring Tool Suite **5.2.0**, VS Code, DBeaver | 백엔드·프론트엔드 개발 및 Oracle 데이터베이스 관리 |
-| **Collaboration** | Git, GitHub, Postman | 브랜치 기반 형상 관리, Pull Request 협업 및 REST API 테스트 |
+| 구분                  | 기술 스택                                                                    | 활용 내용                                                                                    |
+| :-------------------- | :--------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------- |
+| **Backend**           | Java **21**, Spring Boot **3.5.16**, Spring Web, Spring Validation           | REST API 개발, 계층형 아키텍처(Controller-Service-Mapper), 비즈니스 로직 처리 및 입력값 검증 |
+| **Security**          | Spring Security, JWT **0.12.3**                                              | Access Token·Refresh Token 기반 인증 및 인가, 역할(Role) 검증, JWT 인증 필터 처리            |
+| **Persistence**       | MyBatis Spring Boot Starter **3.0.5**, JDBC                                  | SQL Mapper 기반 데이터 접근, 동적 SQL, 페이징 및 트랜잭션 처리                               |
+| **Database**          | Oracle Database **21c XE**                                                   | 관계형 데이터 저장, JOIN, 시퀀스, 제약조건 및 게시판·회원·참여·문의·신고 데이터 관리         |
+| **Frontend**          | React **19.2.7**, Vite **8**, JavaScript                                     | SPA 개발, 컴포넌트 기반 UI 구성 및 사용자 인터페이스 구현                                    |
+| **State Management**  | React Context API, React Hooks                                               | 로그인 사용자 정보와 전역 상태 관리, 컴포넌트별 상태 관리                                    |
+| **Routing · HTTP**    | React Router DOM **7.18.0**, Axios **1.18.1**                                | SPA 라우팅, REST API 통신, JWT 재발급 및 실패 요청 자동 재요청 처리                          |
+| **UI / UX**           | styled-components **6.4.3**, SweetAlert2 **11.26.25**, react-icons **5.7.0** | CSS-in-JS 스타일링, 공통 알림·확인 모달 및 아이콘 컴포넌트 구현                              |
+| **File Handling**     | Multipart/Form-Data                                                          | 이미지 업로드, 첨부파일 저장, 수정·삭제 및 파일 메타데이터 관리                              |
+| **Visualization**     | Recharts **3.9.2**                                                           | 온도·습도·토양 수분 센서 데이터 시각화                                                       |
+| **Build Tool**        | Gradle **8.14.5**                                                            | 백엔드 프로젝트 빌드 및 의존성 관리                                                          |
+| **Development Tools** | Spring Tool Suite **5.2.0**, VS Code, DBeaver                                | 백엔드·프론트엔드 개발 및 Oracle 데이터베이스 관리                                           |
+| **Collaboration**     | Git, GitHub, Postman                                                         | 브랜치 기반 형상 관리, Pull Request 협업 및 REST API 테스트                                  |
 
 ---
 
@@ -141,13 +180,13 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 - **인원:** 5명
 - **방식:** 프론트엔드 · 백엔드 저장소 분리, 기능별 브랜치와 Pull Request 기반 협업
 
-| 팀원 | 주요 담당 | GitHub |
-| :---: | :--- | :---: |
-| **남지호** | 후기 게시판 및 공지·이벤트 CRUD, 파일·댓글·신고 기능 연동 | [![GitHub](https://img.shields.io/badge/GitHub-jiho0828-FF6B6B?style=flat-square&logo=github&logoColor=white)](https://github.com/jiho0828) |
-| **신순주** | 모집 게시판 수정·삭제, 참여 승인 이후 대화 기능 연동 | [![GitHub](https://img.shields.io/badge/GitHub-grape--fruit--apricot-F59E0B?style=flat-square&logo=github&logoColor=white)](https://github.com/grape-fruit-apricot) |
-| **이다산** | 참여 신청·승인·거절, 마이페이지 참여·모집 목록 구현 | [![GitHub](https://img.shields.io/badge/GitHub-ham--zi-22C55E?style=flat-square&logo=github&logoColor=white)](https://github.com/ham-zi) |
-| **이승현** | 인증 게시판 CRUD, 이미지 제약 처리 및 신고 기능 연계 | [![GitHub](https://img.shields.io/badge/GitHub-rlaehqkf-3B82F6?style=flat-square&logo=github&logoColor=white)](https://github.com/rlaehqkf) |
-| **정주미** | 문의 게시판·답변·상태 관리, 로그인·회원가입 및 인증 흐름 구현 | [![GitHub](https://img.shields.io/badge/GitHub-peony639--lab-A855F7?style=flat-square&logo=github&logoColor=white)](https://github.com/peony639-lab) |
+|    팀원    | 주요 담당                                                     |                                                                               GitHub                                                                                |
+| :--------: | :------------------------------------------------------------ | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| **남지호** | 후기 게시판 및 공지·이벤트 CRUD, 파일·댓글·신고 기능 연동     |             [![GitHub](https://img.shields.io/badge/GitHub-jiho0828-FF6B6B?style=flat-square&logo=github&logoColor=white)](https://github.com/jiho0828)             |
+| **신순주** | 모집 게시판 수정·삭제, 참여 승인 이후 대화 기능 연동          | [![GitHub](https://img.shields.io/badge/GitHub-grape--fruit--apricot-F59E0B?style=flat-square&logo=github&logoColor=white)](https://github.com/grape-fruit-apricot) |
+| **이다산** | 참여 신청·승인·거절, 마이페이지 참여·모집 목록 구현           |              [![GitHub](https://img.shields.io/badge/GitHub-ham--zi-22C55E?style=flat-square&logo=github&logoColor=white)](https://github.com/ham-zi)               |
+| **이승현** | 인증 게시판 CRUD, 이미지 제약 처리 및 신고 기능 연계          |             [![GitHub](https://img.shields.io/badge/GitHub-rlaehqkf-3B82F6?style=flat-square&logo=github&logoColor=white)](https://github.com/rlaehqkf)             |
+| **정주미** | 문의 게시판·답변·상태 관리, 로그인·회원가입 및 인증 흐름 구현 |        [![GitHub](https://img.shields.io/badge/GitHub-peony639--lab-A855F7?style=flat-square&logo=github&logoColor=white)](https://github.com/peony639-lab)         |
 
 <!-- 팀원 GitHub 또는 이메일을 공개할 경우 위 표에 링크 열을 추가합니다. -->
 
@@ -155,18 +194,17 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 ## 7. 역할별 MVP 시나리오
 
-
 <div align="center">
 
-| 참여자 | 모집장 |
-| :---: | :---: |
+|                                     참여자                                     |                                     모집장                                     |
+| :----------------------------------------------------------------------------: | :----------------------------------------------------------------------------: |
 | <img src="docs/images/sequence2.png" width="420" alt="참여자 핵심 기능 흐름"/> | <img src="docs/images/sequence3.png" width="420" alt="모집장 핵심 기능 흐름"/> |
-| 모집 검색 → 신청 → 상태 확인 → 대화 → 후기 | 모집 작성 → 요청 관리 → 참여자 대화 → 활동 인증 |
+|                   모집 검색 → 신청 → 상태 확인 → 대화 → 후기                   |                모집 작성 → 요청 관리 → 참여자 대화 → 활동 인증                 |
 
-| 관리자 | 비회원 |
-| :---: | :---: |
+|                                     관리자                                     |                                      비회원                                      |
+| :----------------------------------------------------------------------------: | :------------------------------------------------------------------------------: |
 | <img src="docs/images/sequence4.png" width="420" alt="관리자 핵심 기능 흐름"/> | <img src="docs/images/sequence1.png" width="420" alt="비회원 게시글 목록 조회"/> |
-| 게시글  | 로그인 → 토큰 검증 → 재발급 → 역할별 접근 제어 |
+|                                     게시글                                     |                  로그인 → 토큰 검증 → 재발급 → 역할별 접근 제어                  |
 
 </div>
 
@@ -176,15 +214,15 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 ## 8. 개발 산출물 및 협업 결과
 
-| 산출물 | 결과 |
-| :--- | ---: |
-| Figma 설계 화면 | **36개** |
-| 실제 구현 화면 | **24개** |
-| REST API | **52개** |
-| 데이터베이스 테이블 | **20개** |
-| 테스트 케이스 | **173개** |
-| Pull Request | **204개** - Backend 117 / Frontend 87 |
-| 프로젝트 카드 | **92개** - Backend 57 / Frontend 35 |
+| 산출물              |                                  결과 |
+| :------------------ | ------------------------------------: |
+| Figma 설계 화면     |                              **36개** |
+| 실제 구현 화면      |                              **24개** |
+| REST API            |                              **52개** |
+| 데이터베이스 테이블 |                              **20개** |
+| 테스트 케이스       |                             **173개** |
+| Pull Request        | **204개** - Backend 117 / Frontend 87 |
+| 프로젝트 카드       |   **92개** - Backend 57 / Frontend 35 |
 
 ### 협업 방식
 
@@ -219,23 +257,23 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 전체 52개 API 중 핵심 흐름을 구성하는 대표 API입니다.
 
-| 영역 | Method | Endpoint | 설명 |
-| :--- | :---: | :--- | :--- |
-| 인증 | `POST` | `/api/auth/login` | 로그인 및 토큰 발급 |
-| 인증 | `POST` | `/api/auth/refresh` | Access Token 갱신 |
-| 회원 | `POST` | `/api/users` | 회원가입 |
-| 후기 | `GET` | `/api/boards` | 후기 목록과 페이징 |
-| 후기 | `POST` | `/api/boards` | 후기와 파일 등록 |
-| 모집 | `GET` | `/api/joins` | 모집 목록 조회와 검색 |
-| 모집 | `POST` | `/api/joins` | 모집글 작성 |
-| 참여 | `POST` | `/api/request/{joinNo}` | 참여 신청 |
-| 참여 | `PATCH` | `/api/request/accept` | 참여 요청 수락 |
-| 참여 | `PATCH` | `/api/request/deny` | 참여 요청 거절 |
-| 인증 | `GET/POST` | `/api/proof/**` | 활동 인증 조회 · 작성 |
-| 공지 | `GET/POST` | `/api/notices/**` | 공지 · 이벤트 조회와 관리자 작성 |
-| 문의 | `GET/POST` | `/api/question/**` | 문의 조회 · 작성 · 답변 |
-| 신고 | `POST` | `/api/report` | 콘텐츠 신고 등록 |
-| 대화 | `GET/POST` | `/api/chats/**` | 활동별 대화 조회 · 작성 |
+| 영역 |   Method   | Endpoint                | 설명                             |
+| :--- | :--------: | :---------------------- | :------------------------------- |
+| 인증 |   `POST`   | `/api/auth/login`       | 로그인 및 토큰 발급              |
+| 인증 |   `POST`   | `/api/auth/refresh`     | Access Token 갱신                |
+| 회원 |   `POST`   | `/api/users`            | 회원가입                         |
+| 후기 |   `GET`    | `/api/boards`           | 후기 목록과 페이징               |
+| 후기 |   `POST`   | `/api/boards`           | 후기와 파일 등록                 |
+| 모집 |   `GET`    | `/api/joins`            | 모집 목록 조회와 검색            |
+| 모집 |   `POST`   | `/api/joins`            | 모집글 작성                      |
+| 참여 |   `POST`   | `/api/request/{joinNo}` | 참여 신청                        |
+| 참여 |  `PATCH`   | `/api/request/accept`   | 참여 요청 수락                   |
+| 참여 |  `PATCH`   | `/api/request/deny`     | 참여 요청 거절                   |
+| 인증 | `GET/POST` | `/api/proof/**`         | 활동 인증 조회 · 작성            |
+| 공지 | `GET/POST` | `/api/notices/**`       | 공지 · 이벤트 조회와 관리자 작성 |
+| 문의 | `GET/POST` | `/api/question/**`      | 문의 조회 · 작성 · 답변          |
+| 신고 |   `POST`   | `/api/report`           | 콘텐츠 신고 등록                 |
+| 대화 | `GET/POST` | `/api/chats/**`         | 활동별 대화 조회 · 작성          |
 
 ---
 
@@ -245,12 +283,12 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 <div align="center">
 
-| 메인 화면 | 모집 상세 | 참여 요청 관리 |
-| :---: | :---: | :---: |
+|                              메인 화면                               |                                  모집 상세                                  |                                참여 요청 관리                                |
+| :------------------------------------------------------------------: | :-------------------------------------------------------------------------: | :--------------------------------------------------------------------------: |
 | <img src="docs/images/screen-main.png" width="270" alt="메인 화면"/> | <img src="docs/images/screen-join-detail.png" width="270" alt="모집 상세"/> | <img src="docs/images/screen-request.png" width="270" alt="참여 요청 관리"/> |
 
-| 대화방 | 활동 인증 | 관리자 문의 · 신고 |
-| :---: | :---: | :---: |
+|                              대화방                               |                               활동 인증                               |                           관리자 문의 · 신고                            |
+| :---------------------------------------------------------------: | :-------------------------------------------------------------------: | :---------------------------------------------------------------------: |
 | <img src="docs/images/screen-chat.png" width="270" alt="대화방"/> | <img src="docs/images/screen-proof.png" width="270" alt="활동 인증"/> | <img src="docs/images/screen-admin.png" width="270" alt="관리자 화면"/> |
 
 </div>
@@ -259,36 +297,36 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 
 ## 12. 테스트 및 품질 검증
 
-| 영역 | 테스트 케이스 | 결과 | 설명 |
-| :--- | ---: | :---: | :--- |
-| 회원 | **16건** | ✅ Pass | 회원가입, 로그인, 회원 정보 |
-| 인증(JWT) | **13건** | ✅ Pass | 토큰 발급 및 재발급, 인증 |
-| 모집게시판 | **19건** | ✅ Pass | 모집 CRUD 및 조회 |
-| 참여요청 | **16건** | ✅ Pass | 신청, 승인, 거절 |
-| 인증게시판 | **18건** | ✅ Pass | 활동 인증 CRUD |
-| 후기게시판 | **18건** | ✅ Pass | 후기 CRUD 및 파일 |
-| 후기댓글 | **8건** | ✅ Pass | 댓글 CRUD |
-| 공지사항 | **12건** | ✅ Pass | 공지 CRUD |
-| 문의게시판 | **16건** | ✅ Pass | 문의 CRUD |
-| 문의답변 | **5건** | ✅ Pass | 답변 등록 및 수정 |
-| 신고 | **13건** | ✅ Pass | 신고 등록 및 처리 |
-| 모임대화 | **11건** | ✅ Pass | 채팅 조회 및 작성 |
-| 환경센서 | **5건** | ✅ Pass | 센서 데이터 조회 |
-| 탄소통계 | **3건** | ✅ Pass | 통계 데이터 조회 |
-| 홈 | **1건** | ✅ Pass | 메인 화면 조회 |
-| **합계** | **173건** | **Pass** | 전체 기능 테스트 완료 |
+| 영역       | 테스트 케이스 |   결과   | 설명                        |
+| :--------- | ------------: | :------: | :-------------------------- |
+| 회원       |      **16건** | ✅ Pass  | 회원가입, 로그인, 회원 정보 |
+| 인증(JWT)  |      **13건** | ✅ Pass  | 토큰 발급 및 재발급, 인증   |
+| 모집게시판 |      **19건** | ✅ Pass  | 모집 CRUD 및 조회           |
+| 참여요청   |      **16건** | ✅ Pass  | 신청, 승인, 거절            |
+| 인증게시판 |      **18건** | ✅ Pass  | 활동 인증 CRUD              |
+| 후기게시판 |      **18건** | ✅ Pass  | 후기 CRUD 및 파일           |
+| 후기댓글   |       **8건** | ✅ Pass  | 댓글 CRUD                   |
+| 공지사항   |      **12건** | ✅ Pass  | 공지 CRUD                   |
+| 문의게시판 |      **16건** | ✅ Pass  | 문의 CRUD                   |
+| 문의답변   |       **5건** | ✅ Pass  | 답변 등록 및 수정           |
+| 신고       |      **13건** | ✅ Pass  | 신고 등록 및 처리           |
+| 모임대화   |      **11건** | ✅ Pass  | 채팅 조회 및 작성           |
+| 환경센서   |       **5건** | ✅ Pass  | 센서 데이터 조회            |
+| 탄소통계   |       **3건** | ✅ Pass  | 통계 데이터 조회            |
+| 홈         |       **1건** | ✅ Pass  | 메인 화면 조회              |
+| **합계**   |     **173건** | **Pass** | 전체 기능 테스트 완료       |
 
 ### 테스트 결과
 
-| Pass | Fail | 미실행(보류) | 성공률 |
-| :---: | :---: | :---: | :---: |
-| **141건** | **30건** | **2건** | **81.5%** |
+|   Pass    |   Fail   | 미실행(보류) |  성공률   |
+| :-------: | :------: | :----------: | :-------: |
+| **141건** | **30건** |   **2건**    | **81.5%** |
 
 ### 수정 결과
 
-| Pass | Fail | 미실행(보류) | 성공률 |
-| :---: | :---: | :---: | :---: |
-| **157건** | **0건** | **16건** | **90.8%** |
+|   Pass    |  Fail   | 미실행(보류) |  성공률   |
+| :-------: | :-----: | :----------: | :-------: |
+| **157건** | **0건** |   **16건**   | **90.8%** |
 
 ---
 
@@ -301,7 +339,6 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 - 게시판, 파일, 댓글, 문의, 신고, 마이페이지를 포함한 커뮤니티 구조를 구현했습니다.
 - 공통 페이징, 응답, 알림, 파일 모듈을 적용하여 반복 코드를 줄이고 확장 가능한 구조를 구성했습니다.
 - 정상 · 실패 · 권한 · 경계 상황을 포함한 173개 테스트 케이스로 주요 기능을 점검했습니다.
-
 
 <div align="center">
 
