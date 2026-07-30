@@ -166,7 +166,6 @@ PLOGUES는 단순한 게시판 모음이 아니라 다음 활동이 순차적으
 | **Observability**  | Spring Boot Actuator, Micrometer        | 요청 처리 시간, 예외 발생 횟수, 게시판 조회 횟수 지표 수집                  |
 | **DNS · HTTPS**    | Route 53, AWS ACM                       | 도메인을 ALB에 연결하고 HTTPS 접속 환경 구성                                |
 
-## 배포 아키텍처
 
 <img src="./docs/images/deployment-architecture.png"
      width="900"
