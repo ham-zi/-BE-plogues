@@ -40,16 +40,3 @@ public class ProofDto {
     private List<FileDto> files;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
