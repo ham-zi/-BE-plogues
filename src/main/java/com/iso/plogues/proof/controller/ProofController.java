@@ -20,10 +20,14 @@ import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
 import com.iso.plogues.board.model.dto.BoardDto;
 import com.iso.plogues.board.model.service.BoardService;
+import com.iso.plogues.notice.model.dto.NoticeDto;
 import com.iso.plogues.proof.model.dto.ProofDto;
 import com.iso.plogues.proof.model.service.ProofService;
 import com.iso.plogues.util.dto.BoardResponse;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +35,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/api/proof")
-@RequiredArgsConstructor
 public class ProofController {
 
 	private final ProofService proofService;
+	private final Counter viewCounter;
+	private final MeterRegistry registry;
 
+	public ProofController(ProofService proofService, MeterRegistry registry) {
+		this.proofService = proofService;
+		viewCounter = Counter.builder("Proof_view_total").description("인증게시판 조회 횟수").register(registry);
+		this.registry=registry;
+	}
+	
 	@PostMapping
 	public ResponseEntity<ApiResponse<Void>> save(@Valid @ModelAttribute ProofDto proof,
 												  @RequestParam(name = "file", required = false) List<MultipartFile> files,
@@ -51,9 +62,8 @@ public class ProofController {
 
 	@GetMapping("/{proofNo}")
 	public ResponseEntity<ApiResponse<ProofDto>> findByProofNo(@PathVariable(name = "proofNo") Long proofNo) {
-
 		ProofDto proof = proofService.findByProofNo(proofNo);
-
+		viewCounter.increment();
 		return ResponseEntity.status(200).body(ApiResponse.success("인증 게시글 상세 조회 성공", proof));
 	}
 
@@ -61,8 +71,9 @@ public class ProofController {
 	public ResponseEntity<ApiResponse<BoardResponse<ProofDto>>> findAll(
 			@RequestParam(name = "page", defaultValue = "1") int page,
 			@RequestParam(name = "category", defaultValue= "ALL") String category) {
-		
-		BoardResponse<ProofDto> br = proofService.findAll(page, category);
+			Timer.Sample sample = Timer.start(registry);
+			BoardResponse<ProofDto> br = proofService.findAll(page, category);
+			sample.stop(registry.timer("proof_list_duration"));
 		return ResponseEntity.status(200).body(ApiResponse.success("인증 게시글 전체 조회 성공", br));
 	}
 

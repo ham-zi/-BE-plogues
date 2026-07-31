@@ -86,7 +86,7 @@ public class BoardController {
     		viewCounter.increment();
     		Timer.Sample sample = Timer.start(registry);
     		boardService.selectBoardDetail(boardNo);
-       	 sample.stop(registry.timer("board_detail_duration"));
+       	 	sample.stop(registry.timer("board_detail_duration"));
         return ResponseEntity.ok(ApiResponse.success("게시글 상세 조회 성공", boardService.selectBoardDetail(boardNo)));
     }
 

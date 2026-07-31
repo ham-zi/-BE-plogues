@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.iso.plogues.api.model.vo.ApiResponse;
 import com.iso.plogues.auth.model.vo.CustomUserDetails;
+import com.iso.plogues.proof.model.dto.ProofDto;
 import com.iso.plogues.question.comment.model.dto.AnswerDto;
 import com.iso.plogues.question.comment.model.service.AnswerService;
 import com.iso.plogues.question.model.dto.QuestionDto;
@@ -27,17 +28,29 @@ import com.iso.plogues.question.model.dto.QuestionRequest;
 import com.iso.plogues.question.model.service.QuestionService;
 import com.iso.plogues.util.dto.BoardResponse;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-@RequiredArgsConstructor
 @RequestMapping("/api/question")
 public class QuestionController {
 	private final QuestionService questionService;
 	private final AnswerService answerService;
+	private final Counter viewCounter;
+	private final MeterRegistry registry;
+	
+	public QuestionController(QuestionService questionService, AnswerService answerService, MeterRegistry registry) {
+		this.questionService=questionService;
+		this.answerService=answerService;
+		this.viewCounter=Counter.builder("question_view_total").description("질문게시판 조회 횟수").register(registry);
+		this.registry=registry;
+	}
+	
 	
 	@PostMapping
 	public ResponseEntity<ApiResponse<Void>> save(@Valid @ModelAttribute QuestionRequest question, 
@@ -55,14 +68,17 @@ public class QuestionController {
             @RequestParam(name="updated", required = false) String updated,
             @AuthenticationPrincipal CustomUserDetails user
     ) {
-
-    	  return ResponseEntity.ok(
-                 ApiResponse.success(questionService.findByAll(page, category, user, updated)));
+    	Timer.Sample sample = Timer.start(registry);
+    	BoardResponse<QuestionDto> br = questionService.findByAll(page, category, user, updated);
+		sample.stop(registry.timer("question_list_duration"));
+    	return ResponseEntity.ok(
+                 ApiResponse.success(br));
 	}
 
     @GetMapping("/{boardNo}")
     public ResponseEntity<ApiResponse<QuestionDto>> selectQuestionDetail(@PathVariable(name="boardNo")Long boardNo,
     																	 @AuthenticationPrincipal CustomUserDetails user) {
+    	viewCounter.increment();
         return ResponseEntity.ok(ApiResponse.success("게시글 상세 조회 성공", questionService.selectQuestionDetail(boardNo, user)));
     }
 	

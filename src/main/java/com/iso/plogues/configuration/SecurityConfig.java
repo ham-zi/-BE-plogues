@@ -37,7 +37,7 @@ public class SecurityConfig {
 				   .csrf(AbstractHttpConfigurer::disable)
 				   .cors(Customizer.withDefaults())
 				   .authorizeHttpRequests(requests -> { 
-					   requests.requestMatchers("/actuator/prometheus", "/actuator/health", "/api/ai/**").permitAll();
+					   requests.requestMatchers("/actuator/prometheus", "/actuator/health", "/api/ai/**", "/").permitAll();
 					   requests.requestMatchers(HttpMethod.GET, "/api/notices/**", "/api/joins/**", "/api/home", "/api/boards/**", "/api/tree/**", "/api/health/**").permitAll();
 					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "/api/tree", "/api/auth/refresh").permitAll();
 					   requests.requestMatchers(HttpMethod.GET, "/api/notices/**", "/api/joins/**", "/api/home", "/api/boards/**","/api/proof/**").permitAll();
@@ -76,7 +76,7 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("https://suun.shop"));
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost", "http://13.209.117.56","http://honeyform.store","https://honeyform.store"));
 		configuration.setAllowedMethods(Arrays.asList("POST", "PATCH", "DELETE", "GET", "PUT", "OPTIONS"));
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
 		configuration.setAllowCredentials(true);
