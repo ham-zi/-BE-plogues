@@ -79,7 +79,6 @@
 		</if> 
 	</select>
 
-
 	<select id="findAll" resultType="ProofDto">
 		SELECT
 		        P.PROOF_NO
@@ -121,7 +120,7 @@
 		  ORDER 
 		     BY 
 		   	    P.PROOF_NO DESC 
-	   OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY 
+	   OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.boardLimit} ROWS ONLY
 	</select>
 
 	<update id="deleteProof">
