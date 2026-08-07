@@ -24,7 +24,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        run: ./gradlew bootJar -x test
+        run: ./gradlew clean build
 
       - name: Verify Build output
         run: |
