@@ -155,9 +155,6 @@
 	       #{boardLimit} ROWS ONLY
   </select>
   
-  
-  
-  
   <insert id="saveRequest">
   	INSERT
   	  INTO

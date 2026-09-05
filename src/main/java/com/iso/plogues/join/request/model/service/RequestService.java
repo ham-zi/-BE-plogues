@@ -32,8 +32,8 @@ public class RequestService {
 	
 	@Transactional
 	public void saveRequest(RequestDto requestDto) {
-		isDuplicateRequest(requestDto);
 		joinBoardValidate.ValidateJoinBoard(requestDto.getJoinNo());
+		isDuplicateRequest(requestDto);
 		Request requestEntity = Request.builder()
 									   .joinNo(requestDto.getJoinNo())
 									   .userId(requestDto.getUserId())
@@ -93,7 +93,6 @@ public class RequestService {
 		RequestDto request = requestMapper.findByUserIdJoin(userId, joinNo);
 		validateRequest(request);
 	}
-	//
 	
 	private void validateRequest(RequestDto request) {
 		if(request == null) {
@@ -110,9 +109,11 @@ public class RequestService {
 	private void validateAcceptRequest(String userId, Long requestNo) {
 		RequestDto request = requestMapper.findByRequestNo(requestNo);
 		validateRequestNo(requestNo);
-		checkAccepted(request.getStatus());
-		joinBoardValidate.ValidateJoinBoard(request.getJoinNo());
 		validateHost(userId, request.getHost());
+		joinBoardValidate.ValidateJoinBoard(request.getJoinNo());
+		request = requestMapper.findByRequestNo(requestNo);
+		validateRequestNo(requestNo);
+		checkAccepted(request.getStatus());
 		
 	}
 	private void validateDeniedRequest(String userId, Long requestNo) {
