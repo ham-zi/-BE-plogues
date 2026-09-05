@@ -161,6 +161,22 @@
   	       b.JOIN_NO = #{joinNo}
   </select>
   
+  <select id="pessimisticLocking"
+  		  resultType="long"
+  		  useCache="false"
+  		  flushCache="true">
+  	SELECT
+  	       JOIN_NO
+  	  FROM
+  	       JOIN_BOARD
+  	 WHERE
+  	       JOIN_NO = #{joinNo}
+  	   AND
+  	       DELETED = 'N'
+  	   FOR
+  	       UPDATE
+  </select>
+  
   <update id="deleteJoin">
   	UPDATE 
   	       JOIN_BOARD
