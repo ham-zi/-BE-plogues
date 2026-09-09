@@ -15,6 +15,7 @@ public class JoinBoardValidate {
 	private final JoinMapper joinMapper;
 
 	public void ValidateJoinBoard(Long joinNo) {
+		pessimisticLocking(joinNo);
 		DetailJoinDto joinDto = joinMapper.findByJoinNo(joinNo);
 		validateParticipants(joinDto);
 	}
@@ -23,5 +24,9 @@ public class JoinBoardValidate {
 		if(joinDto.getParticipants() > 0 && joinDto.getCurrentCount() > 0 && joinDto.getParticipants() <= joinDto.getCurrentCount()) {			
 			throw new InValidJoinRequestException("모집이 완료된 모임입니다.");
 		}
+	}
+	
+	private void pessimisticLocking(Long joinNo) {
+		joinMapper.pessimisticLocking(joinNo);
 	}
 }

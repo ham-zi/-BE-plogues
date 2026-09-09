@@ -18,4 +18,5 @@ public interface JoinMapper {
 	DetailJoinDto findByJoinNo(Long joinNo);
 	int deleteJoin(@Param(value="userId") String userId, @Param(value="joinNo") Long joinNo);
 	int updateJoin(Join join);
+	void pessimisticLocking(Long joinNo);
 }
