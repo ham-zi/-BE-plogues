@@ -30,7 +30,7 @@ import com.iso.plogues.join.request.model.dao.RequestMapper;
 import com.iso.plogues.join.request.model.dto.RequestDto;
 
 /**
- * 동시성 제어 전의 정원 초과를 재현하는 단위 테스트.
+ * Mapper 잠금을 무효화한 상태의 정원 초과를 재현하는 단위 테스트.
  * 실제 RequestService / JoinBoardValidate를 실행하고 Mapper만 대체한다.
  * Spring 트랜잭션, 실제 SQL, Oracle 잠금/격리 수준을 검증하는 통합 테스트는 아니다.
  * 재현 테스트의 성공은 버그가 재현됐다는 의미이며, 동시성 안전성을 뜻하지 않는다.
@@ -42,6 +42,7 @@ class RequestServiceConcurrencyTest {
     private static final int HOST_COUNT = 1;
 
     private final RequestMapper requestMapper = mock(RequestMapper.class);
+    // void인 pessimisticLocking 호출은 이 Mock에서 아무 동작도 하지 않는다.
     private final JoinMapper joinMapper = mock(JoinMapper.class);
     private final Set<Long> acceptedRequests = ConcurrentHashMap.newKeySet();
     private final CustomUserDetails host = CustomUserDetails.builder().username("host").build();
@@ -80,7 +81,7 @@ class RequestServiceConcurrencyTest {
     }
 
     @Test
-    @DisplayName("제어 전 재현: 마지막 한 자리를 동시에 조회하면 두 요청이 승인되어 정원을 초과한다")
+    @DisplayName("잠금 없는 Mock 재현: 마지막 한 자리를 동시에 조회하면 정원을 초과한다")
     void concurrentAccept_withoutControl_reproducesOverbooking() throws Exception {
         CyclicBarrier bothHaveRead = new CyclicBarrier(2);
         when(joinMapper.findByJoinNo(JOIN_NO)).thenAnswer(invocation -> {

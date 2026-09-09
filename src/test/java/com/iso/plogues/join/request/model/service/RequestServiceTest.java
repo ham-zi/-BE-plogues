@@ -181,7 +181,7 @@ public class RequestServiceTest {
 		//given
 		CustomUserDetails user = CustomUserDetails.builder().username("user01").build();
 		Long requestNo = (long)3;
-		RequestDto request = new RequestDto();
+		RequestDto request = createRequestDto();
 		request.setStatus("ACCEPTED");
 		
 		//when
