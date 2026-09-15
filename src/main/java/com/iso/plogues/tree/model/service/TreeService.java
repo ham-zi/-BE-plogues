@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.iso.plogues.proof.model.service.ProofService;
@@ -36,10 +37,11 @@ public class TreeService {
 				                            .build());
 	}
 	
+	@Cacheable(value = "dailyTreeDay", key = "'A01'", sync = true)
 	public List<TreeResponse> findDataByDay() {
 		return treeMapper.findDataByDay();
 	}
-	
+
 	//연도별 탄소 감축량 예측
 	public List<CarbonReductionResponse> getCarbonReductionData() {
 	    List<TreeCountDto> treeCounts = getTreeCountByYear();
