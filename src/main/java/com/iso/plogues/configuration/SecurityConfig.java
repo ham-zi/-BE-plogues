@@ -37,9 +37,9 @@ public class SecurityConfig {
 				   .csrf(AbstractHttpConfigurer::disable)
 				   .cors(Customizer.withDefaults())
 				   .authorizeHttpRequests(requests -> { 
-					   requests.requestMatchers("/actuator/prometheus", "/actuator/health", "/api/ai/**", "/").permitAll();
+					   requests.requestMatchers("/actuator/prometheus", "/actuator/health", "/api/ai/**", "/", "/api/sensor/**").permitAll();
 					   requests.requestMatchers(HttpMethod.GET, "/api/notices/**", "/api/joins/**", "/api/home", "/api/boards/**", "/api/tree/**", "/api/health/**").permitAll();
-					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "/api/tree", "/api/auth/refresh").permitAll();
+					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "/api/tree", "/api/auth/refresh", "/api/sensor").permitAll();
 					   requests.requestMatchers(HttpMethod.GET, "/api/notices/**", "/api/joins/**", "/api/home", "/api/boards/**","/api/proof/**").permitAll();
 					   requests.requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login", "/api/tree", "/api/auth/refresh").permitAll();
 					   requests.requestMatchers(HttpMethod.GET, "/api/users/**", "/api/chats", "/api/proof/**", "/api/report").authenticated();
