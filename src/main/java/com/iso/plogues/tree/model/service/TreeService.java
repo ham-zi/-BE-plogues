@@ -37,7 +37,7 @@ public class TreeService {
 				                            .build());
 	}
 	
-	@Cacheable(value = "dailyTreeDay", key = "'A01'", sync = true)
+	@Cacheable(value = "dailyTreeData", key = "'A01'", sync = true)
 	public List<TreeResponse> findDataByDay() {
 		return treeMapper.findDataByDay();
 	}
